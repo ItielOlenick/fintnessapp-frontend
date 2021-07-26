@@ -23,7 +23,7 @@ useEffect(() => {
             <h1>List of users</h1>
             {
                 users && users.map(user => (
-                    <div>
+                    <div key = {user.id}>
                         <p>{user.name}</p>
                         <p>{user.email}</p>
                     </div>
@@ -32,5 +32,5 @@ useEffect(() => {
         </div>
     );
 }
- 
+
 export default UsersList;
