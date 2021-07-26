@@ -13,7 +13,8 @@ function App() {
         <Navbar/>
         <div>
           <Switch>
-            <Route exact path = "/" component={ExercisesList} />
+            <Route exact path = "/" component={WorkoutList} />
+            <Route exact path = "/exercises" component={ExercisesList} />
             <Route path="*" component={NoteFound} />
           </Switch>
         </div>
