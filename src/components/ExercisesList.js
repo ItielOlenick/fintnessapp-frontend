@@ -23,14 +23,14 @@ useEffect (() => {
             <h4>List of exercises</h4>
             <div className="notes-list mt-4">
             {
-                exercises && exercises.map(exercise =>(
+                exercises.length > 0 ? exercises.map(exercise =>(
                     <div key = {exercise.id} className="notes-preview mt-3">
                         <Link to="#" className="link">
                             <h5 className="primary-color text-capitalize">{exercise.name}</h5>
                             <p>{exercise.bodyPart}</p>
                         </Link>
                     </div>
-                ))
+                )) : <div>No notes available</div>
             }
             </div>
         </div>
