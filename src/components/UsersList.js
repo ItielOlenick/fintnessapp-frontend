@@ -6,7 +6,7 @@ const UsersList = () => {
 
     const [users, setUsers] = useState([]);
 
-useEffect(() => {
+useEffect(() => { 
     UsersService.getAll()
     .then(response => {
         console.log('printing response', response.data);
