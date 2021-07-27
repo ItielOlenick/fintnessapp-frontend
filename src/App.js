@@ -5,6 +5,7 @@ import NoteFound from './components/NotFound';
 import Navbar from './components/Navbar';
 import WorkoutList from './components/WorkoutList';
 import ExercisesList from './components/ExercisesList';
+import AddWorkout from './components/AddWorkout';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <div>
           <Switch>
             <Route exact path = "/" component={WorkoutList} />
+            <Route exact path = "/addWorkout" component={AddWorkout} />
             <Route exact path = "/exercises" component={ExercisesList} />
             <Route path="*" component={NoteFound} />
           </Switch>

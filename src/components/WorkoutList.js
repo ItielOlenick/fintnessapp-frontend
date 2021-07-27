@@ -26,7 +26,25 @@ useEffect (() => {
                     <div key = {workout.id} className="notes-preview mt-3">
                         <Link to="#" className="link">
                             <h5 className="primary-color text-capitalize">{workout.name}</h5>
-                            <p>{workout.exercises} exercises</p>
+                            
+                            <div className="row">
+                                <div className="col">
+                                    <p>exercises: </p>
+                                    <ol>
+                                    {workout.exercises.map((item, b) => (
+                                    <li key={b}>{item}</li>
+                                        ))}
+                                    </ol>
+                                </div>
+                                <div className="col">
+                                    <p>Sets: </p>
+                                    <ol>
+                                        {workout.sets.map((item, b) => (
+                                        <ul key={b}>{item}</ul>
+                                        ))}
+                                    </ol>
+                                </div>
+                            </div>
                         </Link>
                     </div>
                 )) : <div>No workouts created yet.</div>
