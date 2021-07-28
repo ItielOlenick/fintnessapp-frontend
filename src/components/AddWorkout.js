@@ -19,7 +19,7 @@ const AddWorkout = () => {
         })
     }, []);
 
-    const options
+    const options;
     listexercises.length > 0 ? options = listexercises : console.log("loading");
     console.log("Options:" ,options);
     /* 
