@@ -117,7 +117,7 @@ const AddWorkout = () => {
                         <h5>Exercises:</h5>
                         <ul>
                             {exercises.map((item, b) => (
-                                <li key={b}>{item}</li>
+                                <li key={b}>{item.name}</li>
                             ))}
                         </ul>
                     </div>
