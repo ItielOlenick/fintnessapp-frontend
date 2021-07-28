@@ -31,16 +31,16 @@ useEffect (() => {
                                 <div className="col">
                                     <p>exercises: </p>
                                     <ol>
-                                    {workout.exercises.map((item, b) => (
-                                    <li key={b}>{item}</li>
+                                        {workout.sets.map((item, b) => (
+                                        <li key={b}>{item.name}</li>
                                         ))}
                                     </ol>
                                 </div>
                                 <div className="col">
-                                    <p>Sets: </p>
+                                    <p>Reps: </p>
                                     <ol>
                                         {workout.sets.map((item, b) => (
-                                        <ul key={b}>{item}</ul>
+                                        <ul key={b}>{item.reps}</ul>
                                         ))}
                                     </ol>
                                 </div>

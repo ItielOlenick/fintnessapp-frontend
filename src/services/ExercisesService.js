@@ -4,4 +4,7 @@ const getAll = () => {
     return httpClient.get("/exercises");
 }
 
-export default { getAll }
+const create = data => {
+    return httpClient.post("/exercises", data);
+}
+export default { getAll, create }

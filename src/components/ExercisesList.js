@@ -30,7 +30,7 @@ useEffect (() => {
                             <p>{exercise.bodyPart}</p>
                         </Link>
                     </div>
-                )) : <div>No notes available</div>
+                )) : <div>No exercises available</div>
             }
             </div>
         </div>

@@ -1,23 +1,91 @@
-import { useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import ExercisesService from "../services/ExercisesService";
 import WorkoutService from "../services/WorkoutService";
+
+
 
 const AddWorkout = () => {
 
-    const [name, setTitle] = useState("");
-    const [exercises, setExercises] = useState([]);
-    const inputExercises = useRef();
-    const inputSets = useRef();
-    const [sets, setSets] = useState([]);
+    const [listexercises, Getexercises] = useState([]);
 
-    var addToList = e => {
-        e.preventDefault();
-        setExercises([...exercises, inputExercises.current.value]);
-        setSets([...sets, inputSets.current.value]);
-    };
+    useEffect (() => {
+        ExercisesService.getAll()
+        .then(response => {
+            console.log("printing response", response.data);
+            Getexercises(response.data);
+        })
+        .catch(error => {
+            console.log("Error - somthing is wrong", error);
+        })
+    }, []);
+
+
+    const options = listexercises;
+
+    /* 
+    TODO get the state for the number of sets with usestate("").
+    map everything with:
+
+    var items = ids.map((id, index) => {
+        return {
+            id: id,
+            name: names[index],
+            country: countries[index]
+        }
+    });
+
+    clean up
+    */
+
     
-    const saveWorkout = (e) => {
+
+    const [name, setName] = useState("");
+    const [exercises, setExercises] = useState([]);
+    const [selectExersice, getExercise] = useState("");
+    const [sets, setSets] = useState([]);
+    const [selectSets, getSets] = useState("");
+    
+    
+    const addExercise = (e) => {
         e.preventDefault();
-        const workout = {name, exercises, sets};
+        setExercises(exercises => [...exercises ,selectExersice]);
+        addSet(e);
+    };
+
+    const addSet = (e) => {
+        e.preventDefault();
+        setSets(sets => [...sets ,selectSets])
+    };
+
+
+    const saveWorkout = (e) => {
+        
+        //final Exercises mapping
+/*         const finalExercises = exercises.map((value, index) => {
+            return {
+                name: value,
+                sets: sets[index]
+            }
+        })
+        ; */
+        console.log("exercises",exercises);
+
+        const finalSets = [{ "name": "Bench press", "bodyPart": "Chest" }];
+        
+        for (let i = 0; i < exercises.length; i++) {
+            for (let j = 0; j < sets[i]; j++) {
+                finalSets.push(
+                    {
+                        name: exercises[i]
+                    }
+                );
+            }
+        };
+        console.log("final sets",finalSets);
+        
+
+        e.preventDefault();
+        const workout = {name, sets: finalSets};
         console.log("",workout);
         WorkoutService.create(workout)
         .then(response => {
@@ -40,7 +108,7 @@ const AddWorkout = () => {
                         className="form-control" 
                         id="title"
                         //value={title}
-                        onChange={(e) => setTitle(e.target.value)}
+                        onChange={(e) => setName(e.target.value)}
                     />
 
                 </div>
@@ -67,29 +135,29 @@ const AddWorkout = () => {
                         <div className="form-group mb-3">
                             <label htmlFor="exercises">Select exercises</label>
                             <select 
-                            ref={inputExercises}
                             className="form-control" 
-                            id="exercises" 
-                            //value={exercises}
-                            //onChange={(e) => setExercises(e.target.value)}
+                            id="exercises"
+                            onInput={(e) => getExercise(e.target.value)}
                             >
-                                <option value="Bench Press">Bench Press</option>
-                                <option value="Dumbell row">Dumbell row</option>
-                                <option value="Tricep extention">Tricep extention</option>
-                                <option value="Bicep curl">Bicep curl</option>
-                                <option value="Squat">Squat</option>
+                                {options.map((options) => (
+                                    <option key={options.id} value={options.name}>
+                                        {options.name}
+                                </option>
+                                ))}
                             </select>
                         </div>
                     </div>
                     <div className="col-3">
                         <label htmlFor="sets">Sets:</label>
-                        <input type="number" className="form-control" id="sets" ref={inputSets} />
+                        <input type="number" className="form-control" id="sets" 
+                        onInput={(e) => getSets(e.target.value)}
+                        />
                     </div>
                 </div>
                 
                 <div className="text-center mb-3">
                     <button
-                    onClick={addToList}
+                    onClick={(e) => (addExercise(e))}
                     >Add exercise</button>
                 </div>
 
