@@ -19,9 +19,9 @@ const AddWorkout = () => {
         })
     }, []);
 
-
-    const options = listexercises;
-
+    const options
+    listexercises.length > 0 ? options = listexercises : console.log("loading");
+    console.log("Options:" ,options);
     /* 
     TODO get the state for the number of sets with usestate("").
     map everything with:
