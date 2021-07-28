@@ -137,7 +137,8 @@ const AddWorkout = () => {
                             <select 
                             className="form-control" 
                             id="exercises"
-                            onInput={(e) => getExercise(e.target.value), console.log(e.target.value)}
+                            onInput={(e) => console.log(e.target.value)}
+                            //getExercise(e.target.value)
                             >
                                 {options.map((options) => (
                                     <option key={options.id} value={options.name}>
