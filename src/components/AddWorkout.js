@@ -69,7 +69,7 @@ const AddWorkout = () => {
         ; */
         console.log("exercises",exercises);
 
-        const finalSets = [{ "name": "Bench press", "bodyPart": "Chest" }];
+        const finalSets = [];
         
         for (let i = 0; i < exercises.length; i++) {
             for (let j = 0; j < sets[i]; j++) {
