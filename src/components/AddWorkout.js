@@ -21,7 +21,6 @@ const AddWorkout = () => {
 
     var options=[];
     listexercises.length > 0 ? options = listexercises : console.log("loading");
-    console.log("Options:" ,options);
     /* 
     TODO get the state for the number of sets with usestate("").
     map everything with:
@@ -48,7 +47,6 @@ const AddWorkout = () => {
     
     const addExercise = (e) => {
         e.preventDefault();
-        console.log("Adding:", selectExersice);
         setExercises(exercises => [...exercises ,selectExersice]);
         addSet(e);
     };
