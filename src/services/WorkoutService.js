@@ -12,4 +12,8 @@ const create = data => {
 const get = id => {
     return httpClient.get(`/workouts/${id}`);
 }
-export default { getAll, create, get }; 
+
+const remove = id => {
+    return httpClient.delete(`/workouts/${id}`);
+}
+export default { getAll, create, get, remove }; 

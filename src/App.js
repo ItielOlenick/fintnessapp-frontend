@@ -1,6 +1,6 @@
 import './App.css';
 import UsersList from './components/UsersList';
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import NoteFound from './components/NotFound';
 import Navbar from './components/Navbar';
 import WorkoutList from './components/WorkoutList';
@@ -21,7 +21,9 @@ function App() {
             <Route exact path = "/workouts/:id" component={ViewWorkout} />
             <Route exact path = "/exercises" component={ExercisesList} />
             <Route exact path = "/addExercise" component={AddExercise} />
+            <Redirect exact from="/exercises/reload" to="/exercises" />
             <Route path="*" component={NoteFound} />
+            
           </Switch>
         </div>
       </div>

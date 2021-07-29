@@ -1,25 +1,35 @@
 import { useEffect, useState } from "react"
-import { Link, useParams } from "react-router-dom";
+import { Link, useHistory, useParams } from "react-router-dom";
 import WorkoutService from "../services/WorkoutService";
 
 const WorkoutList = () =>{
     
     const [workout, SetWorkouts] = useState("");
     const {id} = useParams();
+    const history = useHistory();
+    useEffect (() => {
+        WorkoutService.get(id)
+        .then(response => {
+            console.log("printing response", response.data);
+            SetWorkouts(response.data);
+        })
+        .catch(error => {
+            console.log("Error - somthing is wrong", error);
+        })
+    }, []);
 
-useEffect (() => {
-    WorkoutService.get(id)
-    .then(response => {
-        console.log("printing response", response.data);
-        SetWorkouts(response.data);
-    })
-    .catch(error => {
-        console.log("Error - somthing is wrong", error);
-    })
-}, []);
+    const handleDelete = () => {
+        WorkoutService.remove(id)
+        .then(response => {
+            history.push("/");
+        })
+        .catch(error => {
+            console.log("Somthing is wrong", error);
+        })
+    }
 
     return (
-        <div className="main-content">
+        <div className="main-content note-details">
             
             <div className="notes-list mt-4">
             {
@@ -44,10 +54,15 @@ useEffect (() => {
                                         ))}
                                     </ol>
                             </div>
+                            <div>
+                                <button onClick={handleDelete}>Delete</button>
+                            </div>
                     </div>
                    ) : <div>No workouts created yet.</div>
+                   
             }
             </div>
+
         </div>
     );
 
