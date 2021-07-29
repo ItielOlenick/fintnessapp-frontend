@@ -24,7 +24,7 @@ const AddWorkout = () => {
 
     const [name, setName] = useState("");
     const [exercises, setExercises] = useState([]);
-    const [selectExersice, getExercise] = useState(options[0]);
+    const [selectExersice, getExercise] = useState("");
     const [sets, setSets] = useState([]);
     const [selectSets, getSets] = useState(0);
     
@@ -120,8 +120,10 @@ const AddWorkout = () => {
                             <select 
                             className="form-control" 
                             id="exercises"
+                            defaultValue=""
                             onInput={(e) => getExercise(e.target.value)}
                             >
+                                <option value="" hidden>chose exercise</option>
                                 {options.map((options) => (
                                     <option key={options.id} value={options.name}>
                                         {options.name}
