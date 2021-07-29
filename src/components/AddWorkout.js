@@ -120,7 +120,7 @@ const AddWorkout = () => {
                             <select 
                             className="form-control" 
                             id="exercises"
-                            value={this.state.value}
+                            value={options[0]}
                             onInput={(e) => getExercise(e.target.value)}
                             >
                                 {options.map((options) => (
