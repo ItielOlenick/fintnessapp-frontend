@@ -21,22 +21,6 @@ const AddWorkout = () => {
 
     var options=[];
     listexercises.length > 0 ? options = listexercises : console.log("loading");
-    /* 
-    TODO get the state for the number of sets with usestate("").
-    map everything with:
-
-    var items = ids.map((id, index) => {
-        return {
-            id: id,
-            name: names[index],
-            country: countries[index]
-        }
-    });
-
-    clean up
-    */
-
-    
 
     const [name, setName] = useState("");
     const [exercises, setExercises] = useState([]);
@@ -136,6 +120,8 @@ const AddWorkout = () => {
                             <select 
                             className="form-control" 
                             id="exercises"
+                            //value={this.state.value}
+                            value={selectExersice}
                             onInput={(e) => getExercise(e.target.value)}
                             >
                                 {options.map((options) => (
