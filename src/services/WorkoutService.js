@@ -8,4 +8,8 @@ const getAll = () => {
 const create = data => {
     return httpClient.post("/workouts", data);
 }
-export default { getAll, create }; 
+
+const get = id => {
+    return httpClient.get(`/workouts/${id}`);
+}
+export default { getAll, create, get }; 

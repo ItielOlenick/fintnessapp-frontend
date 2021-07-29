@@ -64,3 +64,9 @@ button {
 .link{
   text-decoration: none;
 }
+
+.samerow{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}

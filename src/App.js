@@ -7,6 +7,7 @@ import WorkoutList from './components/WorkoutList';
 import ExercisesList from './components/ExercisesList';
 import AddWorkout from './components/AddWorkout';
 import AddExercise from './components/AddExercise';
+import ViewWorkout from './components/ViewWorkout';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Switch>
             <Route exact path = "/" component={WorkoutList} />
             <Route exact path = "/addWorkout" component={AddWorkout} />
+            <Route exact path = "/workouts/:id" component={ViewWorkout} />
             <Route exact path = "/exercises" component={ExercisesList} />
             <Route exact path = "/addExercise" component={AddExercise} />
             <Route path="*" component={NoteFound} />
