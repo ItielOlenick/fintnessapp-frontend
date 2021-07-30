@@ -19,7 +19,7 @@ const AddExercise = () => {
     };
     
     return ( 
-        <div className="create">
+        <div className="create container">
             <form>
                 <div className="form-group mb-3">
                 <label htmlFor="name">Exercise name: <sup>*</sup></label>

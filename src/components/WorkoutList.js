@@ -18,7 +18,7 @@ useEffect (() => {
 }, []);
 
     return (
-        <div className="main-content">
+        <div className="main-content container">
             <h4>List of workouts</h4>
             <div className="notes-list mt-4">
             {

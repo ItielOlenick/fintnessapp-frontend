@@ -33,9 +33,9 @@ const ExercisesList = () =>{
     }
 
     return (
-        <div className="main-content">
+        <div className="main-content container">
             <h4>List of exercises</h4>
-            <div className="notes-list mt-4">
+            <div className="notes-list mt-4 container">
             {
                 exercises.length > 0 ? exercises.map((exercise, i) =>(
 

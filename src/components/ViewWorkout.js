@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Link, useHistory, useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import WorkoutService from "../services/WorkoutService";
 
 const WorkoutList = () =>{
@@ -28,12 +28,16 @@ const WorkoutList = () =>{
         })
     }
 
+    const handleEdit = () => {
+        history.push(`/workouts/edit/${id}`)
+    }
+
     return (
-        <div className="main-content note-details">
+        <div className="main-content note-details container">
             
             <div className="notes-list mt-4">
             {
-                workout != "" ? (
+                workout !== "" ? (
                     <div key = {workout.id} className="notes-preview mt-3">
                         <h5 className="primary-color text-capitalize">{workout.name}</h5>
                             <div>
@@ -49,13 +53,14 @@ const WorkoutList = () =>{
                                         {workout.sets.map((item, b) => (
                                         <div className="samerow">
                                             <li key={b}>{item.name}</li>
-                                            <ul key={b}>{item.reps}</ul>
+                                            <ul key={b*2+1}>{item.reps}</ul>
                                         </div>
                                         ))}
                                     </ol>
                             </div>
                             <div>
                                 <button onClick={handleDelete}>Delete</button>
+                                <button onClick={handleEdit} className="ms-3">Edit</button>
                             </div>
                     </div>
                    ) : <div>No workouts created yet.</div>

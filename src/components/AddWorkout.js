@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import ExercisesService from "../services/ExercisesService";
 import WorkoutService from "../services/WorkoutService";
 
@@ -28,7 +29,6 @@ const AddWorkout = () => {
     const [sets, setSets] = useState([]);
     const [selectSets, getSets] = useState(0);
     
-    
     const addExercise = (e) => {
         e.preventDefault();
         setExercises(exercises => [...exercises ,selectExersice]);
@@ -40,17 +40,11 @@ const AddWorkout = () => {
         setSets(sets => [...sets ,selectSets])
     };
 
+    const history = useHistory();
 
     const saveWorkout = (e) => {
         
-        //final Exercises mapping
-/*         const finalExercises = exercises.map((value, index) => {
-            return {
-                name: value,
-                sets: sets[index]
-            }
-        })
-        ; */
+
         console.log("exercises",exercises);
 
         const finalSets = [];
@@ -66,21 +60,24 @@ const AddWorkout = () => {
         };
         console.log("final sets",finalSets);
         
-
         e.preventDefault();
+        if (finalSets.length > 0){
         const workout = {name, sets: finalSets};
         console.log("",workout);
         WorkoutService.create(workout)
         .then(response => {
             console.log("Workout added successfully", response.data);
+            history.push(`/workouts/${response.data.id}`);
         })
         .catch(error => {
             console.log("Somthing went wrong");
-        })
+        })}
+        else console.log("Empty workout");
     };
 
+
     return ( 
-        <div className="create">
+        <div className="create container">
             <form>
 
                 <div className="form-group mb-3">
@@ -90,7 +87,7 @@ const AddWorkout = () => {
                         type="text"
                         className="form-control" 
                         id="title"
-                        //value={title}
+                        value={name}
                         onChange={(e) => setName(e.target.value)}
                     />
 

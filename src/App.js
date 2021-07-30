@@ -1,5 +1,4 @@
 import './App.css';
-import UsersList from './components/UsersList';
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import NoteFound from './components/NotFound';
 import Navbar from './components/Navbar';
@@ -8,6 +7,7 @@ import ExercisesList from './components/ExercisesList';
 import AddWorkout from './components/AddWorkout';
 import AddExercise from './components/AddExercise';
 import ViewWorkout from './components/ViewWorkout';
+import EditWorkout from './components/EditWorkout';
 
 function App() {
   return (
@@ -18,6 +18,7 @@ function App() {
           <Switch>
             <Route exact path = "/" component={WorkoutList} />
             <Route exact path = "/addWorkout" component={AddWorkout} />
+            <Route exact path = "/Workouts/edit/:id" component={EditWorkout} />
             <Route exact path = "/workouts/:id" component={ViewWorkout} />
             <Route exact path = "/exercises" component={ExercisesList} />
             <Route exact path = "/addExercise" component={AddExercise} />

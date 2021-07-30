@@ -16,4 +16,8 @@ const get = id => {
 const remove = id => {
     return httpClient.delete(`/workouts/${id}`);
 }
-export default { getAll, create, get, remove }; 
+
+const update = data => {
+    return httpClient.put("/workouts", data);
+}
+export default { getAll, create, get, remove, update }; 
