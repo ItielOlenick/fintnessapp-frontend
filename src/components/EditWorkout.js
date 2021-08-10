@@ -104,11 +104,8 @@ const EditWorkout = () => {
           <div>
             <ol>
               {sets.map((item, b) => (
-                <div className="samerow">
+                <div className="samerow" style={{ marginBottom: 5 }}>
                   <li key={b}>{item.name}</li>
-                  {/* <div className="col-2">
-                    <button onClick={(e) => removeExercise(e, b)}>Delete</button>
-                  </div> */}
                   <div className="col-4 samerow">
                     <input
                       type="number"

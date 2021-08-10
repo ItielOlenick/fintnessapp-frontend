@@ -73,7 +73,7 @@ button {
 
 @media screen and (max-width: 600px) {
   .mobile {
-    margin-right: 70px;
+    margin-right: 25vw;
   }
   .mobile-btn {
     margin-left: 5px;
@@ -82,8 +82,20 @@ button {
   }
   .mobile-textbox {
     margin-left: -40px;
-    min-width: 45px;
+    width: 50px;
     height: 75%;
     line-height: 0;
+  }
+}
+
+@media screen and (min-width: 600px) {
+  .mobile {
+    margin-right: 120px;
+  }
+  .mobile-btn {
+    margin-left: 30px;
+  }
+  .mobile-textbox {
+    margin-left: 0px;
   }
 }
