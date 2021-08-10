@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap");
 
 /* base styles */
 * {
@@ -40,7 +40,7 @@ button {
   margin: 0px auto;
   padding: 20px;
 }
-.notes-preview a{
+.notes-preview a {
   background: #f4f4f4;
   display: block;
   padding: 1rem;
@@ -61,12 +61,29 @@ button {
   margin: 20px auto;
 }
 
-.link{
+.link {
   text-decoration: none;
 }
 
-.samerow{
+.samerow {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
+
+@media screen and (max-width: 600px) {
+  .mobile {
+    margin-right: 70px;
+  }
+  .mobile-btn {
+    margin-left: 5px;
+    height: 75%;
+    line-height: 0;
+  }
+  .mobile-textbox {
+    margin-left: -40px;
+    min-width: 45px;
+    height: 75%;
+    line-height: 0;
+  }
 }
