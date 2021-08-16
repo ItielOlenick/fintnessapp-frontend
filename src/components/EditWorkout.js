@@ -3,19 +3,25 @@ import { useHistory, useParams } from "react-router-dom";
 import ExercisesService from "../services/ExercisesService";
 import WorkoutService from "../services/WorkoutService";
 
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "../services/firebase";
+
 const EditWorkout = () => {
   const [listexercises, Getexercises] = useState([]);
+  const [user] = useAuthState(auth);
 
   useEffect(() => {
-    ExercisesService.getAll()
-      .then((response) => {
-        console.log("printing response", response.data);
-        Getexercises(response.data);
-      })
-      .catch((error) => {
-        console.log("Error - somthing is wrong", error);
-      });
-  }, []);
+    user
+      ? ExercisesService.getAll(user.email)
+          .then((response) => {
+            console.log("printing response", response.data);
+            Getexercises(response.data);
+          })
+          .catch((error) => {
+            console.log("Error - somthing is wrong", error);
+          })
+      : Getexercises([]);
+  }, [user]);
 
   var options = [];
   listexercises.length > 0 ? (options = listexercises) : console.log("loading");
