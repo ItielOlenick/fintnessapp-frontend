@@ -11,7 +11,7 @@ const ExercisesList = () => {
 
   useEffect(() => {
     user
-      ? ExercisesService.getAll(user.email)
+      ? ExercisesService.getAll(user.uid)
           .then((response) => {
             console.log("printing response", response.data);
             SetExercises(response.data);
