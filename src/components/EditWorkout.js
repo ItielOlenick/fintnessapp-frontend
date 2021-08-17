@@ -72,7 +72,7 @@ const EditWorkout = () => {
 
   const saveWorkout = (e) => {
     e.preventDefault();
-    const workout = { id, name, sets };
+    const workout = { id, name, sets, owner: user.uid };
     console.log("workout:", workout);
     WorkoutService.update(workout)
       .then((response) => {
