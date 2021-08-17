@@ -10,7 +10,7 @@ const WorkoutList = () => {
 
   useEffect(() => {
     user
-      ? WorkoutService.getAll(user.email)
+      ? WorkoutService.getAll(user.uid)
           .then((response) => {
             console.log("printing response", response.data);
             SetWorkouts(response.data);

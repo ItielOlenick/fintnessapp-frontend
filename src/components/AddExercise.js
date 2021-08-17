@@ -11,7 +11,7 @@ const AddExercise = () => {
 
   const saveExercise = (e) => {
     e.preventDefault();
-    const exercise = { name, bodyPart, owner: user.email };
+    const exercise = { name, bodyPart, owner: user.uid };
     ExercisesService.create(exercise)
       .then((response) => {
         message.info("exercise added successfully");

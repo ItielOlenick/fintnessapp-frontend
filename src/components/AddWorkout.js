@@ -10,7 +10,7 @@ const AddWorkout = () => {
   const [user] = useAuthState(auth);
   useEffect(() => {
     user
-      ? ExercisesService.getAll(user.email)
+      ? ExercisesService.getAll(user.uid)
           .then((response) => {
             console.log("printing response", response.data);
             getExercises(response.data);
@@ -60,7 +60,7 @@ const AddWorkout = () => {
 
     e.preventDefault();
     if (finalSets.length > 0) {
-      const workout = { name, sets: finalSets, owner: user.email };
+      const workout = { name, sets: finalSets, owner: user.uid };
       console.log("", workout);
       WorkoutService.create(workout)
         .then((response) => {

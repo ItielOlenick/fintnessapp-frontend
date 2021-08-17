@@ -12,7 +12,7 @@ const EditWorkout = () => {
 
   useEffect(() => {
     user
-      ? ExercisesService.getAll(user.email)
+      ? ExercisesService.getAll(user.uid)
           .then((response) => {
             console.log("printing response", response.data);
             Getexercises(response.data);
