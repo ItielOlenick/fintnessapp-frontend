@@ -13,7 +13,7 @@ const Navbar = () => {
     <div className="container-fluid">
       <div style={{ maxWidth: 800, margin: "0 auto" }}>
         {user ? (
-          <div className="samerow">
+          <div className="sameRow">
             <p>
               {
                 (user.displayName,

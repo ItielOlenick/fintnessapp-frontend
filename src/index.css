@@ -65,7 +65,7 @@ button {
   text-decoration: none;
 }
 
-.samerow {
+.sameRow {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
