@@ -13,12 +13,29 @@ const Register = () => {
       .then((userCredential) => {
         // Signed in
         var user = userCredential.user;
-        console.log(user);
-        history.push("/");
+        return user
+          .updateProfile({
+            displayName: values.name,
+          })
+          .then(() => {
+            console.log("1", user.displayName);
+            // Update successful
+            // ...
+          })
+          .catch((error) => {
+            // An error occurred
+            console.log("2");
+            // ...
+          });
+      })
+      .then((userCredential) => {
+        console.log("3");
+        // Signed in
 
-        // ...
+        history.push("/");
       })
       .catch((error) => {
+        console.log("4");
         var errorCode = error.code;
         var errorMessage = error.message;
         message.warning(errorMessage);
@@ -32,7 +49,7 @@ const Register = () => {
         span: 24,
       },
       sm: {
-        span: 8,
+        span: 10,
       },
     },
     wrapperCol: {
@@ -40,13 +57,13 @@ const Register = () => {
         span: 24,
       },
       sm: {
-        span: 16,
+        span: 14,
       },
     },
   };
   return (
     <Row justify="center" style={{ margin: "15px 0" }}>
-      <Col xs={24} sm={6} style={{ padding: "10px" }}>
+      <Col xs={24} sm={8} style={{ padding: "10px" }}>
         <h2 style={{ textAlign: "center", margin: "50px 0" }}>Register</h2>
         <Form
           form={form}
@@ -54,6 +71,9 @@ const Register = () => {
           onFinish={onFinish}
           {...formItemLayout}
         >
+          <Form.Item name="name" label="Name">
+            <Input />
+          </Form.Item>
           <Form.Item
             name="email"
             label="E-mail"

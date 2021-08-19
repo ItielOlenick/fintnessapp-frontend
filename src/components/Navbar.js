@@ -14,7 +14,12 @@ const Navbar = () => {
       <div style={{ maxWidth: 800, margin: "0 auto" }}>
         {user ? (
           <div className="samerow">
-            <p>{user.email}</p>
+            <p>
+              {
+                (user.displayName,
+                user.displayName ? user.displayName : user.email)
+              }
+            </p>
             <Link onClick={logout} className="ms-3 link">
               Logout
             </Link>

@@ -12,8 +12,6 @@ const Login = () => {
       .signInWithEmailAndPassword(values.email, values.password)
       .then((userCredential) => {
         // Signed in
-        var user = userCredential.user;
-        console.log(user);
         history.push("/");
         // ...
       })
@@ -31,7 +29,7 @@ const Login = () => {
         span: 24,
       },
       sm: {
-        span: 8,
+        span: 10,
       },
     },
     wrapperCol: {
@@ -39,7 +37,7 @@ const Login = () => {
         span: 24,
       },
       sm: {
-        span: 16,
+        span: 14,
       },
     },
   };
