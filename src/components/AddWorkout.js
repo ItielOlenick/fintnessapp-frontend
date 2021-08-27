@@ -4,68 +4,160 @@ import ExercisesService from "../services/ExercisesService";
 import WorkoutService from "../services/WorkoutService";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../services/firebase";
+import {
+  Form,
+  Input,
+  InputNumber,
+  Button,
+  Space,
+  Cascader,
+  Spin,
+  message,
+} from "antd";
+import {
+  MinusCircleOutlined,
+  PlusOutlined,
+  PlusCircleOutlined,
+} from "@ant-design/icons";
+import WgerService from "../services/WgerService";
 
 const AddWorkout = () => {
-  const [listexercises, getExercises] = useState([]);
   const [user] = useAuthState(auth);
+  const [form] = Form.useForm();
+  const [loading, setLoading] = useState(true);
+  const [options, setOptions] = useState([
+    {
+      value: "wgerExercises",
+      label: "Exercises",
+      children: [],
+    },
+    {
+      value: "userExercises",
+      label: "Custom Exercises",
+      children: [],
+    },
+  ]);
   useEffect(() => {
-    user
-      ? ExercisesService.getAll(user.uid)
-          .then((response) => {
-            console.log("printing response", response.data);
-            getExercises(response.data);
-          })
-          .catch((error) => {
-            console.log("Error - something is wrong", error);
-          })
-      : getExercises([]);
+    if (user)
+      ExercisesService.getAll(user.uid)
+        .then((response) => {
+          console.log("printing response", response.data);
+          // getExercises(response.data);
+          const temp = [...options];
+          temp[1].children = response.data.map((values) => ({
+            value: values.name,
+            label: values.name,
+          }));
+          setOptions(temp);
+        })
+        .catch((error) => {
+          console.log("Error - something is wrong", error);
+        });
   }, [user]);
 
-  var options = [];
-  listexercises.length > 0 ? (options = listexercises) : console.log("loading");
+  useEffect(() => getWger(), []);
 
-  const [name, setName] = useState("");
-  const [exercises, setExercises] = useState([]);
-  const [selectExersice, getExercise] = useState("");
-  const [sets, setSets] = useState([]);
-  const [selectSets, getSets] = useState(0);
+  const getWger = () => {
+    // const categories = await WgerService.getCategories().then((data) => {
+    WgerService.getCategories().then((data) => {
+      const categories = [
+        ...data.data.map((values) => ({
+          value: values.id,
+          label: values.name,
+          id: values.id,
+        })),
+      ];
 
-  const addExercise = (e) => {
-    e.preventDefault();
-    setExercises((exercises) => [...exercises, selectExersice]);
-    addSet(e);
+      const wgerExercises = [];
+      const promises = [
+        ...categories.map((category) => {
+          WgerService.getExercise(category.id).then((data) => {
+            const exercises = [
+              ...data.data.map((values) => ({
+                value: values.name,
+                label: values.name,
+              })),
+            ];
+            wgerExercises.push({
+              value: category.value,
+              label: category.label,
+              children: getUniqueListBy(exercises, "value"),
+            });
+          });
+        }),
+      ];
+      Promise.all(promises);
+      console.log(wgerExercises);
+      const temp = [...options];
+      temp[0].children = wgerExercises;
+      setOptions(temp);
+      console.log("options:", options);
+      setLoading(false);
+    });
   };
 
-  const addSet = (e) => {
-    e.preventDefault();
-    setSets((sets) => [...sets, selectSets]);
+  function filter(inputValue, path) {
+    return path.some(
+      (option) =>
+        option.label.toLowerCase().indexOf(inputValue.toLowerCase()) > -1
+    );
+  }
+
+  const onChange = (value, selectedOptions) => {
+    console.log("value:", value, "selectedOptions:", selectedOptions);
+    // form.setF({
+    //   category: selectedOptions[selectedOptions.length - 1].category,
+    // });
+    console.log(form.getFieldsValue(true));
   };
+
+  const displayRender = (labels, selectedOptions) =>
+    labels.map((label, i) => {
+      const option = selectedOptions[i];
+      if (i === labels.length - 1) {
+        return <span key={option.value}>{label}</span>;
+      }
+      return <span key={option.value}></span>;
+    });
+
+  function dropdownRender(menus) {
+    return <div className="cascaderDropdown">{menus}</div>;
+  }
+
+  function render(inputValue, path) {
+    if (path.length === 3 && typeof path[2].value === "string") {
+      return path[2].value;
+    }
+    console.log(path);
+    return path[1].label;
+  }
 
   const history = useHistory();
 
-  const saveWorkout = (e) => {
-    console.log("exercises", exercises);
+  function getUniqueListBy(arr, key) {
+    return [...new Map(arr.map((item) => [item[key], item])).values()];
+  }
 
-    const finalSets = [];
-
-    for (let i = 0; i < exercises.length; i++) {
-      for (let j = 0; j < sets[i]; j++) {
-        finalSets.push({
-          name: exercises[i],
-          reps: 10,
-        });
-      }
-    }
-    console.log("final sets", finalSets);
-
-    e.preventDefault();
-    if (finalSets.length > 0) {
-      const workout = { name, sets: finalSets, owner: user.uid };
-      console.log("", workout);
+  const onFinish = (values) => {
+    console.log("values:", values);
+    const workout = {
+      name: values.workoutName,
+      sets: values.sets.map((val) => ({
+        name: val.exercise[val.exercise.length - 1],
+        reps: val.reps,
+        weight: val.weight,
+        exercisePath: JSON.stringify(val.exercise),
+        category: val.exercise[val.exercise.length - 2],
+      })),
+      user: { id: user.uid },
+    };
+    console.log("workout:", workout);
+    if (workout.sets.length > 0) {
+      console.log("savings workout", workout);
       WorkoutService.create(workout)
         .then((response) => {
           console.log("Workout added successfully", response.data);
-          history.push(`/workouts/${response.data.id}`);
+          history.push("/");
         })
         .catch((error) => {
           console.log("Somthing went wrong");
@@ -74,79 +166,104 @@ const AddWorkout = () => {
   };
 
   return (
-    <div className="create container">
-      <form>
-        <div className="form-group mb-3">
-          <label htmlFor="title">
-            Workout Title: <sup>*</sup>
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="title"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
+    <>
+      {loading ? (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Spin tip="Loading..." />
         </div>
-        <div className="row">
-          <div className="col">
-            <h5>Exercises:</h5>
-            <ul>
-              {exercises.map((item, b) => (
-                <li key={b}>{item}</li>
-              ))}
-            </ul>
-          </div>
-          <div className="col">
-            <h5>Sets:</h5>
-            <ul>
-              {sets.map((item, b) => (
-                <li key={b}>{item}</li>
-              ))}
-            </ul>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col">
-            <div className="form-group mb-3">
-              <label htmlFor="exercises">Select exercises</label>
-              <select
-                className="form-control"
-                id="exercises"
-                defaultValue=""
-                onInput={(e) => getExercise(e.target.value)}
-              >
-                <option value="" hidden>
-                  chose exercise
-                </option>
-                {options.map((options) => (
-                  <option key={options.id} value={options.name}>
-                    {options.name}
-                  </option>
+      ) : (
+        <Form form={form} onFinish={onFinish}>
+          <Form.Item name="workoutName" label="Workout Name">
+            <Input />
+          </Form.Item>
+          <Form.List name="sets">
+            {(fields, { add, remove }) => (
+              <>
+                {fields.map(({ key, name, fieldKey, ...restField }) => (
+                  <>
+                    <Space
+                      key={key}
+                      style={{ display: "flex", justifyContent: "center" }}
+                      align="baseline"
+                      wrap="true"
+                    >
+                      <Form.Item
+                        noStyle
+                        {...restField}
+                        name={[name, "exercise"]}
+                        fieldKey={[fieldKey, "exercise"]}
+                        rules={[
+                          { required: true, message: "Missing exercise" },
+                        ]}
+                      >
+                        <Cascader
+                          placeholder="exercise"
+                          options={options}
+                          onChange={onChange}
+                          dropdownRender={dropdownRender}
+                          showSearch={{
+                            filter,
+                            matchInputWidth: false,
+                            render,
+                          }}
+                          displayRender={displayRender}
+                        />
+                      </Form.Item>
+                      <Form.Item
+                        {...restField}
+                        name={[name, "reps"]}
+                        fieldKey={[fieldKey, "reps"]}
+                        rules={[
+                          { required: true, message: "missing number of reps" },
+                        ]}
+                      >
+                        <InputNumber placeholder="Reps" />
+                      </Form.Item>
+                      <Form.Item
+                        {...restField}
+                        name={[name, "weight"]}
+                        fieldKey={[fieldKey, "weight"]}
+                        rules={[{ required: true, message: "missing weight" }]}
+                      >
+                        <InputNumber placeholder="Weight" />
+                      </Form.Item>
+                      <MinusCircleOutlined onClick={() => remove(name)} />
+                      <PlusCircleOutlined
+                        onClick={() => {
+                          add(form.getFieldValue(["sets", name]), name);
+                        }}
+                      />
+                    </Space>
+                  </>
                 ))}
-              </select>
-            </div>
-          </div>
-          <div className="col-3">
-            <label htmlFor="sets">Sets:</label>
-            <input
-              type="number"
-              className="form-control"
-              id="sets"
-              onInput={(e) => getSets(e.target.value)}
-            />
-          </div>
-        </div>
 
-        <div className="text-center mb-3">
-          <button onClick={(e) => addExercise(e)}>Add exercise</button>
-        </div>
-
-        <div className="text-center mb-3">
-          <button onClick={(e) => saveWorkout(e)}>Save Workout</button>
-        </div>
-      </form>
-    </div>
+                <Form.Item>
+                  <Button
+                    type="dashed"
+                    onClick={() => add()}
+                    block
+                    icon={<PlusOutlined />}
+                  >
+                    Add Set
+                  </Button>
+                </Form.Item>
+              </>
+            )}
+          </Form.List>
+          <Form.Item>
+            <Button type="primary" htmlType="submit">
+              Save
+            </Button>
+          </Form.Item>
+        </Form>
+      )}
+    </>
   );
 };
 

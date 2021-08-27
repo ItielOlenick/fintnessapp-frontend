@@ -1,76 +1,67 @@
-@import url("https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap");
+/* @import url("https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"); */
 
 /* base styles */
-* {
-  margin: 0;
-  font-family: "Ubuntu";
-  color: #333;
-}
-button {
-  background: #79589f;
-  color: white;
-  border: 0;
-  padding: 5px 10px;
-  cursor: pointer;
-}
-.primary-color {
-  color: #4c4ea3;
-}
-/* navbar */
-.navbar {
-  padding: 20px;
-  display: flex;
-  align-items: center;
-  max-width: 800px;
-  margin: 0 auto;
-  border-bottom: 1px solid #f2f2f2;
-}
-
-.navbar a {
-  color: black;
-}
-.navbar a:hover {
-  text-decoration: none;
-  color: #79589f;
-}
-
-/* notes list */
-.main-content {
+/* * {
   max-width: 600px;
   margin: 0px auto;
-  padding: 20px;
-}
-.notes-preview a {
-  background: #f4f4f4;
-  display: block;
-  padding: 1rem;
-}
-.notes-preview a:hover {
-  background: #e4e4e4;
-  text-decoration: none;
-}
-
-/* note details */
-.note-details .metadata {
-  font-size: 14px;
-}
-
-/* create note form */
-.create {
-  max-width: 400px;
-  margin: 20px auto;
-}
-
-.link {
-  text-decoration: none;
-}
-
+} */
 .sameRow {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
+}
+.sameRowAround {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
 }
 
+.main-content {
+  padding: 50px 15px;
+}
+
+@media screen and (max-width: 600px) {
+  .sameRowAround {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .main-content {
+    padding: 30px 15px;
+  }
+
+  .cascaderDropdown {
+    width: 100vw;
+    overflow-x: scroll;
+  }
+
+  .mobileButton {
+    margin-top: 20px;
+  }
+
+  .mobileInput {
+    width: 100% !important;
+  }
+}
+
+.ant-card-body {
+  padding: 0;
+}
+.ant-card-small .ant-card-body {
+  padding: 0;
+}
+.ant-card-body .ant-collapse-content-box {
+  padding: 0;
+}
+.ant-collapse-item {
+  border-bottom: 0 !important;
+}
+.ant-table-tbody > tr:last-of-type > td {
+  border-bottom: 0;
+}
+/* 
 @media screen and (max-width: 600px) {
   .mobile {
     margin-right: 25vw;
@@ -98,4 +89,4 @@ button {
   .mobile-textbox {
     margin-left: 0px;
   }
-}
+} */

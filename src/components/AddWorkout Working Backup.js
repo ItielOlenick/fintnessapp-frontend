@@ -1,22 +1,26 @@
 import { useEffect, useState } from "react";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import ExercisesService from "../services/ExercisesService";
 import WorkoutService from "../services/WorkoutService";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../services/firebase";
-import { Form, Input, InputNumber, Button, Space, Cascader, Spin } from "antd";
 import {
-  MinusCircleOutlined,
-  PlusCircleOutlined,
-  PlusOutlined,
-} from "@ant-design/icons";
+  Form,
+  Input,
+  InputNumber,
+  Button,
+  Space,
+  Cascader,
+  Spin,
+  message,
+} from "antd";
+import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import WgerService from "../services/WgerService";
 
-const EditWorkout = () => {
-  const [loading, setLoading] = useState(true);
+const AddWorkout = () => {
   const [user] = useAuthState(auth);
-  const { id } = useParams();
   const [form] = Form.useForm();
+  const [loading, setLoading] = useState(true);
   const [options, setOptions] = useState([
     {
       value: "wgerExercises",
@@ -29,7 +33,6 @@ const EditWorkout = () => {
       children: [],
     },
   ]);
-
   useEffect(() => {
     if (user)
       ExercisesService.getAll(user.uid)
@@ -48,16 +51,14 @@ const EditWorkout = () => {
         });
   }, [user]);
 
-  useEffect(() => {
-    getWger();
-    getWorkout();
-  }, []);
+  useEffect(() => getWger(), []);
 
   async function getWger() {
+    // const categories = await WgerService.getCategories().then((data) => {
     const categories = await WgerService.getCategories().then((data) => {
       const cats = [
         ...data.data.map((values) => ({
-          value: values.id,
+          value: values.name,
           label: values.name,
           id: values.id,
         })),
@@ -78,7 +79,7 @@ const EditWorkout = () => {
           // console.log(`exercises of category ${category.value}`, exercises);
           wgerExercises.push({
             value: category.value,
-            label: category.label,
+            label: category.value,
             children: getUniqueListBy(exercises, "value"),
           });
         });
@@ -93,23 +94,6 @@ const EditWorkout = () => {
     setLoading(false);
   }
 
-  const getWorkout = () => {
-    WorkoutService.get(id).then((data) => {
-      const workout = {
-        workoutName: data.data.name,
-        sets: data.data.sets.map((value) => ({
-          exercise: JSON.parse(value.exercisePath),
-          reps: value.reps,
-          weight: value.weight,
-          category: value.category,
-          id: value.id,
-        })),
-      };
-      console.log("here we are again:", workout);
-      form.setFieldsValue(workout);
-    });
-  };
-
   function filter(inputValue, path) {
     return path.some(
       (option) =>
@@ -120,10 +104,6 @@ const EditWorkout = () => {
   const onChange = (value, selectedOptions) => {
     console.log(value, selectedOptions);
   };
-
-  function dropdownRender(menus) {
-    return <div className="cascaderDropdown">{menus}</div>;
-  }
 
   const displayRender = (labels, selectedOptions) =>
     labels.map((label, i) => {
@@ -141,31 +121,29 @@ const EditWorkout = () => {
     console.log(path);
     return path[1].label;
   }
+
+  const history = useHistory();
+
   function getUniqueListBy(arr, key) {
     return [...new Map(arr.map((item) => [item[key], item])).values()];
   }
 
-  const history = useHistory();
-
   const onFinish = (values) => {
-    console.log(values);
     const workout = {
-      id: id,
       name: values.workoutName,
-      sets: values.sets.map((val, i) => ({
+      sets: values.sets.map((val) => ({
         name: val.exercise[val.exercise.length - 1],
         reps: val.reps,
         weight: val.weight,
         exercisePath: JSON.stringify(val.exercise),
-        category: val.exercise[val.exercise.length - 2],
       })),
-      user: { id: user.uid },
+      owner: user.uid,
     };
+    console.log("workout:", workout);
     if (workout.sets.length > 0) {
-      console.log("savings workout", workout);
-      WorkoutService.update(workout)
+      WorkoutService.create(workout)
         .then((response) => {
-          console.log("Workout updated successfully", response.data);
+          console.log("Workout added successfully", response.data);
           history.push("/");
         })
         .catch((error) => {
@@ -215,7 +193,7 @@ const EditWorkout = () => {
                           placeholder="exercise"
                           options={options}
                           onChange={onChange}
-                          dropdownRender={dropdownRender}
+                          // changeOnSelect
                           showSearch={{
                             filter,
                             matchInputWidth: false,
@@ -243,25 +221,12 @@ const EditWorkout = () => {
                         <InputNumber placeholder="Weight" />
                       </Form.Item>
                       <MinusCircleOutlined onClick={() => remove(name)} />
-                      <PlusCircleOutlined
-                        onClick={() => {
-                          add(form.getFieldValue(["sets", name]), name);
-                        }}
-                      />
                     </Space>
                   </>
                 ))}
 
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    marginBottom: "10px",
-                  }}
-                >
+                <Form.Item>
                   <Button
-                    style={{ width: 400 }}
                     type="dashed"
                     onClick={() => add()}
                     block
@@ -269,7 +234,7 @@ const EditWorkout = () => {
                   >
                     Add Set
                   </Button>
-                </div>
+                </Form.Item>
               </>
             )}
           </Form.List>
@@ -284,4 +249,4 @@ const EditWorkout = () => {
   );
 };
 
-export default EditWorkout;
+export default AddWorkout;

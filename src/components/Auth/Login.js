@@ -29,7 +29,7 @@ const Login = () => {
         span: 24,
       },
       sm: {
-        span: 10,
+        span: 6,
       },
     },
     wrapperCol: {
@@ -37,15 +37,15 @@ const Login = () => {
         span: 24,
       },
       sm: {
-        span: 14,
+        span: 12,
       },
     },
   };
 
   return (
-    <Row justify="center" style={{ margin: "15px 0" }}>
-      <Col xs={24} sm={6} style={{ padding: "10px" }}>
-        <h2 style={{ textAlign: "center", margin: "50px 0" }}>Login</h2>
+    <Row justify="center">
+      <Col xs={24} sm={10}>
+        <h2 style={{ textAlign: "center", margin: "0 0 50px 0" }}>Login</h2>
         <Form
           form={form}
           name="register"
@@ -80,25 +80,21 @@ const Login = () => {
               { min: 6, type: "string" },
             ]}
           >
-            <Input.Password style={{ width: "100%" }} />
+            <Input.Password />
           </Form.Item>
 
-          <Form.Item
-            wrapperCol={{
-              xs: {
-                span: 24,
-                offset: 0,
-              },
-              sm: {
-                span: 16,
-                offset: 8,
-              },
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              marginBottom: "10px",
             }}
           >
             <Button type="primary" htmlType="submit">
-              <p style={{ color: "white" }}>Login</p>
+              <p>Login</p>
             </Button>
-          </Form.Item>
+          </div>
         </Form>
         <div style={{ textAlign: "center" }}>
           <p>
