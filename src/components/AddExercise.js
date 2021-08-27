@@ -5,7 +5,15 @@ import { message, Form, Input, Button } from "antd";
 import { SaveOutlined } from "@ant-design/icons";
 import { useEffect } from "react";
 
-const AddExercise = ({ count, setCount, id, edit, setEdit, handleCancel }) => {
+const AddExercise = ({
+  count,
+  setCount,
+  id,
+  edit,
+  setEdit,
+  handleCancel,
+  intra,
+}) => {
   const [user] = useAuthState(auth);
   const [form] = Form.useForm();
 
@@ -19,7 +27,7 @@ const AddExercise = ({ count, setCount, id, edit, setEdit, handleCancel }) => {
       });
     } else {
       form.setFieldsValue({ name: "" });
-      setEdit(false);
+      if (!intra) setEdit(false);
     }
   }, [edit]);
 

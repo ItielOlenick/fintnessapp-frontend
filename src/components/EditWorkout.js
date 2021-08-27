@@ -4,19 +4,32 @@ import ExercisesService from "../services/ExercisesService";
 import WorkoutService from "../services/WorkoutService";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../services/firebase";
-import { Form, Input, InputNumber, Button, Space, Cascader, Spin } from "antd";
+import {
+  Row,
+  Col,
+  Modal,
+  Form,
+  Input,
+  InputNumber,
+  Button,
+  Space,
+  Cascader,
+  Spin,
+} from "antd";
 import {
   MinusCircleOutlined,
   PlusCircleOutlined,
   PlusOutlined,
 } from "@ant-design/icons";
 import WgerService from "../services/WgerService";
+import AddExercise from "./AddExercise";
 
 const EditWorkout = () => {
   const [loading, setLoading] = useState(true);
   const [user] = useAuthState(auth);
   const { id } = useParams();
   const [form] = Form.useForm();
+  const [count, setCount] = useState(0);
   const [options, setOptions] = useState([
     {
       value: "wgerExercises",
@@ -46,7 +59,7 @@ const EditWorkout = () => {
         .catch((error) => {
           console.log("Error - something is wrong", error);
         });
-  }, [user]);
+  }, [user, count]);
 
   useEffect(() => {
     getWger();
@@ -122,9 +135,15 @@ const EditWorkout = () => {
   };
 
   function dropdownRender(menus) {
-    return <div className="cascaderDropdown">{menus}</div>;
+    return (
+      <>
+        <div className="cascaderDropdown">{menus}</div>
+        <div>
+          <a onClick={showModal}>Add an exercise</a>
+        </div>
+      </>
+    );
   }
-
   const displayRender = (labels, selectedOptions) =>
     labels.map((label, i) => {
       const option = selectedOptions[i];
@@ -174,6 +193,15 @@ const EditWorkout = () => {
     } else console.log("Empty workout");
   };
 
+  //Modal
+  const [visible, setVisible] = useState(false);
+  const showModal = () => {
+    setVisible(true);
+  };
+  const handleCancel = () => {
+    setVisible(false);
+  };
+
   return (
     <>
       {loading ? (
@@ -195,13 +223,8 @@ const EditWorkout = () => {
             {(fields, { add, remove }) => (
               <>
                 {fields.map(({ key, name, fieldKey, ...restField }) => (
-                  <>
-                    <Space
-                      key={key}
-                      style={{ display: "flex", justifyContent: "center" }}
-                      align="baseline"
-                      wrap="true"
-                    >
+                  <Row gutter={8}>
+                    <Col md={12} xs={24}>
                       <Form.Item
                         noStyle
                         {...restField}
@@ -212,6 +235,8 @@ const EditWorkout = () => {
                         ]}
                       >
                         <Cascader
+                          allowClear={false}
+                          style={{ width: "100%" }}
                           placeholder="exercise"
                           options={options}
                           onChange={onChange}
@@ -224,44 +249,58 @@ const EditWorkout = () => {
                           displayRender={displayRender}
                         />
                       </Form.Item>
-                      <Form.Item
-                        {...restField}
-                        name={[name, "reps"]}
-                        fieldKey={[fieldKey, "reps"]}
-                        rules={[
-                          { required: true, message: "missing number of reps" },
-                        ]}
-                      >
-                        <InputNumber placeholder="Reps" />
-                      </Form.Item>
-                      <Form.Item
-                        {...restField}
-                        name={[name, "weight"]}
-                        fieldKey={[fieldKey, "weight"]}
-                        rules={[{ required: true, message: "missing weight" }]}
-                      >
-                        <InputNumber placeholder="Weight" />
-                      </Form.Item>
-                      <MinusCircleOutlined onClick={() => remove(name)} />
-                      <PlusCircleOutlined
-                        onClick={() => {
-                          add(form.getFieldValue(["sets", name]), name);
+                    </Col>
+                    <Col md={12} xs={24}>
+                      <Space
+                        key={key}
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
                         }}
-                      />
-                    </Space>
-                  </>
+                        align="baseline"
+                        wrap="true"
+                      >
+                        <Space>
+                          <Form.Item
+                            {...restField}
+                            name={[name, "reps"]}
+                            fieldKey={[fieldKey, "reps"]}
+                            rules={[
+                              {
+                                required: true,
+                                message: "missing number of reps",
+                              },
+                            ]}
+                          >
+                            <InputNumber placeholder="Reps" />
+                          </Form.Item>
+
+                          <Form.Item
+                            {...restField}
+                            name={[name, "weight"]}
+                            fieldKey={[fieldKey, "weight"]}
+                            rules={[
+                              { required: true, message: "missing weight" },
+                            ]}
+                          >
+                            <InputNumber placeholder="Weight" />
+                          </Form.Item>
+                        </Space>
+                        <Space>
+                          <MinusCircleOutlined onClick={() => remove(name)} />
+                          <PlusCircleOutlined
+                            onClick={() => {
+                              add(form.getFieldValue(["sets", name]), name);
+                            }}
+                          />
+                        </Space>
+                      </Space>
+                    </Col>
+                  </Row>
                 ))}
 
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    marginBottom: "10px",
-                  }}
-                >
+                <Form.Item>
                   <Button
-                    style={{ width: 400 }}
                     type="dashed"
                     onClick={() => add()}
                     block
@@ -269,7 +308,7 @@ const EditWorkout = () => {
                   >
                     Add Set
                   </Button>
-                </div>
+                </Form.Item>
               </>
             )}
           </Form.List>
@@ -280,6 +319,19 @@ const EditWorkout = () => {
           </Form.Item>
         </Form>
       )}
+      <Modal
+        title={"Add a custom exercise"}
+        visible={visible}
+        onCancel={handleCancel}
+        destroyOnClose={true}
+        footer={null}
+      >
+        <AddExercise
+          setCount={setCount}
+          intra={true}
+          handleCancel={handleCancel}
+        />
+      </Modal>
     </>
   );
 };

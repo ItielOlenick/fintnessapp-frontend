@@ -15,6 +15,9 @@ import {
   Space,
   Cascader,
   Spin,
+  Col,
+  Modal,
+  Row,
 } from "antd";
 import {
   PlusCircleOutlined,
@@ -25,6 +28,7 @@ import {
 import WgerService from "../services/WgerService";
 import LogService from "../services/LogService";
 import Stopwatch from "./Stopwatch";
+import AddExercise from "./AddExercise";
 
 const AddLog = (props) => {
   console.log(props.location.state.id);
@@ -32,6 +36,7 @@ const AddLog = (props) => {
   const [loading, setLoading] = useState(true);
   const [user] = useAuthState(auth);
   const [form] = Form.useForm();
+  const [count, setCount] = useState(0);
   const [options, setOptions] = useState([
     {
       value: "wgerExercises",
@@ -139,7 +144,14 @@ const AddLog = (props) => {
   };
 
   function dropdownRender(menus) {
-    return <div className="cascaderDropdown">{menus}</div>;
+    return (
+      <>
+        <div className="cascaderDropdown">{menus}</div>
+        <div>
+          <a onClick={showModal}>Add an exercise</a>
+        </div>
+      </>
+    );
   }
 
   const displayRender = (labels, selectedOptions) =>
@@ -196,6 +208,15 @@ const AddLog = (props) => {
     } else console.log("Empty workout");
   };
 
+  //Modal
+  const [visible, setVisible] = useState(false);
+  const showModal = () => {
+    setVisible(true);
+  };
+  const handleCancel = () => {
+    setVisible(false);
+  };
+
   return (
     <>
       {loading ? (
@@ -226,13 +247,9 @@ const AddLog = (props) => {
               {(fields, { add, remove }) => (
                 <>
                   {fields.map(({ key, name, fieldKey, ...restField }) => (
-                    <>
-                      <Space
-                        key={key}
-                        style={{ display: "flex", justifyContent: "center" }}
-                        align="baseline"
-                        wrap="true"
-                      >
+                    <Row gutter={8}>
+                      <Col span={2}>
+                        {" "}
                         <Form.Item
                           {...restField}
                           name={[name, "done"]}
@@ -245,6 +262,8 @@ const AddLog = (props) => {
                             }}
                           ></Checkbox>
                         </Form.Item>
+                      </Col>
+                      <Col md={10} xs={22}>
                         <Form.Item
                           noStyle
                           {...restField}
@@ -255,6 +274,8 @@ const AddLog = (props) => {
                           ]}
                         >
                           <Cascader
+                            allowClear={false}
+                            style={{ width: "100%" }}
                             placeholder="exercise"
                             options={options}
                             onChange={onChange}
@@ -267,64 +288,66 @@ const AddLog = (props) => {
                             displayRender={displayRender}
                           />
                         </Form.Item>
-                        <Form.Item
-                          {...restField}
-                          name={[name, "reps"]}
-                          fieldKey={[fieldKey, "reps"]}
-                          rules={[
-                            {
-                              required: true,
-                              message: "missing number of reps",
-                            },
-                          ]}
-                        >
-                          <InputNumber placeholder="Reps" />
-                        </Form.Item>
-                        <Form.Item
-                          {...restField}
-                          name={[name, "weight"]}
-                          fieldKey={[fieldKey, "weight"]}
-                          rules={[
-                            { required: true, message: "missing weight" },
-                          ]}
-                        >
-                          <InputNumber placeholder="Weight" />
-                        </Form.Item>
-                        <Popconfirm
-                          title="Sure to delete?"
-                          onConfirm={() => remove(name)}
-                          onCancel={() => console.log("cancel")}
-                        >
-                          <MinusCircleOutlined />
-                        </Popconfirm>
-                        <PlusCircleOutlined
-                          onClick={() => {
-                            add(form.getFieldValue(["sets", name]), name);
+                      </Col>
+                      <Col md={12} xs={24}>
+                        <Space
+                          key={key}
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
                           }}
-                        />
-                      </Space>
-                    </>
+                          align="baseline"
+                          wrap="true"
+                        >
+                          <Space>
+                            <Form.Item
+                              {...restField}
+                              name={[name, "reps"]}
+                              fieldKey={[fieldKey, "reps"]}
+                              rules={[
+                                {
+                                  required: true,
+                                  message: "missing number of reps",
+                                },
+                              ]}
+                            >
+                              <InputNumber placeholder="Reps" />
+                            </Form.Item>
+
+                            <Form.Item
+                              {...restField}
+                              name={[name, "weight"]}
+                              fieldKey={[fieldKey, "weight"]}
+                              rules={[
+                                { required: true, message: "missing weight" },
+                              ]}
+                            >
+                              <InputNumber placeholder="Weight" />
+                            </Form.Item>
+                          </Space>
+                          <Space>
+                            <MinusCircleOutlined onClick={() => remove(name)} />
+                            <PlusCircleOutlined
+                              onClick={() => {
+                                add(form.getFieldValue(["sets", name]), name);
+                              }}
+                            />
+                          </Space>
+                        </Space>
+                      </Col>
+                    </Row>
                   ))}
 
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      marginBottom: "10px",
-                    }}
-                  >
+                  <Form.Item>
                     <Button
-                      style={{ width: 400 }}
                       type="dashed"
-                      onClick={() => add({ done: false })}
+                      onClick={() => add()}
                       block
                       icon={<PlusOutlined />}
                     >
                       Add Set
                     </Button>
-                  </div>
-                  <br />
+                  </Form.Item>
                 </>
               )}
             </Form.List>
@@ -359,6 +382,19 @@ const AddLog = (props) => {
           </Form>
         </>
       )}
+      <Modal
+        title={"Add a custom exercise"}
+        visible={visible}
+        onCancel={handleCancel}
+        destroyOnClose={true}
+        footer={null}
+      >
+        <AddExercise
+          setCount={setCount}
+          intra={true}
+          handleCancel={handleCancel}
+        />
+      </Modal>
     </>
   );
 };

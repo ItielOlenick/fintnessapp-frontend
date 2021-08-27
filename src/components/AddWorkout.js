@@ -6,13 +6,15 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../services/firebase";
 import {
   Form,
+  Row,
+  Col,
   Input,
   InputNumber,
   Button,
   Space,
   Cascader,
   Spin,
-  message,
+  Modal,
 } from "antd";
 import {
   MinusCircleOutlined,
@@ -20,11 +22,13 @@ import {
   PlusCircleOutlined,
 } from "@ant-design/icons";
 import WgerService from "../services/WgerService";
+import AddExercise from "./AddExercise";
 
 const AddWorkout = () => {
   const [user] = useAuthState(auth);
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(true);
+  const [count, setCount] = useState(0);
   const [options, setOptions] = useState([
     {
       value: "wgerExercises",
@@ -53,7 +57,7 @@ const AddWorkout = () => {
         .catch((error) => {
           console.log("Error - something is wrong", error);
         });
-  }, [user]);
+  }, [user, count]);
 
   useEffect(() => getWger(), []);
 
@@ -121,7 +125,14 @@ const AddWorkout = () => {
     });
 
   function dropdownRender(menus) {
-    return <div className="cascaderDropdown">{menus}</div>;
+    return (
+      <>
+        <div className="cascaderDropdown">{menus}</div>
+        <div>
+          <a onClick={showModal}>Add an exercise</a>
+        </div>
+      </>
+    );
   }
 
   function render(inputValue, path) {
@@ -165,6 +176,15 @@ const AddWorkout = () => {
     } else console.log("Empty workout");
   };
 
+  //Modal
+  const [visible, setVisible] = useState(false);
+  const showModal = () => {
+    setVisible(true);
+  };
+  const handleCancel = () => {
+    setVisible(false);
+  };
+
   return (
     <>
       {loading ? (
@@ -186,13 +206,8 @@ const AddWorkout = () => {
             {(fields, { add, remove }) => (
               <>
                 {fields.map(({ key, name, fieldKey, ...restField }) => (
-                  <>
-                    <Space
-                      key={key}
-                      style={{ display: "flex", justifyContent: "center" }}
-                      align="baseline"
-                      wrap="true"
-                    >
+                  <Row gutter={8}>
+                    <Col md={12} xs={24}>
                       <Form.Item
                         noStyle
                         {...restField}
@@ -203,6 +218,8 @@ const AddWorkout = () => {
                         ]}
                       >
                         <Cascader
+                          allowClear={false}
+                          style={{ width: "100%" }}
                           placeholder="exercise"
                           options={options}
                           onChange={onChange}
@@ -215,32 +232,54 @@ const AddWorkout = () => {
                           displayRender={displayRender}
                         />
                       </Form.Item>
-                      <Form.Item
-                        {...restField}
-                        name={[name, "reps"]}
-                        fieldKey={[fieldKey, "reps"]}
-                        rules={[
-                          { required: true, message: "missing number of reps" },
-                        ]}
-                      >
-                        <InputNumber placeholder="Reps" />
-                      </Form.Item>
-                      <Form.Item
-                        {...restField}
-                        name={[name, "weight"]}
-                        fieldKey={[fieldKey, "weight"]}
-                        rules={[{ required: true, message: "missing weight" }]}
-                      >
-                        <InputNumber placeholder="Weight" />
-                      </Form.Item>
-                      <MinusCircleOutlined onClick={() => remove(name)} />
-                      <PlusCircleOutlined
-                        onClick={() => {
-                          add(form.getFieldValue(["sets", name]), name);
+                    </Col>
+                    <Col md={12} xs={24}>
+                      <Space
+                        key={key}
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
                         }}
-                      />
-                    </Space>
-                  </>
+                        align="baseline"
+                        wrap="true"
+                      >
+                        <Space>
+                          <Form.Item
+                            {...restField}
+                            name={[name, "reps"]}
+                            fieldKey={[fieldKey, "reps"]}
+                            rules={[
+                              {
+                                required: true,
+                                message: "missing number of reps",
+                              },
+                            ]}
+                          >
+                            <InputNumber placeholder="Reps" />
+                          </Form.Item>
+
+                          <Form.Item
+                            {...restField}
+                            name={[name, "weight"]}
+                            fieldKey={[fieldKey, "weight"]}
+                            rules={[
+                              { required: true, message: "missing weight" },
+                            ]}
+                          >
+                            <InputNumber placeholder="Weight" />
+                          </Form.Item>
+                        </Space>
+                        <Space>
+                          <MinusCircleOutlined onClick={() => remove(name)} />
+                          <PlusCircleOutlined
+                            onClick={() => {
+                              add(form.getFieldValue(["sets", name]), name);
+                            }}
+                          />
+                        </Space>
+                      </Space>
+                    </Col>
+                  </Row>
                 ))}
 
                 <Form.Item>
@@ -263,6 +302,19 @@ const AddWorkout = () => {
           </Form.Item>
         </Form>
       )}
+      <Modal
+        title={"Add a custom exercise"}
+        visible={visible}
+        onCancel={handleCancel}
+        destroyOnClose={true}
+        footer={null}
+      >
+        <AddExercise
+          setCount={setCount}
+          intra={true}
+          handleCancel={handleCancel}
+        />
+      </Modal>
     </>
   );
 };
