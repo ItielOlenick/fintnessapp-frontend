@@ -63,8 +63,6 @@ const WorkoutList = () => {
     });
 
     setFromatedWorkout(unique);
-    console.log("Workouts: ", workouts);
-    console.log("unique: ", unique);
   };
 
   useEffect(() => {
@@ -155,8 +153,6 @@ const WorkoutList = () => {
                                   }}
                                   title="Sure to delete?"
                                   onConfirm={(event) => {
-                                    event.stopPropagation();
-
                                     WorkoutService.remove(item.id);
                                     setCount(count - 1);
                                   }}

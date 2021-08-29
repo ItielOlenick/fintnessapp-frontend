@@ -17,7 +17,7 @@ import {
 import { useState } from "react";
 import AddExercise from "./AddExercise";
 
-const ExercisePicker = ({ options, form, setCount }) => {
+const ExercisePicker = ({ options, form, setCount, log }) => {
   function filter(inputValue, path) {
     return path.some(
       (option) =>
@@ -72,7 +72,7 @@ const ExercisePicker = ({ options, form, setCount }) => {
                 <Row gutter={8}>
                   <Col md={22} xs={22}>
                     <Form.Item
-                      noStyle
+                      // noStyle
                       {...restField}
                       name={[name, "exercisePath"]}
                       fieldKey={[fieldKey, "exercisePath"]}
@@ -83,7 +83,6 @@ const ExercisePicker = ({ options, form, setCount }) => {
                         style={{ width: "100%" }}
                         placeholder="exercise"
                         options={options}
-                        // onChange={onChange}
                         dropdownRender={dropdownRender}
                         showSearch={{
                           filter,
@@ -94,7 +93,14 @@ const ExercisePicker = ({ options, form, setCount }) => {
                       />
                     </Form.Item>
                   </Col>
-                  <Col md={2} xs={2}>
+                  <Col
+                    span={2}
+                    style={{
+                      display: "flex",
+                      justifyContent: "flex-end",
+                      paddingTop: 9,
+                    }}
+                  >
                     <MinusCircleOutlined onClick={() => remove(name)} />
                   </Col>
                 </Row>
@@ -106,17 +112,21 @@ const ExercisePicker = ({ options, form, setCount }) => {
                           {fields.map(
                             ({ key, name, fieldKey, ...restField }) => (
                               <Row gutter={8}>
-                                <Col span={2}>
-                                  <Form.Item
-                                    {...restField}
-                                    name={[name, "done"]}
-                                    fieldKey={[fieldKey, "done"]}
-                                    valuePropName="checked"
-                                  >
-                                    <Checkbox></Checkbox>
-                                  </Form.Item>
-                                </Col>
-                                <Col md={22} xs={22}>
+                                {log ? (
+                                  <Col span={2}>
+                                    <Form.Item
+                                      {...restField}
+                                      name={[name, "done"]}
+                                      fieldKey={[fieldKey, "done"]}
+                                      valuePropName="checked"
+                                    >
+                                      <Checkbox></Checkbox>
+                                    </Form.Item>
+                                  </Col>
+                                ) : (
+                                  <></>
+                                )}
+                                <Col span={log ? 22 : 24}>
                                   <Space
                                     key={key}
                                     style={{
@@ -126,7 +136,7 @@ const ExercisePicker = ({ options, form, setCount }) => {
                                     align="baseline"
                                     wrap="true"
                                   >
-                                    <Space>
+                                    <Space align="baseline">
                                       <Form.Item
                                         {...restField}
                                         name={[name, "reps"]}
@@ -138,7 +148,10 @@ const ExercisePicker = ({ options, form, setCount }) => {
                                           },
                                         ]}
                                       >
-                                        <InputNumber placeholder="Reps" />
+                                        <InputNumber
+                                          placeholder="Reps"
+                                          style={{ width: "100%" }}
+                                        />
                                       </Form.Item>
 
                                       <Form.Item
@@ -152,31 +165,16 @@ const ExercisePicker = ({ options, form, setCount }) => {
                                           },
                                         ]}
                                       >
-                                        <InputNumber placeholder="Weight" />
+                                        <InputNumber
+                                          placeholder="Weight"
+                                          style={{ width: "100%" }}
+                                        />
                                       </Form.Item>
-                                    </Space>
-                                    <Space>
+                                      {/* <Space> */}
                                       <MinusCircleOutlined
                                         onClick={() => remove(name)}
                                       />
-                                      <PlusCircleOutlined
-                                        onClick={() => {
-                                          console.log(
-                                            "here",
-                                            form.getFieldValue(["exercises", i])
-                                              .exercisePath
-                                          );
-                                          add(
-                                            form.getFieldValue([
-                                              "exercises",
-                                              i,
-                                              "sets",
-                                              name,
-                                            ]),
-                                            name
-                                          );
-                                        }}
-                                      />
+                                      {/* </Space> */}
                                     </Space>
                                   </Space>
                                 </Col>

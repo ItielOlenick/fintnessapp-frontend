@@ -91,17 +91,18 @@ const EditWorkout = () => {
 
   const getWorkout = () => {
     WorkoutService.get(id).then((data) => {
+      const uniqueSets = getUniqueListBy(data.data.sets, "name").map((v) => {
+        return data.data.sets.filter((c) => c.name === v.name);
+      });
+
       const workout = {
         workoutName: data.data.name,
-        sets: data.data.sets.map((value) => ({
-          exercise: JSON.parse(value.exercisePath),
-          reps: value.reps,
-          weight: value.weight,
-          category: value.category,
-          id: value.id,
+        exercises: uniqueSets.map((value, i) => ({
+          exercisePath: JSON.parse(value[0].exercisePath),
+          sets: uniqueSets[i],
         })),
       };
-      console.log("here we are again:", workout);
+
       form.setFieldsValue(workout);
     });
   };
@@ -114,6 +115,7 @@ const EditWorkout = () => {
 
   const onFinish = (workout) => {
     const savedWorkout = {
+      id: id,
       name: workout.workoutName,
       sets: workout.exercises
         .map((exercise, j) =>
