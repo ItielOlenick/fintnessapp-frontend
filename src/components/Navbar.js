@@ -1,4 +1,4 @@
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../services/firebase";
 import { Menu, Layout, Row, Col } from "antd";
@@ -16,7 +16,8 @@ const Navbar = () => {
     window.addEventListener("resize", updateDimensions);
     return () => window.removeEventListener("resize", updateDimensions);
   }, []);
-
+  const location = useLocation();
+  console.log("location: ", location);
   const [user] = useAuthState(auth);
   const history = useHistory();
   const logout = () => {
@@ -54,23 +55,23 @@ const Navbar = () => {
           theme="dark"
           mode="horizontal"
           style={{ justifyContent: "center" }}
-          // defaultSelectedKeys={["1"]}
+          defaultSelectedKeys={[location.pathname]}
         >
           {user ? (
             <>
-              <Menu.Item>
+              <Menu.Item key="/logList">
                 <Link to="/logList">Logs</Link>
               </Menu.Item>
-              <Menu.Item key="1">
+              <Menu.Item key="/">
                 <Link to="/">Workouts</Link>
               </Menu.Item>
-              <Menu.Item>
+              <Menu.Item key="/exercises">
                 <Link to="/exercises">Exercises</Link>
               </Menu.Item>
             </>
           ) : (
             <>
-              <Menu.Item key="1">
+              <Menu.Item>
                 <Link to="/">Home</Link>
               </Menu.Item>
               <Menu.Item>
