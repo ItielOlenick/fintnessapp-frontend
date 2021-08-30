@@ -59,7 +59,7 @@ const Navbar = () => {
           {user ? (
             <>
               <Menu.Item>
-                <Link to="/">Log</Link>
+                <Link to="/logList">Logs</Link>
               </Menu.Item>
               <Menu.Item key="1">
                 <Link to="/">Workouts</Link>

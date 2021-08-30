@@ -7,7 +7,7 @@ import { auth } from "../services/firebase";
 import { Form, Input, Button, Spin, message } from "antd";
 import WgerService from "../services/WgerService";
 import ExercisePicker from "./ExercisePicker";
-const EditWorkout = () => {
+const EditWorkout = (props) => {
   const [loading, setLoading] = useState(true);
   const [user] = useAuthState(auth);
   const { id } = useParams();
@@ -90,7 +90,7 @@ const EditWorkout = () => {
   }
 
   const getWorkout = () => {
-    WorkoutService.get(id).then((data) => {
+    WorkoutService.get(id ? id : props.location.state.id).then((data) => {
       const uniqueSets = getUniqueListBy(data.data.sets, "name").map((v) => {
         return data.data.sets.filter((c) => c.name === v.name);
       });
@@ -120,18 +120,18 @@ const EditWorkout = () => {
       sets: workout.exercises
         .map((exercise, j) =>
           exercise.sets.flatMap((set, i) => ({
-            name: set.exercisePath[set.exercisePath.length - 1],
+            name: exercise.exercisePath[exercise.exercisePath.length - 1],
             reps: set.reps,
             weight: set.weight,
             exercisePath: JSON.stringify(workout.exercises[j].exercisePath),
-            category: set.exercisePath[set.exercisePath.length - 2],
+            category: exercise.exercisePath[exercise.exercisePath.length - 2],
           }))
         )
         .flat(),
       user: { id: user.uid },
     };
     if (savedWorkout.sets.length > 0) {
-      console.log("savings workout", savedWorkout);
+      console.log("updating workout", savedWorkout);
       WorkoutService.update(savedWorkout)
         .then((response) => {
           console.log("Workout updated successfully", response.data);
@@ -167,6 +167,10 @@ const EditWorkout = () => {
               onClick={() => {
                 if (form.getFieldValue(["exercises", 0, "sets"]) != undefined) {
                   form.submit();
+                  console.log(
+                    "form before saving: ",
+                    form.getFieldsValue(true)
+                  );
                 } else {
                   message.warn(
                     "Empty workout, please add at least one exercise"

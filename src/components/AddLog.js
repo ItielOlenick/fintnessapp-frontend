@@ -99,7 +99,10 @@ const AddLog = (props) => {
   }
 
   const getWorkout = () => {
-    WorkoutService.get(props.location.state.id).then((data) => {
+    (!props.location.state.edit
+      ? WorkoutService.get(props.location.state.id)
+      : LogService.get(props.location.state.id)
+    ).then((data) => {
       const uniqueSets = getUniqueListBy(data.data.sets, "name").map((v) => {
         return data.data.sets.filter((c) => c.name === v.name);
       });
@@ -110,6 +113,9 @@ const AddLog = (props) => {
           exercisePath: JSON.parse(value[0].exercisePath),
           sets: uniqueSets[i],
         })),
+        notes: data.data.notes,
+        startedAt: data.data.startedAt,
+        endedAt: data.data.endedAt,
       };
 
       form.setFieldsValue(workout);
@@ -126,13 +132,14 @@ const AddLog = (props) => {
           exercise.sets.flatMap((set, i) =>
             set.done
               ? {
-                  name: set.exercisePath[set.exercisePath.length - 1],
+                  name: exercise.exercisePath[exercise.exercisePath.length - 1],
                   reps: set.reps,
                   weight: set.weight,
                   exercisePath: JSON.stringify(
                     workout.exercises[j].exercisePath
                   ),
-                  category: set.exercisePath[set.exercisePath.length - 2],
+                  category:
+                    exercise.exercisePath[exercise.exercisePath.length - 2],
                 }
               : []
           )
@@ -149,7 +156,7 @@ const AddLog = (props) => {
       LogService.create(log)
         .then((response) => {
           console.log("Workout logged successfully", response.data);
-          history.push("/");
+          history.push("/logList");
         })
         .catch((error) => {
           console.log("Somthing went wrong");
@@ -214,11 +221,11 @@ const AddLog = (props) => {
                 type="primary"
                 htmlType="button"
                 onClick={() => {
-                  console.log("workout as of now: ", form.getFieldsValue(true));
-                  // setStarted({
-                  //   started: true,
-                  // //   timeStarted: new Date().toISOString(),
-                  // });
+                  // console.log("workout as of now: ", form.getFieldsValue(true));
+                  setStarted({
+                    started: true,
+                    timeStarted: new Date().toISOString(),
+                  });
                 }}
               >
                 Start

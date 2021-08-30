@@ -35,7 +35,7 @@ const AddExercise = ({
     let exercise;
 
     if (edit) {
-      exercise = { name: values.name, owner: user.uid, id: id };
+      exercise = { name: values.name, user: { id: user.uid }, id: id };
       ExercisesService.update(exercise)
         .then((response) => {
           message.info("exercise updated successfully");
@@ -47,7 +47,7 @@ const AddExercise = ({
           console.log("Something went wrong", error);
         });
     } else {
-      exercise = { name: values.name, owner: user.uid };
+      exercise = { name: values.name, user: { id: user.uid } };
       ExercisesService.create(exercise)
         .then((response) => {
           message.info("exercise added successfully");

@@ -16,7 +16,7 @@ import Home from "./components/Home";
 import { Content } from "antd/lib/layout/layout";
 import { Col, Row } from "antd";
 import AddLog from "./components/AddLog";
-
+import LogList from "./components/LogList";
 function App() {
   const [user] = useAuthState(auth);
   return (
@@ -29,10 +29,17 @@ function App() {
               <div>
                 <Switch>
                   <Route exact path="/" component={WorkoutList} />
+                  <Route exact path="/logList" component={LogList} />
                   <Route exact path="/addWorkout" component={AddWorkout} />
                   <Route
                     exact
                     path="/Workouts/edit/:id"
+                    component={EditWorkout}
+                  />
+                  <Route exact path="/logs/edit" component={AddLog} />
+                  <Route
+                    exact
+                    path="/addWorkoutFromLog"
                     component={EditWorkout}
                   />
                   <Route exact path="/workouts/:id" component={ViewWorkout} />
