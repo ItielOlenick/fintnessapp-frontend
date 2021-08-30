@@ -118,8 +118,9 @@ const ExercisesList = () => {
                       <Popconfirm
                         title="Sure to delete?"
                         onConfirm={() => {
-                          ExercisesService.remove(item.id);
-                          setCount(count - 1);
+                          ExercisesService.remove(item.id).then(
+                            setCount(count - 1)
+                          );
                         }}
                         onCancel={() => console.log("cancel")}
                       >
