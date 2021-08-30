@@ -184,8 +184,10 @@ const LogList = () => {
                                   }}
                                   title="Sure to delete?"
                                   onConfirm={(event) => {
-                                    LogService.remove(item.id);
-                                    setCount(count - 1);
+                                    LogService.remove(item.id).then(() => {
+                                      setCount(count - 1);
+                                      event.stopPropagation();
+                                    });
                                   }}
                                   onCancel={(event) => {
                                     event.stopPropagation();
