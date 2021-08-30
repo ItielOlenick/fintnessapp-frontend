@@ -187,9 +187,6 @@ const AddLog = (props) => {
           </Collapse>
           <br />
           <Form form={form} onFinish={onFinish}>
-            <Form.Item name="workoutName" label="Workout Name">
-              <Input />
-            </Form.Item>
             <ExercisePicker
               options={options}
               setCount={setCount}

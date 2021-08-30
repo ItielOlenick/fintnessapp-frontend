@@ -157,9 +157,6 @@ const EditWorkout = (props) => {
         </div>
       ) : (
         <Form form={form} onFinish={onFinish}>
-          <Form.Item name="workoutName" label="Workout Name">
-            <Input />
-          </Form.Item>
           <ExercisePicker options={options} setCount={setCount} form={form} />
           <Form.Item>
             <Button

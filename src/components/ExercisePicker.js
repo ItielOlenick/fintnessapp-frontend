@@ -9,17 +9,30 @@ import {
   InputNumber,
   Button,
   Modal,
+  Switch,
+  Input,
 } from "antd";
 import {
   MinusCircleOutlined,
   MenuOutlined,
   PlusOutlined,
 } from "@ant-design/icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AddExercise from "./AddExercise";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
 const ExercisePicker = ({ options, form, setCount, log }) => {
+  const [width, setWidth] = useState(window.innerWidth);
+  const [height, setHeight] = useState(window.innerHeight);
+  const updateDimensions = () => {
+    setWidth(window.innerWidth);
+    setHeight(window.innerHeight);
+  };
+  useEffect(() => {
+    window.addEventListener("resize", updateDimensions);
+    return () => window.removeEventListener("resize", updateDimensions);
+  }, []);
+
   function filter(inputValue, path) {
     return path.some(
       (option) =>
@@ -66,23 +79,46 @@ const ExercisePicker = ({ options, form, setCount, log }) => {
   };
 
   var reorder = () => {};
+  const onChange = (checked) => {
+    checked ? setOrder(true) : setOrder(false);
+  };
 
-  const [dragging, setDragging] = useState();
-
+  const [order, setOrder] = useState(false);
   return (
-    <div
-    // style={
-    //   dragging
-    //     ? {
-    //         paddingBottom: "150px",
-    //       }
-    //     : {}
-    // }
-    >
+    <div>
+      <Row gutter={8}>
+        <Col span={18}>
+          <Form.Item name="workoutName" label="Workout Name">
+            <Input />
+          </Form.Item>
+        </Col>
+        <Col span={6}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-end ",
+            }}
+          >
+            <Form.Item
+              label="Reorder"
+              style={
+                width < 576
+                  ? {
+                      display: "block",
+                      justifyContent: "flex-end ",
+                    }
+                  : {}
+              }
+            >
+              <Switch onChange={(checked) => onChange(checked)} />
+            </Form.Item>
+          </div>
+        </Col>
+      </Row>
+
       <DragDropContext
-        onDragStart={() => setDragging(true)}
+        // onDragStart={() => setDragging(true)}
         onDragEnd={(result) => {
-          setDragging(false);
           if (!result.destination) return;
           reorder(result.source.index, result.destination.index);
         }}
@@ -99,35 +135,29 @@ const ExercisePicker = ({ options, form, setCount, log }) => {
                         draggableId={name.toString()}
                         index={i}
                       >
-                        {(provided) => (
+                        {(provided, snapshot) => (
                           <div
                             {...provided.draggableProps}
                             ref={provided.innerRef}
                           >
-                            <div
-                              style={
-                                dragging
-                                  ? {
-                                      outline: "1px dashed #1890FF",
-
-                                      background: "white",
-                                    }
-                                  : {}
-                              }
-                            >
+                            <div>
                               <>{(reorder = move)}</>
                               <Row gutter={8}>
                                 <Col
                                   span={2}
-                                  style={{
-                                    display: "flex",
-                                    justifyContent: "flex-start",
-                                    paddingTop: 9,
-                                  }}
+                                  style={
+                                    order
+                                      ? {
+                                          display: "flex",
+                                          justifyContent: "flex-start",
+                                          paddingTop: 9,
+                                        }
+                                      : { display: "none" }
+                                  }
                                 >
                                   <MenuOutlined {...provided.dragHandleProps} />
                                 </Col>
-                                <Col md={20} xs={20}>
+                                <Col span={order ? 20 : 22}>
                                   <Form.Item
                                     // noStyle
                                     {...restField}
@@ -169,13 +199,13 @@ const ExercisePicker = ({ options, form, setCount, log }) => {
                                 </Col>
                               </Row>
                               <Row
-                              // style={
-                              //   dragging
-                              //     ? {
-                              //         display: "none",
-                              //       }
-                              //     : {}
-                              // }
+                                style={
+                                  order
+                                    ? {
+                                        display: "none",
+                                      }
+                                    : {}
+                                }
                               >
                                 <Col span={24}>
                                   <Form.List name={[name, "sets"]}>
