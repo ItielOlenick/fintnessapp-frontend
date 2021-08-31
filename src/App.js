@@ -25,6 +25,7 @@ function App() {
 
   useEffect(() => {
     if (user) setLoading(false);
+    else setLoading(false);
   }, [user]);
 
   return (

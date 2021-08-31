@@ -70,11 +70,11 @@ const LogList = () => {
         setLogs(response.data);
         setCount(response.data.length);
         setLoading(false);
-        format();
       })
       .catch((error) => {
         console.log("Error - something is wrong", error);
       });
+    format();
   }, [user, count]);
 
   //
