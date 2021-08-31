@@ -108,7 +108,14 @@ const LogList = () => {
         <div className="sameRowAround" style={{ marginBottom: 50 }}>
           <h3 style={{ textAlign: "center" }}>Logs</h3>
           <Tooltip title="New Workout">
-            <Link to={"/addWorkout"}>
+            <Link
+              to={{
+                pathname: `/addWorkoutFromLog`,
+                search: "",
+                hash: "#",
+                state: { id: null },
+              }}
+            >
               <Button type="primary" shape="circle">
                 <PlusOutlined />
               </Button>
@@ -185,7 +192,7 @@ const LogList = () => {
                                   title="Sure to delete?"
                                   onConfirm={(event) => {
                                     LogService.remove(item.id).then(() => {
-                                      setCount(count - 1);
+                                      setCount(count - 100);
                                       event.stopPropagation();
                                     });
                                   }}
