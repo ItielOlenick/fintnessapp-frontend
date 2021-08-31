@@ -37,10 +37,6 @@ const LogList = () => {
   const { Panel } = Collapse;
   const [formatedWorkout, setFromatedWorkout] = useState();
 
-  // if i want to show unique repeating sets, with reps and kg,
-  // get source from logs, comment out the extra functions and comment in
-  // the colum rendering that is commented out
-
   function getUniqueListBy(arr, key) {
     return [...new Map(arr.map((item) => [item[key], item])).values()];
   }
@@ -64,22 +60,21 @@ const LogList = () => {
     });
 
     setFromatedWorkout(unique);
+
+    console.log(formatedWorkout);
   };
 
   useEffect(() => {
-    if (user)
-      LogService.getAll(user.uid)
-        .then((response) => {
-          setLogs(response.data);
-          setCount(response.data.length);
-          setLoading(false);
-        })
-        .catch((error) => {
-          console.log("Error - something is wrong", error);
-        });
-    format();
-    UserService.get(user.uid).then((v) => console.log(v));
-    console.log(logs);
+    LogService.getAll(user.uid)
+      .then((response) => {
+        setLogs(response.data);
+        setCount(response.data.length);
+        setLoading(false);
+        format();
+      })
+      .catch((error) => {
+        console.log("Error - something is wrong", error);
+      });
   }, [user, count]);
 
   //
@@ -98,10 +93,6 @@ const LogList = () => {
     },
   ];
 
-  // const menu = (
-
-  // );
-
   return (
     <Row>
       <Col span={24}>
@@ -110,7 +101,7 @@ const LogList = () => {
           <Tooltip title="New Workout">
             <Link
               to={{
-                pathname: `/addWorkoutFromLog`,
+                pathname: `/logWorkout`,
                 search: "",
                 hash: "#",
                 state: { id: null },
@@ -193,6 +184,7 @@ const LogList = () => {
                                   onConfirm={(event) => {
                                     LogService.remove(item.id).then(() => {
                                       setCount(count - 100);
+
                                       event.stopPropagation();
                                     });
                                   }}

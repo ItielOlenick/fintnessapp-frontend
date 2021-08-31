@@ -2,49 +2,34 @@ import { useEffect, useState } from "react";
 import { Statistic, Button, Row, Col, Space } from "antd";
 
 const Stopwatch = () => {
-  const [time, setTime] = useState({ hr: 0, min: 0, sec: 0, ms: 0 });
+  const [time, setTime] = useState(0);
   const [stopwatch, setStopwatch] = useState();
   const [start, setStart] = useState(false);
   const [display, setDisplay] = useState("");
 
-  useEffect(() => {
-    arrange();
-    pad();
-  }, [time]);
+  let ms = time % 100;
+  let sec = Math.floor(time / 100) % 60;
+  let min = Math.floor(time / 100 / 60) % 60;
+  let hr = Math.floor(time / 100 / 60 / 60) % 24;
 
-  const arrange = () => {
-    if (time.ms === 100)
-      setTime((time) => ({ ...time, sec: time.sec + 1, ms: 0 }));
-    if (time.sec === 60)
-      setTime((time) => ({ ...time, min: time.min + 1, sec: 0 }));
-    if (time.min === 60)
-      setTime((time) => ({ ...time, hr: time.hr + 1, min: 0 }));
-  };
-
-  const pad = () => {
-    let hr = time.hr.toString();
-    let min = time.min.toString();
-    let sec = time.sec.toString();
-    let ms = time.ms.toString();
-    if (hr < 10) hr = "0" + hr;
-    if (min < 10) min = "0" + min;
-    if (sec < 10) sec = "0" + sec;
-    if (ms < 10) ms = "0" + ms;
-    setDisplay(`${hr}:${min}:${sec}:${ms}`);
-  };
+  let dms = ms < 10 ? "0" + ms : ms;
+  let dsec = sec < 10 ? "0" + sec : sec;
+  let dmin = min < 10 ? "0" + min : min;
+  let dhr = hr < 10 ? "0" + hr : hr;
 
   const control = (action) => {
     if (!start) {
       if (action === "start") {
+        const startTime = Date.now();
         setStart(true);
         setStopwatch(
           setInterval(() => {
-            setTime((time) => ({ ...time, ms: time.ms + 1 }));
+            setTime(time + Math.floor((Date.now() - startTime) / 10));
           }, 10)
         );
       }
       if (action === "clear") {
-        setTime({ hr: 0, min: 0, sec: 0, ms: 0 });
+        setTime(0);
       }
     }
     if (action === "pause") {
@@ -54,42 +39,40 @@ const Stopwatch = () => {
   };
 
   return (
-    <div>
-      <Row>
-        <Col xs={24} md={12}>
-          <Statistic value={display} />
-        </Col>
-        <Col xs={24} md={12} style={{ display: "flex", alignItems: "center" }}>
-          <Space>
-            {start ? (
-              <Button
-                onClick={() => {
-                  control("pause");
-                }}
-              >
-                stop
-              </Button>
-            ) : (
-              <Button
-                onClick={() => {
-                  control("start");
-                }}
-              >
-                start
-              </Button>
-            )}
-
+    <Row>
+      <Col xs={24} md={12}>
+        <Statistic value={`${dhr}:${dmin}:${dsec}:${dms}`} />
+      </Col>
+      <Col xs={24} md={12} style={{ display: "flex", alignItems: "center" }}>
+        <Space>
+          {start ? (
             <Button
               onClick={() => {
-                control("clear");
+                control("pause");
               }}
             >
-              reset
+              stop
             </Button>
-          </Space>
-        </Col>
-      </Row>
-    </div>
+          ) : (
+            <Button
+              onClick={() => {
+                control("start");
+              }}
+            >
+              start
+            </Button>
+          )}
+
+          <Button
+            onClick={() => {
+              control("clear");
+            }}
+          >
+            reset
+          </Button>
+        </Space>
+      </Col>
+    </Row>
   );
 };
 

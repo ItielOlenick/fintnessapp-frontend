@@ -14,19 +14,29 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "./services/firebase";
 import Home from "./components/Home";
 import { Content } from "antd/lib/layout/layout";
-import { Col, Row } from "antd";
+import { Col, Row, Spin } from "antd";
 import AddLog from "./components/AddLog";
 import LogList from "./components/LogList";
+import { useState } from "react";
+import { useEffect } from "react";
 function App() {
+  const [loading, setLoading] = useState(true);
   const [user] = useAuthState(auth);
+
+  useEffect(() => {
+    if (user) setLoading(false);
+  }, [user]);
+
   return (
     <BrowserRouter>
       <Navbar />
       <Row justify="center">
         <Col sm={12} xs={24}>
           <Content className="main-content">
-            {user ? (
-              <div>
+            {loading ? (
+              <></>
+            ) : user ? (
+              <>
                 <Switch>
                   <Route exact path="/" component={WorkoutList} />
                   <Route exact path="/logList" component={LogList} />
@@ -49,17 +59,15 @@ function App() {
                   <Redirect exact from="/exercises/reload" to="/exercises" />
                   <Route path="*" component={NoteFound} />
                 </Switch>
-              </div>
+              </>
             ) : (
-              <div>
-                <Switch>
-                  <Route exact path="/" component={Home} />
-                  <Redirect exact from="/home" to="/" />
-                  <Route exact path="/login" component={Login} />
-                  <Route exact path="/register" component={Register} />
-                  <Route path="*" component={NoteFound} />
-                </Switch>
-              </div>
+              <Switch>
+                <Route exact path="/" component={Home} />
+                <Redirect exact from="/home" to="/" />
+                <Route exact path="/login" component={Login} />
+                <Route exact path="/register" component={Register} />
+                <Route path="*" component={NoteFound} />
+              </Switch>
             )}
           </Content>
         </Col>

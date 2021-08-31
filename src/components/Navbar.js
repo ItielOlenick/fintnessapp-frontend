@@ -17,7 +17,7 @@ const Navbar = () => {
     return () => window.removeEventListener("resize", updateDimensions);
   }, []);
   const location = useLocation();
-  console.log("location: ", location);
+
   const [user] = useAuthState(auth);
   const history = useHistory();
   const logout = () => {
@@ -29,24 +29,6 @@ const Navbar = () => {
 
   return (
     <>
-      <Row justify="center">
-        <Col sm={10} xs={24}>
-          {/* <div style={{ maxWidth: 800, margin: "0 auto" }}> */}
-          {user ? (
-            <div className="sameRow" style={{ padding: "0 10px" }}>
-              <p>
-                {
-                  (user.displayName,
-                  user.displayName ? user.displayName : user.email)
-                }
-              </p>
-              <Link onClick={logout}>Logout</Link>
-            </div>
-          ) : (
-            <></>
-          )}
-        </Col>
-      </Row>
       <ConditionalWrap
         condition={width > 600}
         wrap={(children) => <Header>{children}</Header>}
