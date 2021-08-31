@@ -3,9 +3,14 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../services/firebase";
 import { Menu, Layout, Row, Col } from "antd";
 import { useEffect, useState } from "react";
-const { Header } = Layout;
+import {
+  CalendarOutlined,
+  FireOutlined,
+  BookOutlined,
+} from "@ant-design/icons";
 
 const Navbar = () => {
+  const { Header } = Layout;
   const [width, setWidth] = useState(window.innerWidth);
   const [height, setHeight] = useState(window.innerHeight);
   const updateDimensions = () => {
@@ -33,19 +38,71 @@ const Navbar = () => {
         <Menu
           theme="dark"
           mode="horizontal"
-          style={{ justifyContent: "center" }}
+          style={
+            width > 600
+              ? { justifyContent: "center" }
+              : {
+                  justifyContent: "center",
+                  position: "fixed",
+                  bottom: 0,
+                  width: "100%",
+                  zIndex: 1,
+                }
+          }
           defaultSelectedKeys={[location.pathname]}
         >
           {user ? (
             <>
-              <Menu.Item key="/logList">
-                <Link to="/logList">Logs</Link>
+              <Menu.Item key="/logList" style={{ width: 75, height: 65 }}>
+                <Link to="/logList">
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                    }}
+                  >
+                    <CalendarOutlined
+                      style={{ fontSize: 22, marginTop: 10, lineHeight: 1 }}
+                    />
+                    <p style={{ marginBottom: 0, lineHeight: 1.5 }}>Logs</p>
+                  </div>
+                </Link>
               </Menu.Item>
-              <Menu.Item key="/">
-                <Link to="/">Workouts</Link>
+              <Menu.Item key="/" style={{ width: 75, height: 65 }}>
+                <Link to="/">
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                    }}
+                  >
+                    <FireOutlined
+                      style={{ fontSize: 22, marginTop: 10, lineHeight: 1 }}
+                    />
+                    <p style={{ marginBottom: 0, lineHeight: 1.5 }}>Workouts</p>
+                  </div>
+                </Link>
               </Menu.Item>
-              <Menu.Item key="/exercises">
-                <Link to="/exercises">Exercises</Link>
+              <Menu.Item key="/exercises" style={{ width: 75, height: 65 }}>
+                <Link to="/exercises">
+                  {" "}
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                    }}
+                  >
+                    <BookOutlined
+                      style={{ fontSize: 22, marginTop: 10, lineHeight: 1 }}
+                    />
+                    <p style={{ marginBottom: 0, lineHeight: 1.5 }}>
+                      Exercises
+                    </p>
+                  </div>
+                </Link>
               </Menu.Item>
             </>
           ) : (

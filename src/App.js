@@ -31,7 +31,7 @@ function App() {
   return (
     <BrowserRouter>
       <Navbar />
-      <Row justify="center">
+      <Row justify="center" style={{ paddingBottom: 30 }}>
         <Col sm={12} xs={24}>
           <Content className="main-content">
             {loading ? (
