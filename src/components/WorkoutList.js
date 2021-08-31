@@ -66,19 +66,18 @@ const WorkoutList = () => {
   };
 
   useEffect(() => {
-    WorkoutService.getAll(user.uid)
-      .then((response) => {
-        SetWorkouts(response.data);
-        setCount(response.data.length);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.log("Error - something is wrong", error);
-      });
+    if (user)
+      WorkoutService.getAll(user.uid)
+        .then((response) => {
+          SetWorkouts(response.data);
+          setCount(response.data.length);
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.log("Error - something is wrong", error);
+        });
     format();
   }, [user, count]);
-
-  //
 
   const columns = [
     {

@@ -65,19 +65,18 @@ const LogList = () => {
   };
 
   useEffect(() => {
-    LogService.getAll(user.uid)
-      .then((response) => {
-        setLogs(response.data);
-        setCount(response.data.length);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.log("Error - something is wrong", error);
-      });
+    if (user)
+      LogService.getAll(user.uid)
+        .then((response) => {
+          setLogs(response.data);
+          setCount(response.data.length);
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.log("Error - something is wrong", error);
+        });
     format();
   }, [user, count]);
-
-  //
 
   const columns = [
     {
