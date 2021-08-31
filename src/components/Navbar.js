@@ -20,9 +20,6 @@ const Navbar = () => {
 
   const [user] = useAuthState(auth);
   const history = useHistory();
-  const logout = () => {
-    auth.signOut().then(history.push("/home"));
-  };
 
   const ConditionalWrap = ({ condition, wrap, children }) =>
     condition ? wrap(children) : children;
