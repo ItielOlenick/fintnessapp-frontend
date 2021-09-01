@@ -90,7 +90,6 @@ const AddLog = (props) => {
     const temp = [...options];
     temp[0].children = wgerExercises;
     setOptions(temp);
-    console.log("options:", options);
     setLoading(false);
   }
 
@@ -104,7 +103,9 @@ const AddLog = (props) => {
       : LogService.get(props.location.state.id)
     ).then((data) => {
       const uniqueSets = getUniqueListBy(data.data.sets, "name").map((v) => {
-        return data.data.sets.filter((c) => c.name === v.name);
+        const set = data.data.sets.filter((c) => c.name === v.name);
+        if (props.location.state.edit) set.forEach((s) => (s.done = true));
+        return set;
       });
 
       const workout = {
