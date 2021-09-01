@@ -24,7 +24,7 @@ function App() {
   return (
     <BrowserRouter>
       <Navbar />
-      <Row justify="center" style={{ paddingBottom: 30 }}>
+      <Row justify="center" style={{ paddingBottom: 50 }}>
         <Col sm={12} xs={24}>
           <Content className="main-content">
             {user ? (

@@ -22,6 +22,12 @@
   padding: 50px 15px;
 }
 
+.ant-menu-item-selected {
+  background-color: transparent !important;
+}
+.ant-list-split .ant-list-header {
+  border-bottom: none;
+}
 @media screen and (max-width: 600px) {
   .sameRowAround {
     display: flex;

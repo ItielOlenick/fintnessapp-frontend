@@ -70,12 +70,7 @@ const ExercisesList = () => {
       <Row>
         <Col span={24}>
           <div className="sameRowAround" style={{ marginBottom: 50 }}>
-            <h3 style={{ textAlign: "center" }}>Custom Exercises</h3>
-            <Tooltip title="Add Exercise">
-              <Button type="primary" shape="circle" onClick={showModal}>
-                <PlusOutlined />
-              </Button>
-            </Tooltip>
+            <h2 style={{ margin: 0 }}>Custom Exercises</h2>
           </div>
           {loading ? (
             show ? (
@@ -93,6 +88,16 @@ const ExercisesList = () => {
             )
           ) : exercises.length > 0 ? (
             <List
+              header={
+                <div className="sameRow">
+                  My Exercises
+                  <Tooltip title="Add Exercise">
+                    <Button type="primary" shape="circle" onClick={showModal}>
+                      <PlusOutlined />
+                    </Button>
+                  </Tooltip>
+                </div>
+              }
               grid={{ gutter: 0, column: 1 }}
               dataSource={exercises}
               renderItem={(item) => (
@@ -140,13 +145,22 @@ const ExercisesList = () => {
               )}
             />
           ) : (
-            <div>
+            <>
+              <div className="sameRow">
+                My Exercises
+                <Tooltip title="Add Exercise">
+                  <Button type="primary" shape="circle" onClick={showModal}>
+                    <PlusOutlined />
+                  </Button>
+                </Tooltip>
+              </div>
+              <br />
               <p> Create an exercise and it will appear here.</p>
               <p>
                 You will be able to choose your custom exercises when creating
                 your workouts.
               </p>
-            </div>
+            </>
           )}
         </Col>
       </Row>

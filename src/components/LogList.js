@@ -101,21 +101,7 @@ const LogList = () => {
     <Row>
       <Col span={24}>
         <div className="sameRowAround" style={{ marginBottom: 50 }}>
-          <h3 style={{ textAlign: "center" }}>Logs</h3>
-          <Tooltip title="New Workout">
-            <Link
-              to={{
-                pathname: `/logWorkout`,
-                search: "",
-                hash: "#",
-                state: { id: null },
-              }}
-            >
-              <Button type="primary" shape="circle">
-                <PlusOutlined />
-              </Button>
-            </Link>
-          </Tooltip>
+          <h2 style={{ margin: 0 }}>Logs</h2>
         </div>
         {loading ? (
           show ? (
@@ -133,6 +119,7 @@ const LogList = () => {
           )
         ) : logs.length > 0 ? (
           <List
+            header="Workout History"
             grid={{ gutter: 0, column: 1 }}
             dataSource={formatedWorkout}
             renderItem={(item) => (
@@ -229,7 +216,7 @@ const LogList = () => {
             )}
           />
         ) : (
-          <div>Nothing to show yet.</div>
+          <div>No workouts recorded yet.</div>
         )}
       </Col>
     </Row>

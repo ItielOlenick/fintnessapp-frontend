@@ -4,6 +4,7 @@ import { auth } from "../services/firebase";
 import { Menu, Layout, Row, Col } from "antd";
 import { useEffect, useState } from "react";
 import {
+  SettingOutlined,
   CalendarOutlined,
   FireOutlined,
   BookOutlined,
@@ -29,6 +30,17 @@ const Navbar = () => {
   const ConditionalWrap = ({ condition, wrap, children }) =>
     condition ? wrap(children) : children;
 
+  const miStyle = { width: 70, height: 60 };
+  const divStyle = {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  };
+  const iconStyle = { fontSize: 22, marginTop: 10, lineHeight: 1 };
+  const textStyle = {
+    marginBottom: 0,
+    lineHeight: 1.5,
+  };
   return (
     <>
       <ConditionalWrap
@@ -53,54 +65,35 @@ const Navbar = () => {
         >
           {user ? (
             <>
-              <Menu.Item key="/logList" style={{ width: 75, height: 65 }}>
+              <Menu.Item key="/logList" style={miStyle}>
                 <Link to="/logList">
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                    }}
-                  >
-                    <CalendarOutlined
-                      style={{ fontSize: 22, marginTop: 10, lineHeight: 1 }}
-                    />
-                    <p style={{ marginBottom: 0, lineHeight: 1.5 }}>Logs</p>
+                  <div style={divStyle}>
+                    <CalendarOutlined style={iconStyle} />
+                    <p style={textStyle}>Logs</p>
                   </div>
                 </Link>
               </Menu.Item>
-              <Menu.Item key="/" style={{ width: 75, height: 65 }}>
+              <Menu.Item key="/" style={miStyle}>
                 <Link to="/">
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                    }}
-                  >
-                    <FireOutlined
-                      style={{ fontSize: 22, marginTop: 10, lineHeight: 1 }}
-                    />
-                    <p style={{ marginBottom: 0, lineHeight: 1.5 }}>Workouts</p>
+                  <div style={divStyle}>
+                    <FireOutlined style={iconStyle} />
+                    <p style={textStyle}>Workouts</p>
                   </div>
                 </Link>
               </Menu.Item>
-              <Menu.Item key="/exercises" style={{ width: 75, height: 65 }}>
+              <Menu.Item key="/exercises" style={miStyle}>
                 <Link to="/exercises">
-                  {" "}
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                    }}
-                  >
-                    <BookOutlined
-                      style={{ fontSize: 22, marginTop: 10, lineHeight: 1 }}
-                    />
-                    <p style={{ marginBottom: 0, lineHeight: 1.5 }}>
-                      Exercises
-                    </p>
+                  <div style={divStyle}>
+                    <BookOutlined style={iconStyle} />
+                    <p style={textStyle}>Exercises</p>
+                  </div>
+                </Link>
+              </Menu.Item>
+              <Menu.Item key="/settings" style={miStyle}>
+                <Link to="#">
+                  <div style={divStyle}>
+                    <SettingOutlined style={iconStyle} />
+                    <p style={textStyle}>Profile</p>
                   </div>
                 </Link>
               </Menu.Item>
