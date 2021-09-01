@@ -12,7 +12,6 @@ import Stopwatch from "./Stopwatch";
 import ExercisePicker from "./ExercisePicker";
 
 const AddLog = (props) => {
-  console.log(props.location.state.id);
   const [started, setStarted] = useState({ started: false, timeStarted: "" });
   const [loading, setLoading] = useState(true);
   const [user] = useAuthState(auth);
@@ -52,7 +51,7 @@ const AddLog = (props) => {
 
   useEffect(() => {
     getWger();
-    getWorkout();
+    if (!props.location.state.empty) getWorkout();
   }, []);
 
   async function getWger() {

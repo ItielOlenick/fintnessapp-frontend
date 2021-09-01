@@ -135,7 +135,7 @@ const WorkoutList = () => {
                         pathname: `/logWorkout`,
                         search: "",
                         hash: "#",
-                        state: { id: null },
+                        state: { id: null, empty: true },
                       }}
                     >
                       <Button type="secondary">Start Empty Workout</Button>
