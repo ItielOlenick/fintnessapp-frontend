@@ -15,18 +15,10 @@ import {
   Spin,
   Table,
   Space,
-  Popover,
   Menu,
   Dropdown,
 } from "antd";
-import {
-  MoreOutlined,
-  PlusOutlined,
-  DeleteOutlined,
-  EditOutlined,
-  UnorderedListOutlined,
-} from "@ant-design/icons";
-import UserService from "../services/UserService";
+import { MoreOutlined, PlusOutlined } from "@ant-design/icons";
 
 const WorkoutList = () => {
   const [user] = useAuthState(auth);
@@ -34,7 +26,7 @@ const WorkoutList = () => {
   const [loading, setLoading] = useState(true);
   const [count, setCount] = useState(0);
   const { Panel } = Collapse;
-  const [formatedWorkout, setFromatedWorkout] = useState();
+  const [formatedWorkout, setFormattedWorkout] = useState();
 
   // if i want to show unique repeating sets, with reps and kg,
   // get source from workouts, comment out the extra functions and comment in
@@ -62,7 +54,7 @@ const WorkoutList = () => {
       };
     });
 
-    setFromatedWorkout(unique);
+    setFormattedWorkout(unique);
   };
 
   useEffect(() => {
@@ -93,9 +85,10 @@ const WorkoutList = () => {
     },
   ];
 
-  // const menu = (
-
-  // );
+  const [show, setShow] = useState(false);
+  const timer = setTimeout(() => {
+    setShow(true);
+  }, 300);
 
   return (
     <Row>
@@ -111,22 +104,25 @@ const WorkoutList = () => {
           </Tooltip>
         </div>
         {loading ? (
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Spin tip="Loading..." />
-          </div>
+          show ? (
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Spin tip="Loading..." />
+            </div>
+          ) : (
+            <></>
+          )
         ) : workouts.length > 0 ? (
           <List
             grid={{ gutter: 0, column: 1 }}
             dataSource={formatedWorkout}
             renderItem={(item) => (
               <List.Item key={item.id}>
-                {/* <Link to={`/workouts/${item.id}`}> */}
                 <Card hoverable="true">
                   <Collapse bordered={false}>
                     <Panel
@@ -206,7 +202,6 @@ const WorkoutList = () => {
                     </Panel>
                   </Collapse>
                 </Card>
-                {/* </Link> */}
               </List.Item>
             )}
           />

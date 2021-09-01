@@ -92,6 +92,11 @@ const LogList = () => {
     },
   ];
 
+  const [show, setShow] = useState(false);
+  const timer = setTimeout(() => {
+    setShow(true);
+  }, 300);
+
   return (
     <Row>
       <Col span={24}>
@@ -113,15 +118,19 @@ const LogList = () => {
           </Tooltip>
         </div>
         {loading ? (
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Spin tip="Loading..." />
-          </div>
+          show ? (
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Spin tip="Loading..." />
+            </div>
+          ) : (
+            <></>
+          )
         ) : logs.length > 0 ? (
           <List
             grid={{ gutter: 0, column: 1 }}

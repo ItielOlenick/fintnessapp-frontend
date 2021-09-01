@@ -143,18 +143,27 @@ const EditWorkout = (props) => {
     } else console.log("Empty workout");
   };
 
+  const [show, setShow] = useState(false);
+  const timer = setTimeout(() => {
+    setShow(true);
+  }, 300);
+
   return (
     <>
       {loading ? (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Spin tip="Loading..." />
-        </div>
+        show ? (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Spin tip="Loading..." />
+          </div>
+        ) : (
+          <></>
+        )
       ) : (
         <Form form={form} onFinish={onFinish}>
           <ExercisePicker options={options} setCount={setCount} form={form} />

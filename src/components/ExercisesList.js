@@ -60,6 +60,10 @@ const ExercisesList = () => {
     setVisible(false);
     setEdit(false);
   };
+  const [show, setShow] = useState(false);
+  const timer = setTimeout(() => {
+    setShow(true);
+  }, 300);
 
   return (
     <>
@@ -74,15 +78,19 @@ const ExercisesList = () => {
             </Tooltip>
           </div>
           {loading ? (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Spin tip="Loading..." />
-            </div>
+            show ? (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Spin tip="Loading..." />
+              </div>
+            ) : (
+              <></>
+            )
           ) : exercises.length > 0 ? (
             <List
               grid={{ gutter: 0, column: 1 }}
