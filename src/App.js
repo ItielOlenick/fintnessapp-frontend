@@ -14,19 +14,12 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "./services/firebase";
 import Home from "./components/Home";
 import { Content } from "antd/lib/layout/layout";
-import { Col, Row, Spin } from "antd";
+import { Col, Row } from "antd";
 import AddLog from "./components/AddLog";
 import LogList from "./components/LogList";
-import { useState } from "react";
-import { useEffect } from "react";
-function App() {
-  const [loading, setLoading] = useState(true);
-  const [user] = useAuthState(auth);
 
-  useEffect(() => {
-    if (user) setLoading(false);
-    else setLoading(false);
-  }, [user]);
+function App() {
+  const [user] = useAuthState(auth);
 
   return (
     <BrowserRouter>
@@ -34,9 +27,7 @@ function App() {
       <Row justify="center" style={{ paddingBottom: 30 }}>
         <Col sm={12} xs={24}>
           <Content className="main-content">
-            {loading ? (
-              <></>
-            ) : user ? (
+            {user ? (
               <>
                 <Switch>
                   <Route exact path="/" component={WorkoutList} />
