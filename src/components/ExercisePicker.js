@@ -22,17 +22,6 @@ import AddExercise from "./AddExercise";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
 const ExercisePicker = ({ options, form, setCount, log }) => {
-  const [width, setWidth] = useState(window.innerWidth);
-  const [height, setHeight] = useState(window.innerHeight);
-  const updateDimensions = () => {
-    setWidth(window.innerWidth);
-    setHeight(window.innerHeight);
-  };
-  useEffect(() => {
-    window.addEventListener("resize", updateDimensions);
-    return () => window.removeEventListener("resize", updateDimensions);
-  }, []);
-
   function filter(inputValue, path) {
     return path.some(
       (option) =>
@@ -99,17 +88,7 @@ const ExercisePicker = ({ options, form, setCount, log }) => {
               justifyContent: "flex-end ",
             }}
           >
-            <Form.Item
-              label="Reorder"
-              style={
-                width < 576
-                  ? {
-                      display: "block",
-                      justifyContent: "flex-end ",
-                    }
-                  : {}
-              }
-            >
+            <Form.Item className="switch-mobile" label="Reorder">
               <Switch onChange={(checked) => onChange(checked)} />
             </Form.Item>
           </div>

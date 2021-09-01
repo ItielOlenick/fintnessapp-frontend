@@ -69,9 +69,6 @@ const ExercisesList = () => {
     <>
       <Row>
         <Col span={24}>
-          <div className="sameRowAround" style={{ marginBottom: 50 }}>
-            <h2 style={{ margin: 0 }}>Custom Exercises</h2>
-          </div>
           {loading ? (
             show ? (
               <div
@@ -86,80 +83,99 @@ const ExercisesList = () => {
             ) : (
               <></>
             )
-          ) : exercises.length > 0 ? (
-            <List
-              header={
-                <div className="sameRow">
-                  My Exercises
-                  <Tooltip title="Add Exercise">
-                    <Button type="primary" shape="circle" onClick={showModal}>
-                      <PlusOutlined />
-                    </Button>
-                  </Tooltip>
-                </div>
-              }
-              grid={{ gutter: 0, column: 1 }}
-              dataSource={exercises}
-              renderItem={(item) => (
-                <List.Item key={item.id}>
-                  <Card
-                    className="cardNoBody"
-                    size={"small"}
-                    hoverable="true"
-                    title={item.name}
-                    extra={[
-                      // <Button
-                      //   type="link"
-                      //   onClick={() => {
-                      //     setEdit(true);
-                      //     setId(item.id);
-                      //     showModal();
-                      //   }}
-                      //   icon={
-                      <EditOutlined
-                        onClick={() => {
-                          setEdit(true);
-                          setId(item.id);
-                          showModal();
-                        }}
-                        key="edit"
-                        style={{ marginRight: 15 }}
-                      />,
-                      //   }
-                      // />,
-
-                      <Popconfirm
-                        title="Sure to delete?"
-                        onConfirm={() => {
-                          ExercisesService.remove(item.id).then(
-                            setCount(count - 1)
-                          );
-                        }}
-                        onCancel={() => console.log("cancel")}
-                      >
-                        <DeleteOutlined key="delete" />
-                      </Popconfirm>,
-                    ]}
-                  ></Card>
-                </List.Item>
-              )}
-            />
           ) : (
             <>
-              <div className="sameRow">
-                My Exercises
-                <Tooltip title="Add Exercise">
-                  <Button type="primary" shape="circle" onClick={showModal}>
-                    <PlusOutlined />
-                  </Button>
-                </Tooltip>
-              </div>
-              <br />
-              <p> Create an exercise and it will appear here.</p>
-              <p>
-                You will be able to choose your custom exercises when creating
-                your workouts.
-              </p>
+              {
+                <div className="sameRowAround" style={{ marginBottom: 50 }}>
+                  <h2 style={{ margin: 0 }}>Custom Exercises</h2>
+                </div>
+              }
+              <>
+                {exercises.length > 0 ? (
+                  <List
+                    header={
+                      <div className="sameRow">
+                        My Exercises
+                        <Tooltip title="Add Exercise">
+                          <Button
+                            type="primary"
+                            shape="circle"
+                            onClick={showModal}
+                          >
+                            <PlusOutlined />
+                          </Button>
+                        </Tooltip>
+                      </div>
+                    }
+                    grid={{ gutter: 0, column: 1 }}
+                    dataSource={exercises}
+                    renderItem={(item) => (
+                      <List.Item key={item.id}>
+                        <Card
+                          className="cardNoBody"
+                          size={"small"}
+                          hoverable="true"
+                          title={item.name}
+                          extra={[
+                            // <Button
+                            //   type="link"
+                            //   onClick={() => {
+                            //     setEdit(true);
+                            //     setId(item.id);
+                            //     showModal();
+                            //   }}
+                            //   icon={
+                            <EditOutlined
+                              onClick={() => {
+                                setEdit(true);
+                                setId(item.id);
+                                showModal();
+                              }}
+                              key="edit"
+                              style={{ marginRight: 15 }}
+                            />,
+                            //   }
+                            // />,
+
+                            <Popconfirm
+                              title="Sure to delete?"
+                              onConfirm={() => {
+                                ExercisesService.remove(item.id).then(
+                                  setCount(count - 1)
+                                );
+                              }}
+                              onCancel={() => console.log("cancel")}
+                            >
+                              <DeleteOutlined key="delete" />
+                            </Popconfirm>,
+                          ]}
+                        ></Card>
+                      </List.Item>
+                    )}
+                  />
+                ) : (
+                  <>
+                    <div className="sameRow">
+                      My Exercises
+                      <Tooltip title="Add Exercise">
+                        <Button
+                          type="primary"
+                          shape="circle"
+                          onClick={showModal}
+                        >
+                          <PlusOutlined />
+                        </Button>
+                      </Tooltip>
+                    </div>
+                    <br />
+                    <p> Create an exercise and it will appear here.</p>
+                    <p>
+                      You will be able to choose your custom exercises when
+                      creating your workouts.
+                    </p>
+                  </>
+                )}
+              </>
             </>
           )}
         </Col>

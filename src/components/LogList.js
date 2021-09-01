@@ -113,9 +113,6 @@ const LogList = () => {
   return (
     <Row>
       <Col span={24}>
-        <div className="sameRowAround" style={{ marginBottom: 50 }}>
-          <h2 style={{ margin: 0 }}>Logs</h2>
-        </div>
         {loading ? (
           show ? (
             <div
@@ -130,110 +127,122 @@ const LogList = () => {
           ) : (
             <></>
           )
-        ) : logs.length > 0 ? (
-          <List
-            header="Workout History"
-            grid={{ gutter: 0, column: 1 }}
-            dataSource={formatedWorkout}
-            renderItem={(item) => (
-              <List.Item key={item.id}>
-                <Card hoverable="true">
-                  <Collapse bordered={false}>
-                    <Panel
-                      showArrow={false}
-                      header={item.name}
-                      extra={
-                        <>
-                          {formatDate(new Date(Date.parse(item.startedAt)))}
-                          <Divider type="vertical" />
-                          <Dropdown
-                            trigger="click"
-                            overlay={
-                              <Menu>
-                                <Menu.Item key={item.id + 13}>
-                                  <Link
-                                    to={{
-                                      pathname: `/addWorkoutFromLog`,
-                                      search: "",
-                                      hash: "#",
-                                      state: { id: item.id },
-                                    }}
-                                  >
-                                    Create Workout From this Log
-                                  </Link>
-                                </Menu.Item>
-                                <Menu.Item key={item.id + 12}>
-                                  <Link
-                                    to={{
-                                      pathname: "/logWorkout",
-                                      search: "",
-                                      hash: "#",
-                                      state: { id: item.id },
-                                    }}
-                                  >
-                                    Start Workout From This Log
-                                  </Link>
-                                </Menu.Item>
-                                <Menu.Item key={item.id + 10}>
-                                  <Link
-                                    to={{
-                                      pathname: `/logs/edit`,
-                                      search: "",
-                                      hash: "#",
-                                      state: { id: item.id, edit: true },
-                                    }}
-                                  >
-                                    Edit
-                                  </Link>
-                                </Menu.Item>
-                                <Menu.Item key={item.id + 11}>
-                                  <Popconfirm
-                                    onClick={(event) => {
-                                      event.stopPropagation();
-                                    }}
-                                    title="Sure to delete?"
-                                    onConfirm={(event) => {
-                                      LogService.remove(item.id).then(() => {
-                                        setCount(count - 100);
-
-                                        event.stopPropagation();
-                                      });
-                                    }}
-                                    onCancel={(event) => {
-                                      event.stopPropagation();
-
-                                      console.log("cancel");
-                                    }}
-                                  >
-                                    Delete
-                                  </Popconfirm>
-                                </Menu.Item>
-                              </Menu>
-                            }
-                          >
-                            <MoreOutlined
-                              onClick={(event) => {
-                                event.stopPropagation();
-                              }}
-                            />
-                          </Dropdown>
-                        </>
-                      }
-                    >
-                      <Table
-                        size="small"
-                        dataSource={item.sets}
-                        columns={columns}
-                        pagination={false}
-                      />
-                    </Panel>
-                  </Collapse>
-                </Card>
-              </List.Item>
-            )}
-          />
         ) : (
-          <div>No workouts recorded yet.</div>
+          <>
+            {
+              <div className="sameRowAround" style={{ marginBottom: 50 }}>
+                <h2 style={{ margin: 0 }}>Logs</h2>
+              </div>
+            }
+
+            {logs.length > 0 ? (
+              <List
+                header="Workout History"
+                grid={{ gutter: 0, column: 1 }}
+                dataSource={formatedWorkout}
+                renderItem={(item) => (
+                  <List.Item key={item.id}>
+                    <Card hoverable="true">
+                      <Collapse bordered={false}>
+                        <Panel
+                          showArrow={false}
+                          header={item.name}
+                          extra={
+                            <>
+                              {formatDate(new Date(Date.parse(item.startedAt)))}
+                              <Divider type="vertical" />
+                              <Dropdown
+                                trigger="click"
+                                overlay={
+                                  <Menu>
+                                    <Menu.Item key={item.id + 13}>
+                                      <Link
+                                        to={{
+                                          pathname: `/addWorkoutFromLog`,
+                                          search: "",
+                                          hash: "#",
+                                          state: { id: item.id },
+                                        }}
+                                      >
+                                        Create Workout From this Log
+                                      </Link>
+                                    </Menu.Item>
+                                    <Menu.Item key={item.id + 12}>
+                                      <Link
+                                        to={{
+                                          pathname: "/logWorkout",
+                                          search: "",
+                                          hash: "#",
+                                          state: { id: item.id },
+                                        }}
+                                      >
+                                        Start Workout From This Log
+                                      </Link>
+                                    </Menu.Item>
+                                    <Menu.Item key={item.id + 10}>
+                                      <Link
+                                        to={{
+                                          pathname: `/logs/edit`,
+                                          search: "",
+                                          hash: "#",
+                                          state: { id: item.id, edit: true },
+                                        }}
+                                      >
+                                        Edit
+                                      </Link>
+                                    </Menu.Item>
+                                    <Menu.Item key={item.id + 11}>
+                                      <Popconfirm
+                                        onClick={(event) => {
+                                          event.stopPropagation();
+                                        }}
+                                        title="Sure to delete?"
+                                        onConfirm={(event) => {
+                                          LogService.remove(item.id).then(
+                                            () => {
+                                              setCount(count - 100);
+
+                                              event.stopPropagation();
+                                            }
+                                          );
+                                        }}
+                                        onCancel={(event) => {
+                                          event.stopPropagation();
+
+                                          console.log("cancel");
+                                        }}
+                                      >
+                                        Delete
+                                      </Popconfirm>
+                                    </Menu.Item>
+                                  </Menu>
+                                }
+                              >
+                                <MoreOutlined
+                                  onClick={(event) => {
+                                    event.stopPropagation();
+                                  }}
+                                />
+                              </Dropdown>
+                            </>
+                          }
+                        >
+                          <Table
+                            size="small"
+                            dataSource={item.sets}
+                            columns={columns}
+                            pagination={false}
+                          />
+                        </Panel>
+                      </Collapse>
+                    </Card>
+                  </List.Item>
+                )}
+              />
+            ) : (
+              <div>No workouts recorded yet.</div>
+            )}
+          </>
         )}
       </Col>
     </Row>

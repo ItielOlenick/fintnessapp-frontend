@@ -21,6 +21,9 @@
 .main-content {
   padding: 50px 15px;
 }
+.navbar-menu {
+  justify-content: center;
+}
 
 .ant-menu-item-selected {
   background-color: transparent !important;
@@ -29,6 +32,18 @@
   border-bottom: none;
 }
 @media screen and (max-width: 600px) {
+  .switch-mobile {
+    display: block;
+    justify-content: flex-end;
+  }
+  .navbar-menu {
+    justify-content: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 1;
+  }
+
   .sameRowAround {
     display: flex;
     flex-direction: row;

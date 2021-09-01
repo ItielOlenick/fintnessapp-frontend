@@ -101,29 +101,6 @@ const WorkoutList = () => {
   return (
     <Row>
       <Col span={24}>
-        <div className="sameRowAround" style={{ marginBottom: 25 }}>
-          <h2 style={{ margin: 0 }}>Workouts</h2>
-        </div>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            marginBottom: 10,
-          }}
-        >
-          <Tooltip title="New Workout">
-            <Link
-              to={{
-                pathname: `/logWorkout`,
-                search: "",
-                hash: "#",
-                state: { id: null },
-              }}
-            >
-              <Button type="secondary">Start Empty Workout</Button>
-            </Link>
-          </Tooltip>
-        </div>
         {loading ? (
           show ? (
             <div
@@ -138,12 +115,221 @@ const WorkoutList = () => {
           ) : (
             <></>
           )
-        ) : workouts.length > 0 ? (
+        ) : (
           <>
-            <List
-              header={
+            {
+              <>
+                <div className="sameRowAround" style={{ marginBottom: 25 }}>
+                  <h2 style={{ margin: 0 }}>Workouts</h2>
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    marginBottom: 10,
+                  }}
+                >
+                  <Tooltip title="New Workout">
+                    <Link
+                      to={{
+                        pathname: `/logWorkout`,
+                        search: "",
+                        hash: "#",
+                        state: { id: null },
+                      }}
+                    >
+                      <Button type="secondary">Start Empty Workout</Button>
+                    </Link>
+                  </Tooltip>
+                </div>
+              </>
+            }
+            {workouts.length > 0 ? (
+              <>
+                <List
+                  header={
+                    <div className="sameRow">
+                      My Routines{" "}
+                      <Tooltip title="New Workout">
+                        <Link to={"/addWorkout"}>
+                          <Button type="primary" shape="circle">
+                            <PlusOutlined />
+                          </Button>
+                        </Link>
+                      </Tooltip>
+                    </div>
+                  }
+                  grid={{ gutter: 0, column: 1 }}
+                  dataSource={formatedWorkout}
+                  renderItem={(item) => (
+                    <List.Item key={item.id}>
+                      <Card hoverable="true">
+                        <Collapse bordered={false}>
+                          <Panel
+                            showArrow={false}
+                            header={item.name}
+                            extra={
+                              <Dropdown
+                                trigger="click"
+                                overlay={
+                                  <Menu>
+                                    <Menu.Item key={item.id + 10}>
+                                      <Link to={`/workouts/edit/${item.id}`}>
+                                        Edit
+                                      </Link>
+                                    </Menu.Item>
+                                    <Menu.Item key={item.id + 11}>
+                                      <Popconfirm
+                                        onClick={(event) => {
+                                          event.stopPropagation();
+                                        }}
+                                        title="Sure to delete?"
+                                        onConfirm={(event) => {
+                                          WorkoutService.remove(item.id).then(
+                                            () => {
+                                              setCount(count - 100);
+                                              event.stopPropagation();
+                                            }
+                                          );
+                                        }}
+                                        onCancel={(event) => {
+                                          event.stopPropagation();
+
+                                          console.log("cancel");
+                                        }}
+                                      >
+                                        Delete
+                                      </Popconfirm>
+                                    </Menu.Item>
+                                  </Menu>
+                                }
+                              >
+                                <MoreOutlined
+                                  onClick={(event) => {
+                                    event.stopPropagation();
+                                  }}
+                                />
+                              </Dropdown>
+                            }
+                          >
+                            <Table
+                              size="small"
+                              dataSource={item.sets}
+                              columns={columns}
+                              pagination={false}
+                              footer={() => (
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    justifyContent: "center",
+                                  }}
+                                >
+                                  <Space size="large">
+                                    <Tooltip title="Start workout">
+                                      <Link
+                                        to={{
+                                          pathname: "/logWorkout",
+                                          search: "",
+                                          hash: "#",
+                                          state: { id: item.id },
+                                        }}
+                                      >
+                                        <Button type="primary">
+                                          Start Workout
+                                        </Button>
+                                      </Link>
+                                    </Tooltip>
+                                  </Space>
+                                </div>
+                              )}
+                            />
+                          </Panel>
+                        </Collapse>
+                      </Card>
+                    </List.Item>
+                  )}
+                />
+                <List
+                  header={"Sample Routines"}
+                  grid={{ gutter: 0, column: 1 }}
+                  dataSource={sampleRoutines}
+                  renderItem={(item) => (
+                    <List.Item key={item.id}>
+                      <Card hoverable="true">
+                        <Collapse bordered={false}>
+                          <Panel
+                            showArrow={false}
+                            header={item.name}
+                            extra={
+                              <Dropdown
+                                trigger="click"
+                                overlay={
+                                  <Menu>
+                                    <Menu.Item key={item.id + 13}>
+                                      <Link
+                                        to={{
+                                          pathname: `/addWorkoutFromLog`,
+                                          search: "",
+                                          hash: "#",
+                                          state: { id: item.id },
+                                        }}
+                                      >
+                                        Create Workout From this Sample
+                                      </Link>
+                                    </Menu.Item>
+                                  </Menu>
+                                }
+                              >
+                                <MoreOutlined
+                                  onClick={(event) => {
+                                    event.stopPropagation();
+                                  }}
+                                />
+                              </Dropdown>
+                            }
+                          >
+                            <Table
+                              size="small"
+                              dataSource={item.sets}
+                              columns={columns}
+                              pagination={false}
+                              footer={() => (
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    justifyContent: "center",
+                                  }}
+                                >
+                                  <Space size="large">
+                                    <Tooltip title="Start workout">
+                                      <Link
+                                        to={{
+                                          pathname: "/logWorkout",
+                                          search: "",
+                                          hash: "#",
+                                          state: { id: item.id },
+                                        }}
+                                      >
+                                        <Button type="primary">
+                                          Start Workout
+                                        </Button>
+                                      </Link>
+                                    </Tooltip>
+                                  </Space>
+                                </div>
+                              )}
+                            />
+                          </Panel>
+                        </Collapse>
+                      </Card>
+                    </List.Item>
+                  )}
+                />
+              </>
+            ) : (
+              <>
                 <div className="sameRow">
-                  My Routines{" "}
+                  My Routines
                   <Tooltip title="New Workout">
                     <Link to={"/addWorkout"}>
                       <Button type="primary" shape="circle">
@@ -152,267 +338,89 @@ const WorkoutList = () => {
                     </Link>
                   </Tooltip>
                 </div>
-              }
-              grid={{ gutter: 0, column: 1 }}
-              dataSource={formatedWorkout}
-              renderItem={(item) => (
-                <List.Item key={item.id}>
-                  <Card hoverable="true">
-                    <Collapse bordered={false}>
-                      <Panel
-                        showArrow={false}
-                        header={item.name}
-                        extra={
-                          <Dropdown
-                            trigger="click"
-                            overlay={
-                              <Menu>
-                                <Menu.Item key={item.id + 10}>
-                                  <Link to={`/workouts/edit/${item.id}`}>
-                                    Edit
-                                  </Link>
-                                </Menu.Item>
-                                <Menu.Item key={item.id + 11}>
-                                  <Popconfirm
-                                    onClick={(event) => {
-                                      event.stopPropagation();
-                                    }}
-                                    title="Sure to delete?"
-                                    onConfirm={(event) => {
-                                      WorkoutService.remove(item.id).then(
-                                        () => {
-                                          setCount(count - 100);
-                                          event.stopPropagation();
-                                        }
-                                      );
-                                    }}
-                                    onCancel={(event) => {
-                                      event.stopPropagation();
-
-                                      console.log("cancel");
-                                    }}
-                                  >
-                                    Delete
-                                  </Popconfirm>
-                                </Menu.Item>
-                              </Menu>
+                <br />
+                <p>
+                  No routines yet,
+                  <br /> Create your first routine and will appear here
+                </p>
+                <List
+                  header={"Sample Routines"}
+                  grid={{ gutter: 0, column: 1 }}
+                  dataSource={sampleRoutines}
+                  renderItem={(item) => (
+                    <List.Item key={item.id}>
+                      <Card hoverable="true">
+                        <Collapse bordered={false}>
+                          <Panel
+                            showArrow={false}
+                            header={item.name}
+                            extra={
+                              <Dropdown
+                                trigger="click"
+                                overlay={
+                                  <Menu>
+                                    <Menu.Item key={item.id + 13}>
+                                      <Link
+                                        to={{
+                                          pathname: `/addWorkoutFromLog`,
+                                          search: "",
+                                          hash: "#",
+                                          state: { id: item.id },
+                                        }}
+                                      >
+                                        Create Workout From this Sample
+                                      </Link>
+                                    </Menu.Item>
+                                  </Menu>
+                                }
+                              >
+                                <MoreOutlined
+                                  onClick={(event) => {
+                                    event.stopPropagation();
+                                  }}
+                                />
+                              </Dropdown>
                             }
                           >
-                            <MoreOutlined
-                              onClick={(event) => {
-                                event.stopPropagation();
-                              }}
+                            <Table
+                              size="small"
+                              dataSource={item.sets}
+                              columns={columns}
+                              pagination={false}
+                              footer={() => (
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    justifyContent: "center",
+                                  }}
+                                >
+                                  <Space size="large">
+                                    <Tooltip title="Start workout">
+                                      <Link
+                                        to={{
+                                          pathname: "/logWorkout",
+                                          search: "",
+                                          hash: "#",
+                                          state: { id: item.id },
+                                        }}
+                                      >
+                                        <Button type="primary">
+                                          Start Workout
+                                        </Button>
+                                      </Link>
+                                    </Tooltip>
+                                  </Space>
+                                </div>
+                              )}
                             />
-                          </Dropdown>
-                        }
-                      >
-                        <Table
-                          size="small"
-                          dataSource={item.sets}
-                          columns={columns}
-                          pagination={false}
-                          footer={() => (
-                            <div
-                              style={{
-                                display: "flex",
-                                justifyContent: "center",
-                              }}
-                            >
-                              <Space size="large">
-                                <Tooltip title="Start workout">
-                                  <Link
-                                    to={{
-                                      pathname: "/logWorkout",
-                                      search: "",
-                                      hash: "#",
-                                      state: { id: item.id },
-                                    }}
-                                  >
-                                    <Button type="primary">
-                                      Start Workout
-                                    </Button>
-                                  </Link>
-                                </Tooltip>
-                              </Space>
-                            </div>
-                          )}
-                        />
-                      </Panel>
-                    </Collapse>
-                  </Card>
-                </List.Item>
-              )}
-            />
-            <List
-              header={"Sample Routines"}
-              grid={{ gutter: 0, column: 1 }}
-              dataSource={sampleRoutines}
-              renderItem={(item) => (
-                <List.Item key={item.id}>
-                  <Card hoverable="true">
-                    <Collapse bordered={false}>
-                      <Panel
-                        showArrow={false}
-                        header={item.name}
-                        extra={
-                          <Dropdown
-                            trigger="click"
-                            overlay={
-                              <Menu>
-                                <Menu.Item key={item.id + 13}>
-                                  <Link
-                                    to={{
-                                      pathname: `/addWorkoutFromLog`,
-                                      search: "",
-                                      hash: "#",
-                                      state: { id: item.id },
-                                    }}
-                                  >
-                                    Create Workout From this Sample
-                                  </Link>
-                                </Menu.Item>
-                              </Menu>
-                            }
-                          >
-                            <MoreOutlined
-                              onClick={(event) => {
-                                event.stopPropagation();
-                              }}
-                            />
-                          </Dropdown>
-                        }
-                      >
-                        <Table
-                          size="small"
-                          dataSource={item.sets}
-                          columns={columns}
-                          pagination={false}
-                          footer={() => (
-                            <div
-                              style={{
-                                display: "flex",
-                                justifyContent: "center",
-                              }}
-                            >
-                              <Space size="large">
-                                <Tooltip title="Start workout">
-                                  <Link
-                                    to={{
-                                      pathname: "/logWorkout",
-                                      search: "",
-                                      hash: "#",
-                                      state: { id: item.id },
-                                    }}
-                                  >
-                                    <Button type="primary">
-                                      Start Workout
-                                    </Button>
-                                  </Link>
-                                </Tooltip>
-                              </Space>
-                            </div>
-                          )}
-                        />
-                      </Panel>
-                    </Collapse>
-                  </Card>
-                </List.Item>
-              )}
-            />
-          </>
-        ) : (
-          <>
-            <div className="sameRow">
-              My Routines
-              <Tooltip title="New Workout">
-                <Link to={"/addWorkout"}>
-                  <Button type="primary" shape="circle">
-                    <PlusOutlined />
-                  </Button>
-                </Link>
-              </Tooltip>
-            </div>
-            <br />
-            <p>
-              No routines yet,
-              <br /> Create your first routine and will appear here
-            </p>
-            <List
-              header={"Sample Routines"}
-              grid={{ gutter: 0, column: 1 }}
-              dataSource={sampleRoutines}
-              renderItem={(item) => (
-                <List.Item key={item.id}>
-                  <Card hoverable="true">
-                    <Collapse bordered={false}>
-                      <Panel
-                        showArrow={false}
-                        header={item.name}
-                        extra={
-                          <Dropdown
-                            trigger="click"
-                            overlay={
-                              <Menu>
-                                <Menu.Item key={item.id + 13}>
-                                  <Link
-                                    to={{
-                                      pathname: `/addWorkoutFromLog`,
-                                      search: "",
-                                      hash: "#",
-                                      state: { id: item.id },
-                                    }}
-                                  >
-                                    Create Workout From this Sample
-                                  </Link>
-                                </Menu.Item>
-                              </Menu>
-                            }
-                          >
-                            <MoreOutlined
-                              onClick={(event) => {
-                                event.stopPropagation();
-                              }}
-                            />
-                          </Dropdown>
-                        }
-                      >
-                        <Table
-                          size="small"
-                          dataSource={item.sets}
-                          columns={columns}
-                          pagination={false}
-                          footer={() => (
-                            <div
-                              style={{
-                                display: "flex",
-                                justifyContent: "center",
-                              }}
-                            >
-                              <Space size="large">
-                                <Tooltip title="Start workout">
-                                  <Link
-                                    to={{
-                                      pathname: "/logWorkout",
-                                      search: "",
-                                      hash: "#",
-                                      state: { id: item.id },
-                                    }}
-                                  >
-                                    <Button type="primary">
-                                      Start Workout
-                                    </Button>
-                                  </Link>
-                                </Tooltip>
-                              </Space>
-                            </div>
-                          )}
-                        />
-                      </Panel>
-                    </Collapse>
-                  </Card>
-                </List.Item>
-              )}
-            />
+                          </Panel>
+                        </Collapse>
+                      </Card>
+                    </List.Item>
+                  )}
+                />
+              </>
+            )}
           </>
         )}
       </Col>
