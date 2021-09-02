@@ -10,6 +10,7 @@ import WgerService from "../services/WgerService";
 import LogService from "../services/LogService";
 import Stopwatch from "./Stopwatch";
 import ExercisePicker from "./ExercisePicker";
+import Timer from "./Timer";
 
 const AddLog = (props) => {
   const [started, setStarted] = useState({ started: false, timeStarted: "" });
@@ -178,10 +179,11 @@ const AddLog = (props) => {
         </div>
       ) : (
         <>
-          <Collapse ghost>
-            <Panel header="Stopwatch" key="1" showArrow={false}>
-              <div style={{ alignItems: "center" }}>
+          <Collapse>
+            <Panel header="Stopwatch & Timer" key="1" showArrow={false}>
+              <div className="sameRow">
                 <Stopwatch />
+                <Timer />
               </div>
             </Panel>
           </Collapse>

@@ -74,7 +74,7 @@ const ExercisePicker = ({ options, form, setCount, log }) => {
 
   const [order, setOrder] = useState(false);
   return (
-    <div>
+    <>
       <Row gutter={8}>
         <Col span={18}>
           <Form.Item name="workoutName" label="Workout Name">
@@ -94,7 +94,7 @@ const ExercisePicker = ({ options, form, setCount, log }) => {
           </div>
         </Col>
       </Row>
-
+      <p>Exercises</p>
       <DragDropContext
         // onDragStart={() => setDragging(true)}
         onDragEnd={(result) => {
@@ -340,6 +340,7 @@ const ExercisePicker = ({ options, form, setCount, log }) => {
                                     </>
                                   )}
                                 </Form.List>
+                                <Divider />
                               </Col>
                             </Row>
                           </div>
@@ -385,7 +386,7 @@ const ExercisePicker = ({ options, form, setCount, log }) => {
           handleCancel={handleCancel}
         />
       </Modal>
-    </div>
+    </>
   );
 };
 

@@ -113,8 +113,8 @@ const ExercisesList = () => {
                       <List.Item key={item.id}>
                         <Card
                           className="cardNoBody"
-                          size={"small"}
-                          hoverable="true"
+                          size="small"
+                          // hoverable="true"
                           title={item.name}
                           extra={[
                             // <Button

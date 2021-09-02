@@ -1,11 +1,14 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Statistic, Button, Row, Col, Space } from "antd";
-
+import {
+  PauseOutlined,
+  CaretRightOutlined,
+  UndoOutlined,
+} from "@ant-design/icons";
 const Stopwatch = () => {
   const [time, setTime] = useState(0);
   const [stopwatch, setStopwatch] = useState();
   const [start, setStart] = useState(false);
-  const [display, setDisplay] = useState("");
 
   let ms = time % 100;
   let sec = Math.floor(time / 100) % 60;
@@ -40,10 +43,26 @@ const Stopwatch = () => {
 
   return (
     <Row>
-      <Col xs={24} md={12}>
+      <Col
+        xs={24}
+        md={12}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
         <Statistic value={`${dhr}:${dmin}:${dsec}:${dms}`} />
       </Col>
-      <Col xs={24} md={12} style={{ display: "flex", alignItems: "center" }}>
+      <Col
+        xs={24}
+        md={12}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
         <Space>
           {start ? (
             <Button
@@ -51,7 +70,7 @@ const Stopwatch = () => {
                 control("pause");
               }}
             >
-              stop
+              <PauseOutlined />
             </Button>
           ) : (
             <Button
@@ -59,7 +78,7 @@ const Stopwatch = () => {
                 control("start");
               }}
             >
-              start
+              <CaretRightOutlined />
             </Button>
           )}
 
@@ -68,7 +87,7 @@ const Stopwatch = () => {
               control("clear");
             }}
           >
-            reset
+            <UndoOutlined />
           </Button>
         </Space>
       </Col>
