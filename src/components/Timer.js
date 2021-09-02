@@ -21,8 +21,6 @@ const Timer = () => {
     audio.play();
   };
 
-  const [set, setSet] = useState({ hh: 0, mm: 0, ss: 0 });
-
   const [time, setTime] = useState(0);
   const [stopwatch, setStopwatch] = useState();
   const [start, setStart] = useState(false);
@@ -65,7 +63,7 @@ const Timer = () => {
   };
 
   useEffect(() => {
-    if (time === 0 && userTime !== 0 && start) {
+    if (time === 0 && userTime !== 0) {
       play();
       setStart(false);
       clearInterval(stopwatch);
@@ -76,7 +74,6 @@ const Timer = () => {
     if (!start && time != 0) {
       if (action === "start") {
         const startTime = userTime != time ? Date.now() : Date.now() + 1000;
-
         setStart(true);
         setStopwatch(
           setInterval(() => {
