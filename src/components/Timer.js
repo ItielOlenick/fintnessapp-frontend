@@ -1,5 +1,14 @@
 import { useState } from "react";
-import { Statistic, Button, Row, Col, Space, Popover, TimePicker } from "antd";
+import {
+  Statistic,
+  Button,
+  Row,
+  Col,
+  Space,
+  Popover,
+  Form,
+  InputNumber,
+} from "antd";
 import { useEffect } from "react";
 import {
   UndoOutlined,
@@ -11,6 +20,8 @@ const Timer = () => {
   const play = () => {
     audio.play();
   };
+
+  const [set, setSet] = useState({ hh: 0, mm: 0, ss: 0 });
 
   const [time, setTime] = useState(0);
   const [stopwatch, setStopwatch] = useState();
@@ -54,7 +65,7 @@ const Timer = () => {
   };
 
   useEffect(() => {
-    if (time <= 0 && userTime != 0) {
+    if (time === 0 && userTime !== 0 && start) {
       play();
       setStart(false);
       clearInterval(stopwatch);
@@ -86,6 +97,12 @@ const Timer = () => {
       clearInterval(stopwatch);
       keepAwake(0);
     }
+  };
+
+  const onFinish = (v) => {
+    console.log(v);
+    setTime((v.hh * 1000 * 60 * 60 + v.mm * 1000 * 60 + v.ss * 1000) / 10);
+    setUserTime((v.hh * 1000 * 60 * 60 + v.mm * 1000 * 60 + v.ss * 1000) / 10);
   };
 
   return (
@@ -144,7 +161,56 @@ const Timer = () => {
               trigger="click"
               content={
                 <>
-                  <TimePicker
+                  <Form
+                    onFinish={onFinish}
+                    initialValues={{ hh: null, mm: null, ss: null }}
+                  >
+                    <Space style={{ height: 50 }}>
+                      <Form.Item name="hh" noStyle>
+                        <InputNumber
+                          formatter={(value) =>
+                            value < 10 && value ? `0${value}` : value
+                          }
+                          style={{ width: 50 }}
+                          type="number"
+                          min={0}
+                          max={24}
+                          placeholder="hh"
+                        />
+                      </Form.Item>
+                      <Form.Item name="mm" noStyle>
+                        <InputNumber
+                          formatter={(value) =>
+                            value < 10 && value ? `0${value}` : value
+                          }
+                          style={{ width: 50 }}
+                          type="number"
+                          min={0}
+                          max={59}
+                          placeholder="mm"
+                        />
+                      </Form.Item>
+                      <Form.Item name="ss" noStyle>
+                        <InputNumber
+                          formatter={(value) =>
+                            value < 10 && value ? `0${value}` : value
+                          }
+                          style={{ width: 50 }}
+                          type="number"
+                          min={0}
+                          max={59}
+                          placeholder="ss"
+                        />
+                      </Form.Item>
+                      <Form.Item noStyle>
+                        <Button htmlType="submit" type="primary">
+                          Set
+                        </Button>
+                      </Form.Item>
+                    </Space>
+                  </Form>
+
+                  {/* <TimePicker
                     onChange={(time, timeString) => {
                       setTime(
                         Date.parse("1970-01-01T" + timeString + "Z") / 10
@@ -153,7 +219,7 @@ const Timer = () => {
                         Date.parse("1970-01-01T" + timeString + "Z") / 10
                       );
                     }}
-                  />
+                  /> */}
                 </>
               }
             >
