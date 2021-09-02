@@ -5,7 +5,7 @@ import {
   Row,
   Col,
   Space,
-  Popover,
+  Modal,
   Form,
   InputNumber,
 } from "antd";
@@ -20,7 +20,7 @@ const Timer = () => {
   const play = () => {
     audio.play();
   };
-
+  const [form] = Form.useForm();
   const [time, setTime] = useState(0);
   const [stopwatch, setStopwatch] = useState();
   const [start, setStart] = useState(false);
@@ -63,10 +63,11 @@ const Timer = () => {
   };
 
   useEffect(() => {
-    if (time === 0 && userTime !== 0) {
+    if (time <= 0 && userTime !== 0) {
       play();
       setStart(false);
       clearInterval(stopwatch);
+      setTime(0);
     }
   }, [time]);
 
@@ -102,130 +103,158 @@ const Timer = () => {
     setUserTime((v.hh * 1000 * 60 * 60 + v.mm * 1000 * 60 + v.ss * 1000) / 10);
   };
 
-  return (
-    <Row>
-      <Col
-        xs={24}
-        md={12}
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <Statistic value={`${dhr}:${dmin}:${dsec}`} />
-      </Col>
-      <Col
-        xs={24}
-        md={12}
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <Space>
-          {start ? (
-            <Button
-              onClick={() => {
-                control("pause");
-              }}
-            >
-              <PauseOutlined />
-            </Button>
-          ) : (
-            <Button
-              onClick={() => {
-                control("start");
-              }}
-            >
-              <CaretRightOutlined />
-            </Button>
-          )}
+  const [visible, setVisible] = useState(false);
+  const showModal = () => {
+    if (!start) {
+      setVisible(true);
+    }
+  };
+  const handleCancel = () => {
+    setVisible(false);
+  };
 
+  let hours = null;
+  let minutes = null;
+  let seconds = null;
+
+  return (
+    <>
+      <Row>
+        <Col
+          xs={24}
+          md={12}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Statistic value={`${dhr}:${dmin}:${dsec}`} />
+        </Col>
+        <Col
+          xs={24}
+          md={12}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Space>
+            {start ? (
+              <Button
+                onClick={() => {
+                  control("pause");
+                }}
+              >
+                <PauseOutlined />
+              </Button>
+            ) : (
+              <Button
+                onClick={() => {
+                  control("start");
+                }}
+              >
+                <CaretRightOutlined />
+              </Button>
+            )}
+
+            <Button
+              onClick={() => {
+                control("clear");
+              }}
+            >
+              <UndoOutlined />
+            </Button>
+            <Button onClick={showModal}>Set</Button>
+          </Space>
+        </Col>
+      </Row>
+      <Modal
+        closable={false}
+        width={"65vw"}
+        visible={visible}
+        onCancel={handleCancel}
+        footer={
           <Button
+            htmlType="submit"
+            type="primary"
             onClick={() => {
-              control("clear");
+              handleCancel();
+              form.submit();
             }}
           >
-            <UndoOutlined />
+            Set
           </Button>
-          {start ? (
-            <Button>Set</Button>
-          ) : (
-            <Popover
-              placement="topLeft"
-              trigger="click"
-              content={
-                <>
-                  <Form
-                    onFinish={onFinish}
-                    initialValues={{ hh: null, mm: null, ss: null }}
-                  >
-                    <Space style={{ height: 50 }}>
-                      <Form.Item name="hh" noStyle>
-                        <InputNumber
-                          formatter={(value) =>
-                            value < 10 && value ? `0${value}` : value
-                          }
-                          style={{ width: 50 }}
-                          type="number"
-                          min={0}
-                          max={24}
-                          placeholder="hh"
-                        />
-                      </Form.Item>
-                      <Form.Item name="mm" noStyle>
-                        <InputNumber
-                          formatter={(value) =>
-                            value < 10 && value ? `0${value}` : value
-                          }
-                          style={{ width: 50 }}
-                          type="number"
-                          min={0}
-                          max={59}
-                          placeholder="mm"
-                        />
-                      </Form.Item>
-                      <Form.Item name="ss" noStyle>
-                        <InputNumber
-                          formatter={(value) =>
-                            value < 10 && value ? `0${value}` : value
-                          }
-                          style={{ width: 50 }}
-                          type="number"
-                          min={0}
-                          max={59}
-                          placeholder="ss"
-                        />
-                      </Form.Item>
-                      <Form.Item noStyle>
-                        <Button htmlType="submit" type="primary">
-                          Set
-                        </Button>
-                      </Form.Item>
-                    </Space>
-                  </Form>
-
-                  {/* <TimePicker
-                    onChange={(time, timeString) => {
-                      setTime(
-                        Date.parse("1970-01-01T" + timeString + "Z") / 10
-                      );
-                      setUserTime(
-                        Date.parse("1970-01-01T" + timeString + "Z") / 10
-                      );
-                    }}
-                  /> */}
-                </>
-              }
-            >
-              <Button>Set</Button>
-            </Popover>
-          )}
-        </Space>
-      </Col>
-    </Row>
+        }
+      >
+        <>
+          <Form
+            form={form}
+            onFinish={onFinish}
+            initialValues={{ hh: null, mm: null, ss: null }}
+            layout="vertical"
+          >
+            <Space>
+              <Form.Item name="hh" noStyle>
+                <InputNumber
+                  ref={(i) => {
+                    hours = i;
+                  }}
+                  parser={(value) =>
+                    value < 10 && value && value != 0 ? `0${value}` : value
+                  }
+                  style={{ width: 50 }}
+                  type="number"
+                  min={0}
+                  max={24}
+                  placeholder="hh"
+                  onChange={(e) => {
+                    if (e / 10 >= 1) {
+                      minutes.focus();
+                    }
+                  }}
+                />
+              </Form.Item>
+              <Form.Item name="mm" noStyle>
+                <InputNumber
+                  parser={(value) =>
+                    value < 10 && value && value != 0 ? `0${value}` : value
+                  }
+                  style={{ width: 50 }}
+                  type="number"
+                  min={0}
+                  max={59}
+                  placeholder="mm"
+                  ref={(i) => {
+                    minutes = i;
+                  }}
+                  onChange={(e) => {
+                    if (e / 10 >= 1) seconds.focus();
+                  }}
+                  //add if input is 2 move to the next one automatically
+                />
+              </Form.Item>
+              <Form.Item name="ss" noStyle>
+                <InputNumber
+                  parser={(value) =>
+                    value < 10 && value && value != 0 ? `0${value}` : value
+                  }
+                  style={{ width: 50 }}
+                  type="number"
+                  min={0}
+                  max={59}
+                  placeholder="ss"
+                  ref={(i) => {
+                    seconds = i;
+                  }}
+                />
+              </Form.Item>
+            </Space>
+          </Form>
+        </>
+      </Modal>
+    </>
   );
 };
 

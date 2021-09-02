@@ -9,10 +9,10 @@ import {
   FireOutlined,
   BookOutlined,
 } from "@ant-design/icons";
+import { useEffect } from "react";
 
 const Navbar = () => {
   const location = useLocation();
-
   const [user] = useAuthState(auth);
 
   // const ConditionalWrap = ({ condition, wrap, children }) =>
@@ -35,7 +35,7 @@ const Navbar = () => {
         className="navbar-menu"
         theme="dark"
         mode="horizontal"
-        defaultSelectedKeys={[location.pathname]}
+        selectedKeys={[location.pathname]}
       >
         {user ? (
           <>

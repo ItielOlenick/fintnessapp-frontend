@@ -251,10 +251,10 @@ const WorkoutList = () => {
                                       }}
                                       title="Sure to delete?"
                                       onConfirm={(event) => {
+                                        event.stopPropagation();
                                         WorkoutService.remove(item.id).then(
                                           () => {
                                             setCount(count - 100);
-                                            event.stopPropagation();
                                           }
                                         );
                                       }}
