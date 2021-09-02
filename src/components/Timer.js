@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Input, Statistic, Button, Row, Col, Space, Popover } from "antd";
+import { Statistic, Button, Row, Col, Space, Popover, TimePicker } from "antd";
 import { useEffect } from "react";
 import {
   UndoOutlined,
@@ -58,7 +58,6 @@ const Timer = () => {
       play();
       setStart(false);
       clearInterval(stopwatch);
-      setTime(0);
     }
   }, [time]);
 
@@ -141,18 +140,17 @@ const Timer = () => {
             <Button>Set</Button>
           ) : (
             <Popover
+              placement="topLeft"
               trigger="click"
               content={
                 <>
-                  <Input
-                    type="time"
-                    step={2}
-                    onChange={(e) => {
+                  <TimePicker
+                    onChange={(time, timeString) => {
                       setTime(
-                        Date.parse("1970-01-01T" + e.target.value + "Z") / 10
+                        Date.parse("1970-01-01T" + timeString + "Z") / 10
                       );
                       setUserTime(
-                        Date.parse("1970-01-01T" + e.target.value + "Z") / 10
+                        Date.parse("1970-01-01T" + timeString + "Z") / 10
                       );
                     }}
                   />
