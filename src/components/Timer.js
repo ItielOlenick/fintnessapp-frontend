@@ -63,11 +63,10 @@ const Timer = () => {
   };
 
   useEffect(() => {
-    if (time <= 0 && userTime !== 0) {
+    if (time <= 0 && userTime != 0) {
       play();
       setStart(false);
       clearInterval(stopwatch);
-      setTime(0);
     }
   }, [time]);
 
@@ -98,9 +97,9 @@ const Timer = () => {
   };
 
   const onFinish = (v) => {
-    console.log(v);
-    setTime((v.hh * 1000 * 60 * 60 + v.mm * 1000 * 60 + v.ss * 1000) / 10);
     setUserTime((v.hh * 1000 * 60 * 60 + v.mm * 1000 * 60 + v.ss * 1000) / 10);
+    setTime((v.hh * 1000 * 60 * 60 + v.mm * 1000 * 60 + v.ss * 1000) / 10);
+    setTimeout(() => form.resetFields(), 300);
   };
 
   const [visible, setVisible] = useState(false);
