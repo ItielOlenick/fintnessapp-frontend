@@ -36,7 +36,7 @@ const LogList = () => {
   const [loading, setLoading] = useState(true);
   const [count, setCount] = useState(0);
   const { Panel } = Collapse;
-  const [formatedWorkout, setFromatedWorkout] = useState();
+  const [formattedWorkout, setFormattedWorkout] = useState();
 
   function getUniqueListBy(arr, key) {
     return [...new Map(arr.map((item) => [item[key], item])).values()];
@@ -60,9 +60,9 @@ const LogList = () => {
       };
     });
 
-    setFromatedWorkout(unique);
+    setFormattedWorkout(unique);
 
-    console.log(formatedWorkout);
+    console.log(formattedWorkout);
   };
 
   useEffect(() => {
@@ -139,97 +139,105 @@ const LogList = () => {
               <List
                 header="Workout History"
                 grid={{ gutter: 0, column: 1 }}
-                dataSource={formatedWorkout}
+                dataSource={formattedWorkout}
                 renderItem={(item) => (
                   <List.Item key={item.id}>
-                    <Card
-                      title={item.name}
-                      size="small"
-                      // hoverable="true"
-                      extra={
-                        <>
-                          {formatDate(new Date(Date.parse(item.startedAt)))}
-                          <Divider type="vertical" />
-                          <Dropdown
-                            trigger="click"
-                            overlay={
-                              <Menu>
-                                <Menu.Item key={item.id + 13}>
-                                  <Link
-                                    to={{
-                                      pathname: `/addWorkoutFromLog`,
-                                      search: "",
-                                      hash: "#",
-                                      state: { id: item.id },
-                                    }}
-                                  >
-                                    Create Workout From this Log
-                                  </Link>
-                                </Menu.Item>
-                                <Menu.Item key={item.id + 12}>
-                                  <Link
-                                    to={{
-                                      pathname: "/logWorkout",
-                                      search: "",
-                                      hash: "#",
-                                      state: { id: item.id },
-                                    }}
-                                  >
-                                    Start Workout From This Log
-                                  </Link>
-                                </Menu.Item>
-                                <Menu.Item key={item.id + 10}>
-                                  <Link
-                                    to={{
-                                      pathname: `/logs/edit`,
-                                      search: "",
-                                      hash: "#",
-                                      state: { id: item.id, edit: true },
-                                    }}
-                                  >
-                                    Edit
-                                  </Link>
-                                </Menu.Item>
-                                <Menu.Item key={item.id + 11}>
-                                  <Popconfirm
-                                    onClick={(event) => {
-                                      event.stopPropagation();
-                                    }}
-                                    title="Sure to delete?"
-                                    onConfirm={(event) => {
-                                      LogService.remove(item.id).then(() => {
-                                        setCount(count - 100);
-
-                                        event.stopPropagation();
-                                      });
-                                    }}
-                                    onCancel={(event) => {
-                                      event.stopPropagation();
-
-                                      console.log("cancel");
-                                    }}
-                                  >
-                                    Delete
-                                  </Popconfirm>
-                                </Menu.Item>
-                              </Menu>
-                            }
-                          >
-                            <MoreOutlined
-                              onClick={(event) => {
-                                event.stopPropagation();
-                              }}
-                            />
-                          </Dropdown>
-                        </>
-                      }
+                    <Link
+                      to={{
+                        pathname: "/viewLog",
+                        search: "",
+                        hash: "#",
+                        state: { id: item.id },
+                      }}
                     >
-                      {item.sets.map((set) => (
-                        <li>
-                          {set.count} x {set.name}
-                        </li>
-                      ))}
-                    </Card>
+                      <Card
+                        title={item.name}
+                        size="small"
+                        // hoverable="true"
+                        extra={
+                          <>
+                            {formatDate(new Date(Date.parse(item.startedAt)))}
+                            <Divider type="vertical" />
+                            <Dropdown
+                              trigger="click"
+                              overlay={
+                                <Menu>
+                                  <Menu.Item key={item.id + 13}>
+                                    <Link
+                                      to={{
+                                        pathname: `/addWorkoutFromLog`,
+                                        search: "",
+                                        hash: "#",
+                                        state: { id: item.id },
+                                      }}
+                                    >
+                                      Create Workout From this Log
+                                    </Link>
+                                  </Menu.Item>
+                                  <Menu.Item key={item.id + 12}>
+                                    <Link
+                                      to={{
+                                        pathname: "/logWorkout",
+                                        search: "",
+                                        hash: "#",
+                                        state: { id: item.id },
+                                      }}
+                                    >
+                                      Start Workout From This Log
+                                    </Link>
+                                  </Menu.Item>
+                                  <Menu.Item key={item.id + 10}>
+                                    <Link
+                                      to={{
+                                        pathname: `/logs/edit`,
+                                        search: "",
+                                        hash: "#",
+                                        state: { id: item.id, edit: true },
+                                      }}
+                                    >
+                                      Edit
+                                    </Link>
+                                  </Menu.Item>
+                                  <Menu.Item key={item.id + 11}>
+                                    <Popconfirm
+                                      onClick={(event) => {
+                                        event.stopPropagation();
+                                      }}
+                                      title="Sure to delete?"
+                                      onConfirm={(event) => {
+                                        event.stopPropagation();
+                                        LogService.remove(item.id).then(() => {
+                                          setCount(count - 100);
+                                        });
+                                      }}
+                                      onCancel={(event) => {
+                                        event.stopPropagation();
+
+                                        console.log("cancel");
+                                      }}
+                                    >
+                                      Delete
+                                    </Popconfirm>
+                                  </Menu.Item>
+                                </Menu>
+                              }
+                            >
+                              <MoreOutlined
+                                onClick={(event) => {
+                                  event.stopPropagation();
+                                }}
+                              />
+                            </Dropdown>
+                          </>
+                        }
+                      >
+                        {item.sets.map((set) => (
+                          <li>
+                            {set.count} x {set.name}
+                          </li>
+                        ))}
+                      </Card>
+                    </Link>
                   </List.Item>
                 )}
               />

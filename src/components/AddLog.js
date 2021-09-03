@@ -127,6 +127,7 @@ const AddLog = (props) => {
 
   const onFinish = (workout) => {
     const log = {
+      id: props.location.state.edit ? props.location.state.id : null,
       name: workout.workoutName,
       sets: workout.exercises
         .map((exercise, j) =>

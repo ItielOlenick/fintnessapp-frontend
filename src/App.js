@@ -6,7 +6,6 @@ import WorkoutList from "./components/WorkoutList";
 import ExercisesList from "./components/ExercisesList";
 import AddWorkout from "./components/AddWorkout";
 import AddExercise from "./components/AddExercise";
-import ViewWorkout from "./components/ViewWorkout";
 import EditWorkout from "./components/EditWorkout";
 import Login from "./components/Auth/Login";
 import Register from "./components/Auth/Register";
@@ -17,6 +16,7 @@ import { Content } from "antd/lib/layout/layout";
 import { Col, Row } from "antd";
 import AddLog from "./components/AddLog";
 import LogList from "./components/LogList";
+import ViewLog from "./components/ViewLog";
 
 function App() {
   const [user] = useAuthState(auth);
@@ -32,6 +32,7 @@ function App() {
                 <Switch>
                   <Route exact path="/" component={WorkoutList} />
                   <Route exact path="/logList" component={LogList} />
+                  <Route exact path="/viewLog" component={ViewLog} />
                   <Route exact path="/addWorkout" component={AddWorkout} />
                   <Route
                     exact
@@ -44,7 +45,7 @@ function App() {
                     path="/addWorkoutFromLog"
                     component={EditWorkout}
                   />
-                  <Route exact path="/workouts/:id" component={ViewWorkout} />
+
                   <Route exact path="/logWorkout/" component={AddLog} />
                   <Route exact path="/exercises" component={ExercisesList} />
                   <Route exact path="/addExercise" component={AddExercise} />
