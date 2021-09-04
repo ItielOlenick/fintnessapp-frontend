@@ -5,6 +5,12 @@
   max-width: 600px;
   margin: 0px auto;
 } */
+
+/* disable pull to scroll */
+body {
+    overscroll-behavior-y: contain;
+}
+
 .ant-collapse-content > .ant-collapse-content-box {
   /* padding: 0; */
 }
