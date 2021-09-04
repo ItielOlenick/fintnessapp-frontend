@@ -8,7 +8,7 @@
 
 /* disable pull to scroll */
 body {
-    overscroll-behavior-y: contain;
+  overscroll-behavior-y: contain;
 }
 
 .ant-collapse-content > .ant-collapse-content-box {
@@ -40,10 +40,10 @@ body {
   justify-content: center;
 }
 
-@media screen and (max-height: 450px){
-.navbar-menu{
-display:none;
-}
+@media screen and (max-height: 450px) {
+  .navbar-menu {
+    display: none;
+  }
 }
 
 .ant-menu-item-selected {

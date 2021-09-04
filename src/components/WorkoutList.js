@@ -14,13 +14,15 @@ import {
   Popconfirm,
   Spin,
   Table,
+  Drawer,
   Space,
   Menu,
   Dropdown,
 } from "antd";
 import { MoreOutlined, PlusOutlined } from "@ant-design/icons";
+import AddWorkout from "./AddWorkout";
 
-const WorkoutList = () => {
+const WorkoutList = ({ start }) => {
   const [user] = useAuthState(auth);
   const [workouts, SetWorkouts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -158,162 +160,168 @@ const WorkoutList = () => {
   );
 
   return (
-    <Row>
-      <Col span={24}>
-        {loading ? (
-          show ? (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Spin tip="Loading..." />
-            </div>
+    <>
+      <Row>
+        <Col span={24}>
+          {loading ? (
+            show ? (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Spin tip="Loading..." />
+              </div>
+            ) : (
+              <></>
+            )
           ) : (
-            <></>
-          )
-        ) : (
-          <>
-            {
-              <>
-                <div className="sameRowAround" style={{ marginBottom: 25 }}>
-                  <h2 style={{ margin: 0 }}>Workouts</h2>
-                </div>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    marginBottom: 10,
-                  }}
-                >
-                  <Tooltip title="New Workout">
-                    <Link
-                      to={{
-                        pathname: `/logWorkout`,
-                        search: "",
-                        hash: "#",
-                        state: { id: null, empty: true },
+            <>
+              {
+                <>
+                  <div className="sameRowAround" style={{ marginBottom: 25 }}>
+                    <h2 style={{ margin: 0 }}>Workouts</h2>
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      marginBottom: 10,
+                    }}
+                  >
+                    <Button
+                      type="secondary"
+                      onClick={() => {
+                        start({
+                          id: null,
+                          empty: true,
+                        });
                       }}
                     >
-                      <Button type="secondary">Start Empty Workout</Button>
-                    </Link>
-                  </Tooltip>
-                </div>
-              </>
-            }
-            {workouts.length > 0 ? (
-              <>
-                <List
-                  header={
-                    <div className="sameRow">
-                      My Routines{" "}
-                      <Tooltip title="New Workout">
-                        <Link to={"/addWorkout"}>
-                          <Button type="primary" shape="circle">
-                            <PlusOutlined />
-                          </Button>
-                        </Link>
-                      </Tooltip>
-                    </div>
-                  }
-                  grid={{ gutter: 0, column: 1 }}
-                  dataSource={formatedWorkout}
-                  renderItem={(item) => (
-                    <List.Item key={item.id}>
-                      <Link
-                        to={{
-                          pathname: "/logWorkout",
-                          search: "",
-                          hash: "#",
-                          state: { id: item.id },
-                        }}
-                      >
-                        <Card
-                          title={item.name}
-                          size="small"
-                          // hoverable="true"
-                          extra={
-                            <Dropdown
-                              trigger="click"
-                              overlay={
-                                <Menu>
-                                  <Menu.Item key={item.id + 10}>
-                                    <Link to={`/workouts/edit/${item.id}`}>
-                                      Edit
-                                    </Link>
-                                  </Menu.Item>
-                                  <Menu.Item key={item.id + 11}>
-                                    <Popconfirm
-                                      onClick={(event) => {
-                                        event.stopPropagation();
-                                      }}
-                                      title="Sure to delete?"
-                                      onConfirm={(event) => {
-                                        event.stopPropagation();
-                                        WorkoutService.remove(item.id).then(
-                                          () => {
-                                            setCount(count - 100);
-                                          }
-                                        );
-                                      }}
-                                      onCancel={(event) => {
-                                        event.stopPropagation();
-
-                                        console.log("cancel");
-                                      }}
-                                    >
-                                      Delete
-                                    </Popconfirm>
-                                  </Menu.Item>
-                                </Menu>
-                              }
-                            >
-                              <MoreOutlined
-                                onClick={(event) => {
-                                  event.stopPropagation();
-                                }}
-                              />
-                            </Dropdown>
-                          }
+                      Start Empty Workout
+                    </Button>
+                  </div>
+                </>
+              }
+              {workouts.length > 0 ? (
+                <>
+                  <List
+                    header={
+                      <div className="sameRow">
+                        My Routines{" "}
+                        <Tooltip title="New Workout">
+                          <Link to={"/addWorkout"}>
+                            <Button type="primary" shape="circle">
+                              <PlusOutlined />
+                            </Button>
+                          </Link>
+                        </Tooltip>
+                      </div>
+                    }
+                    grid={{ gutter: 0, column: 1 }}
+                    dataSource={formatedWorkout}
+                    renderItem={(item) => (
+                      <List.Item key={item.id}>
+                        <Link
+                          onClick={() => {
+                            start({
+                              id: item.id,
+                            });
+                          }}
+                          // to={{
+                          //   pathname: "/logWorkout",
+                          //   search: "",
+                          //   hash: "#",
+                          //   state: { id: item.id },
+                          // }}
                         >
-                          {item.sets.map((set) => (
-                            <li>
-                              {set.count} x {set.name}
-                            </li>
-                          ))}
-                        </Card>
+                          <Card
+                            title={item.name}
+                            size="small"
+                            // hoverable="true"
+                            extra={
+                              <Dropdown
+                                trigger="click"
+                                overlay={
+                                  <Menu>
+                                    <Menu.Item key={item.id + 10}>
+                                      <Link to={`/workouts/edit/${item.id}`}>
+                                        Edit
+                                      </Link>
+                                    </Menu.Item>
+                                    <Menu.Item key={item.id + 11}>
+                                      <Popconfirm
+                                        onClick={(event) => {
+                                          event.stopPropagation();
+                                        }}
+                                        title="Sure to delete?"
+                                        onConfirm={(event) => {
+                                          event.stopPropagation();
+                                          WorkoutService.remove(item.id).then(
+                                            () => {
+                                              setCount(count - 100);
+                                            }
+                                          );
+                                        }}
+                                        onCancel={(event) => {
+                                          event.stopPropagation();
+
+                                          console.log("cancel");
+                                        }}
+                                      >
+                                        Delete
+                                      </Popconfirm>
+                                    </Menu.Item>
+                                  </Menu>
+                                }
+                              >
+                                <MoreOutlined
+                                  onClick={(event) => {
+                                    event.stopPropagation();
+                                  }}
+                                />
+                              </Dropdown>
+                            }
+                          >
+                            {item.sets.map((set) => (
+                              <li>
+                                {set.count} x {set.name}
+                              </li>
+                            ))}
+                          </Card>
+                        </Link>
+                      </List.Item>
+                    )}
+                  />
+                  {sample}
+                </>
+              ) : (
+                <>
+                  <div className="sameRow">
+                    My Routines
+                    <Tooltip title="New Workout">
+                      <Link to={"/addWorkout"}>
+                        <Button type="primary" shape="circle">
+                          <PlusOutlined />
+                        </Button>
                       </Link>
-                    </List.Item>
-                  )}
-                />
-                {sample}
-              </>
-            ) : (
-              <>
-                <div className="sameRow">
-                  My Routines
-                  <Tooltip title="New Workout">
-                    <Link to={"/addWorkout"}>
-                      <Button type="primary" shape="circle">
-                        <PlusOutlined />
-                      </Button>
-                    </Link>
-                  </Tooltip>
-                </div>
-                <br />
-                <p>
-                  No routines yet,
-                  <br /> Create your first routine and will appear here
-                </p>
-                {sample}
-              </>
-            )}
-          </>
-        )}
-      </Col>
-    </Row>
+                    </Tooltip>
+                  </div>
+                  <br />
+                  <p>
+                    No routines yet,
+                    <br /> Create your first routine and will appear here
+                  </p>
+                  {sample}
+                </>
+              )}
+            </>
+          )}
+        </Col>
+      </Row>
+    </>
   );
 };
 

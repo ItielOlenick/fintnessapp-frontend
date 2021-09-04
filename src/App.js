@@ -13,25 +13,81 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "./services/firebase";
 import Home from "./components/Home";
 import { Content } from "antd/lib/layout/layout";
-import { Col, Row } from "antd";
+import { Col, Row, Drawer, Modal, Button } from "antd";
 import AddLog from "./components/AddLog";
 import LogList from "./components/LogList";
 import ViewLog from "./components/ViewLog";
-
+import { useState } from "react";
 function App() {
   const [user] = useAuthState(auth);
 
+  //active workout
+
+  //initiate new workout
+  const start = ({ id, edit, empty }) => {
+    if (active) {
+      console.log(active);
+      showModal();
+      setWorkoutProps({ ...workoutProps, id: id, edit: edit, empty: empty });
+    } else {
+      setWorkoutProps({ ...workoutProps, id: id, edit: edit, empty: empty });
+      showDrawer();
+      setActive(true);
+    }
+  };
+
+  const [active, setActive] = useState();
+  const [workoutProps, setWorkoutProps] = useState({
+    edit: false,
+    id: null,
+    empty: true,
+  });
+  //drawer
+  const [visible, setVisible] = useState(false);
+
+  const done = () => {
+    setActive(false);
+    onClose();
+  };
+
+  const showDrawer = () => {
+    setVisible(true);
+  };
+  const onClose = () => {
+    setVisible(false);
+  };
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const showModal = () => {
+    setModalVisible(true);
+  };
+  const handleCancel = () => {
+    setModalVisible(false);
+  };
+  const handleOk = () => {
+    setActive(false);
+    setModalVisible(false);
+    start({ ...workoutProps });
+  };
   return (
     <BrowserRouter>
-      <Navbar />
+      <Navbar showDrawer={showDrawer} />
       <Row justify="center" style={{ paddingBottom: 50 }}>
         <Col sm={12} xs={24}>
           <Content className="main-content">
             {user ? (
               <>
                 <Switch>
-                  <Route exact path="/" component={WorkoutList} />
-                  <Route exact path="/logList" component={LogList} />
+                  <Route
+                    exact
+                    path="/"
+                    render={(props) => <WorkoutList {...props} start={start} />}
+                  />
+                  <Route
+                    exact
+                    path="/logList"
+                    render={(props) => <LogList {...props} start={start} />}
+                  />
                   <Route exact path="/viewLog" component={ViewLog} />
                   <Route exact path="/addWorkout" component={AddWorkout} />
                   <Route
@@ -49,7 +105,7 @@ function App() {
                   <Route exact path="/logWorkout/" component={AddLog} />
                   <Route exact path="/exercises" component={ExercisesList} />
                   <Route exact path="/addExercise" component={AddExercise} />
-                  <Redirect exact from="/exercises/reload" to="/exercises" />
+                  {/* <Redirect exact from="/exercises/reload" to="/exercises" /> */}
                   <Route path="*" component={NoteFound} />
                 </Switch>
               </>
@@ -65,6 +121,59 @@ function App() {
           </Content>
         </Col>
       </Row>
+      {active ? (
+        <div>
+          <Button
+            style={{
+              bottom: 60,
+              position: "fixed",
+              width: "100%",
+              justifyContent: "center",
+            }}
+            danger
+            onClick={() => {
+              showDrawer();
+            }}
+          >
+            Resume Workout
+          </Button>
+        </div>
+      ) : (
+        <></>
+      )}
+      <Drawer
+        contentWrapperStyle={{ bottom: 60 }}
+        placement="bottom"
+        visible={visible}
+        onClose={onClose}
+        height={"calc(100% - 60px)"}
+        destroyOnClose={true}
+        closable={false}
+      >
+        <AddLog
+          done={done}
+          location={{
+            state: {
+              empty: workoutProps.empty,
+              edit: workoutProps.edit,
+              id: workoutProps.id,
+            },
+          }}
+        />
+      </Drawer>
+
+      <Modal
+        zIndex={2000}
+        title={"Workout in progress"}
+        visible={modalVisible}
+        onCancel={handleCancel}
+        onOk={handleOk}
+        destroyOnClose={true}
+        // footer={null}
+      >
+        You have a active workout session. are you sure you want to terminate it
+        and start a new one?
+      </Modal>
     </BrowserRouter>
   );
 }

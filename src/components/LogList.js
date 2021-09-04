@@ -30,7 +30,7 @@ import {
 import UserService from "../services/UserService";
 import LogService from "../services/LogService";
 
-const LogList = () => {
+const LogList = ({ start }) => {
   const [user] = useAuthState(auth);
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -176,12 +176,15 @@ const LogList = () => {
                                   </Menu.Item>
                                   <Menu.Item key={item.id + 12}>
                                     <Link
-                                      to={{
-                                        pathname: "/logWorkout",
-                                        search: "",
-                                        hash: "#",
-                                        state: { id: item.id },
+                                      onClick={() => {
+                                        start({ id: item.id });
                                       }}
+                                      // to={{
+                                      //   pathname: "/logWorkout",
+                                      //   search: "",
+                                      //   hash: "#",
+                                      //   state: { id: item.id },
+                                      // }}
                                     >
                                       Start Workout From This Log
                                     </Link>

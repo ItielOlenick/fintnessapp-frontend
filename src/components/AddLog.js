@@ -158,6 +158,7 @@ const AddLog = (props) => {
       LogService.create(log)
         .then((response) => {
           console.log("Workout logged successfully", response.data);
+          props.done();
           history.push("/logList");
         })
         .catch((error) => {

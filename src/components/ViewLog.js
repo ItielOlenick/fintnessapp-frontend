@@ -1,6 +1,6 @@
 import LogService from "../services/LogService";
 import { auth } from "../services/firebase";
-import { Table, List } from "antd";
+import { Table, List, Card } from "antd";
 import { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 
@@ -75,15 +75,18 @@ const ViewLog = (props) => {
             grid={{ gutter: 0, column: 1 }}
             renderItem={(item) => (
               <List.Item key={item.id}>
-                <h4>{item.name}</h4>
-
-                {log.sets
-                  .filter((s) => s.name === item.name)
-                  .map((v, i) => (
-                    <li>
-                      {i + 1}. {v.reps} x {v.weight} kg
-                    </li>
-                  ))}
+                <Card size="small" title={item.name}>
+                  {/* <ol> */}
+                  {log.sets
+                    .filter((s) => s.name === item.name)
+                    .map((v, i) => (
+                      <li>
+                        &nbsp;&nbsp;&nbsp;&nbsp;{i + 1}. &nbsp;&nbsp;&nbsp;
+                        {v.reps} x {v.weight} kg
+                      </li>
+                    ))}
+                  {/* </ol> */}
+                </Card>
               </List.Item>
             )}
           />

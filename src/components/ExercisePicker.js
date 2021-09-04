@@ -374,6 +374,7 @@ const ExercisePicker = ({ options, form, setCount, log }) => {
         </Droppable>
       </DragDropContext>
       <Modal
+        zIndex={2000}
         title={"Add a custom exercise"}
         visible={visible}
         onCancel={handleCancel}
