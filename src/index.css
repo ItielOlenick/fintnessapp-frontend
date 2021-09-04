@@ -40,6 +40,12 @@ body {
   justify-content: center;
 }
 
+@media screen and (max-height: 450px){
+.navbar-menu{
+display:none;
+}
+}
+
 .ant-menu-item-selected {
   background-color: transparent !important;
 }
