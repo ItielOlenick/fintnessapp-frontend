@@ -26,7 +26,6 @@ function App() {
   //initiate new workout
   const start = ({ id, edit, empty }) => {
     if (active) {
-      console.log(active);
       showModal();
       setWorkoutProps({ ...workoutProps, id: id, edit: edit, empty: empty });
     } else {
@@ -141,26 +140,29 @@ function App() {
       ) : (
         <></>
       )}
-      <Drawer
-        contentWrapperStyle={{ bottom: 60 }}
-        placement="bottom"
-        visible={visible}
-        onClose={onClose}
-        height={"calc(100% - 60px)"}
-        destroyOnClose={true}
-        closable={false}
-      >
-        <AddLog
-          done={done}
-          location={{
-            state: {
-              empty: workoutProps.empty,
-              edit: workoutProps.edit,
-              id: workoutProps.id,
-            },
-          }}
-        />
-      </Drawer>
+      {active ? (
+        <Drawer
+          contentWrapperStyle={{ bottom: 60 }}
+          placement="bottom"
+          visible={visible}
+          onClose={onClose}
+          height={"calc(100% - 60px)"}
+          closable={false}
+        >
+          <AddLog
+            done={done}
+            location={{
+              state: {
+                empty: workoutProps.empty,
+                edit: workoutProps.edit,
+                id: workoutProps.id,
+              },
+            }}
+          />
+        </Drawer>
+      ) : (
+        <></>
+      )}
 
       <Modal
         zIndex={2000}
@@ -168,7 +170,7 @@ function App() {
         visible={modalVisible}
         onCancel={handleCancel}
         onOk={handleOk}
-        destroyOnClose={true}
+        // destroyOnClose={true}
         // footer={null}
       >
         You have a active workout session. are you sure you want to terminate it
