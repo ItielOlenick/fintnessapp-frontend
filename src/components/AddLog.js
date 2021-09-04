@@ -4,7 +4,7 @@ import ExercisesService from "../services/ExercisesService";
 import WorkoutService from "../services/WorkoutService";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../services/firebase";
-import { Collapse, Form, Input, Button, Spin, message } from "antd";
+import { Collapse, Form, Input, Button, Spin, message, Popconfirm } from "antd";
 
 import WgerService from "../services/WgerService";
 import LogService from "../services/LogService";
@@ -13,7 +13,10 @@ import ExercisePicker from "./ExercisePicker";
 import Timer from "./Timer";
 
 const AddLog = (props) => {
-  const [started, setStarted] = useState({ started: false, timeStarted: "" });
+  const [started, setStarted] = useState({
+    started: true,
+    timeStarted: new Date().toISOString(),
+  });
   const [loading, setLoading] = useState(true);
   const [user] = useAuthState(auth);
   const [form] = Form.useForm();
@@ -167,6 +170,11 @@ const AddLog = (props) => {
     } else console.log("Empty workout");
   };
 
+  // setStarted({
+  //   // started: true,
+  //   timeStarted: new Date().toISOString(),
+  // });
+
   return (
     <>
       {loading ? (
@@ -200,7 +208,7 @@ const AddLog = (props) => {
             <Form.Item name="notes" label="Workout notes">
               <TextArea rows={5} />
             </Form.Item>
-            {started.started ? (
+            <div className="sameRow">
               <Button
                 type="primary"
                 onClick={() => {
@@ -217,21 +225,13 @@ const AddLog = (props) => {
               >
                 Save
               </Button>
-            ) : (
-              <Button
-                type="primary"
-                htmlType="button"
-                onClick={() => {
-                  // console.log("workout as of now: ", form.getFieldsValue(true));
-                  setStarted({
-                    started: true,
-                    timeStarted: new Date().toISOString(),
-                  });
-                }}
+              <Popconfirm
+                title="Sure to cancel Workout?"
+                onConfirm={() => props.done()}
               >
-                Start
-              </Button>
-            )}
+                <Button>Cancel Workout</Button>
+              </Popconfirm>
+            </div>
           </Form>
         </>
       )}

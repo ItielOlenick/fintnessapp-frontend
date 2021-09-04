@@ -173,8 +173,8 @@ function App() {
         // destroyOnClose={true}
         // footer={null}
       >
-        You have a active workout session. are you sure you want to terminate it
-        and start a new one?
+        You have an active workout session. are you sure you want to terminate
+        it and start a new one?
       </Modal>
     </BrowserRouter>
   );
