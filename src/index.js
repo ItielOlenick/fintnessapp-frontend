@@ -11,12 +11,11 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById("root")
 );
+
 const configuration = {
   onUpdate: (registration) => {
     if (registration && registration.waiting) {
-      if (
-        window.confirm("New version available!  refresh to update your app?")
-      ) {
+      if (window.confirm("Update the app?")) {
         // navigator.serviceWorker.controller.postMessage({
         //   type: "SKIP_WAITING",
         // });
