@@ -85,6 +85,8 @@ function App() {
           openNotification();
           clearInterval(check);
         }
+        console.log("up to date");
+        console.log("latest version: ", latest, "current version: ", current);
       });
   }, 10000);
 
