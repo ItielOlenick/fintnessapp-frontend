@@ -18,7 +18,8 @@ import AddLog from "./components/AddLog";
 import LogList from "./components/LogList";
 import ViewLog from "./components/ViewLog";
 import { useState } from "react";
-
+import axios from "axios";
+import version from "./version";
 function App() {
   const [user] = useAuthState(auth);
 
@@ -69,32 +70,43 @@ function App() {
     start({ ...workoutProps }, true);
   };
 
-  //update notification
-  // const openNotification = () => {
-  //   const msg = (
-  //     <>
-  //       Click{" "}
-  //       <a
-  //         onClick={() => {
-  //           navigator.serviceWorker.controller.postMessage({
-  //             type: "SKIP_WAITING",
-  //           });
-  //         }}
-  //       >
-  //         here
-  //       </a>{" "}
-  //       to update now
-  //     </>
-  //   );
-  //   const args = {
-  //     key: "update",
-  //     message: "Update Available",
-  //     description: msg,
-  //     duration: 0,
-  //   };
-  //   notification.open(args);
-  // };
-  // openNotification();
+  const [currVer, setCurrVer] = useState();
+
+  const check = setInterval(() => {
+    axios
+      .get(
+        "https://raw.githubusercontent.com/ItielOlenick/fintnessapp-frontend/antd-and-remake-the-concept/version.txt"
+      )
+      .then((data) => {
+        if (version !== data.data) {
+          openNotification();
+          clearInterval(check);
+        }
+      });
+  }, 10000);
+
+  const openNotification = () => {
+    const msg = (
+      <>
+        Click{" "}
+        <a
+          onClick={() => {
+            window.location.reload();
+          }}
+        >
+          here
+        </a>{" "}
+        to update now
+      </>
+    );
+    const args = {
+      key: "update",
+      message: "Update Available",
+      description: msg,
+      duration: 0,
+    };
+    notification.open(args);
+  };
 
   return (
     <BrowserRouter>
