@@ -6,6 +6,9 @@ import App from "./App";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 
 const reloadIndex = () => {
+  navigator.serviceWorker.controller.postMessage({
+    type: "SKIP_WAITING",
+  });
   window.location.reload();
 };
 
@@ -20,9 +23,6 @@ const configuration = {
   onUpdate: (registration) => {
     if (registration && registration.waiting) {
       if (window.confirm("Update the app?")) {
-        // navigator.serviceWorker.controller.postMessage({
-        //   type: "SKIP_WAITING",
-        // });
         registration.waiting.postMessage({ type: "SKIP_WAITING" });
         window.location.reload();
       }
