@@ -75,10 +75,12 @@ function App() {
   const check = setInterval(() => {
     axios
       .get(
-        "https://raw.githubusercontent.com/ItielOlenick/fintnessapp-frontend/antd-and-remake-the-concept/version.txt"
+        "https://raw.githubusercontent.com/ItielOlenick/fintnessapp-frontend/antd-and-remake-the-concept/src/version.js"
       )
       .then((data) => {
-        if (version !== data.data) {
+        const latest = data.data.match(/\d/g).join("");
+        const current = version.toString().match(/\d/g).join("");
+        if (latest !== current) {
           openNotification();
           clearInterval(check);
         }
