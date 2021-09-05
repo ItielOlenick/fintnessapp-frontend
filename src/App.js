@@ -13,11 +13,12 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "./services/firebase";
 import Home from "./components/Home";
 import { Content } from "antd/lib/layout/layout";
-import { Col, Row, Drawer, Modal, Button } from "antd";
+import { Col, Row, Drawer, Modal, Button, notification } from "antd";
 import AddLog from "./components/AddLog";
 import LogList from "./components/LogList";
 import ViewLog from "./components/ViewLog";
 import { useState } from "react";
+
 function App() {
   const [user] = useAuthState(auth);
 
@@ -67,6 +68,34 @@ function App() {
     setModalVisible(false);
     start({ ...workoutProps }, true);
   };
+
+  //update notification
+  // const openNotification = () => {
+  //   const msg = (
+  //     <>
+  //       Click{" "}
+  //       <a
+  //         onClick={() => {
+  //           navigator.serviceWorker.controller.postMessage({
+  //             type: "SKIP_WAITING",
+  //           });
+  //         }}
+  //       >
+  //         here
+  //       </a>{" "}
+  //       to update now
+  //     </>
+  //   );
+  //   const args = {
+  //     key: "update",
+  //     message: "Update Available",
+  //     description: msg,
+  //     duration: 0,
+  //   };
+  //   notification.open(args);
+  // };
+  // openNotification();
+
   return (
     <BrowserRouter>
       <Navbar showDrawer={showDrawer} />
@@ -162,7 +191,6 @@ function App() {
       ) : (
         <></>
       )}
-
       <Modal
         zIndex={2000}
         title={"Workout in progress"}
