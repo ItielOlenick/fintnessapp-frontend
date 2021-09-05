@@ -24,12 +24,11 @@ function App() {
   //active workout
 
   //initiate new workout
-  const start = ({ id, edit, empty }) => {
-    if (active) {
+  const start = ({ id, edit, empty }, force) => {
+    setWorkoutProps({ ...workoutProps, id: id, edit: edit, empty: empty });
+    if (active && !force) {
       showModal();
-      setWorkoutProps({ ...workoutProps, id: id, edit: edit, empty: empty });
     } else {
-      setWorkoutProps({ ...workoutProps, id: id, edit: edit, empty: empty });
       showDrawer();
       setActive(true);
     }
@@ -66,7 +65,7 @@ function App() {
   const handleOk = () => {
     setActive(false);
     setModalVisible(false);
-    start({ ...workoutProps });
+    start({ ...workoutProps }, true);
   };
   return (
     <BrowserRouter>
@@ -134,7 +133,7 @@ function App() {
               showDrawer();
             }}
           >
-            Resume Workout
+            Workout in progress
           </Button>
         </div>
       ) : (
@@ -142,11 +141,11 @@ function App() {
       )}
       {active ? (
         <Drawer
-          contentWrapperStyle={{ bottom: 60 }}
+          contentWrapperStyle={visible ? { bottom: 60 } : {}}
           placement="bottom"
           visible={visible}
           onClose={onClose}
-          height={"calc(100% - 60px)"}
+          height={visible ? "calc(100% - 60px)" : "100%"}
           closable={false}
         >
           <AddLog
