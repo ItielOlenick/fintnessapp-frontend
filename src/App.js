@@ -20,7 +20,7 @@ import ViewLog from "./components/ViewLog";
 import { useState } from "react";
 import axios from "axios";
 import version from "./version";
-function App() {
+function App({ reloadIndex }) {
   const [user] = useAuthState(auth);
 
   //active workout
@@ -96,7 +96,7 @@ function App() {
         Click{" "}
         <a
           onClick={() => {
-            window.location.reload();
+            reloadIndex();
           }}
         >
           here

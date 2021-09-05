@@ -5,9 +5,13 @@ import "./index.css";
 import App from "./App";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 
+const reloadIndex = () => {
+  window.location.reload();
+};
+
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <App reloadIndex={reloadIndex} />
   </React.StrictMode>,
   document.getElementById("root")
 );
