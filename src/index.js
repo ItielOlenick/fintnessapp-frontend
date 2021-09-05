@@ -17,10 +17,10 @@ const configuration = {
       if (
         window.confirm("New version available!  refresh to update your app?")
       ) {
-        navigator.serviceWorker.controller.postMessage({
-          type: "SKIP_WAITING",
-        });
-        // registration.waiting.postMessage({ type: "SKIP_WAITING" });
+        // navigator.serviceWorker.controller.postMessage({
+        //   type: "SKIP_WAITING",
+        // });
+        registration.waiting.postMessage({ type: "SKIP_WAITING" });
         window.location.reload();
       }
     }
