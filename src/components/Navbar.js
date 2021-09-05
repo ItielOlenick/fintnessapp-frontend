@@ -11,7 +11,7 @@ import {
 } from "@ant-design/icons";
 import { useEffect } from "react";
 
-const Navbar = () => {
+const Navbar = ({ checkForUpdates }) => {
   const location = useLocation();
   const [user] = useAuthState(auth);
 
@@ -30,7 +30,7 @@ const Navbar = () => {
     lineHeight: 1.5,
   };
   return (
-    <div>
+    <div onTouchStart={() => checkForUpdates()}>
       <Menu
         className="navbar-menu"
         theme="dark"

@@ -17,7 +17,7 @@ import { Col, Row, Drawer, Modal, Button, notification } from "antd";
 import AddLog from "./components/AddLog";
 import LogList from "./components/LogList";
 import ViewLog from "./components/ViewLog";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import version from "./version";
 function App({ reloadIndex }) {
@@ -70,9 +70,7 @@ function App({ reloadIndex }) {
     start({ ...workoutProps }, true);
   };
 
-  const [currVer, setCurrVer] = useState();
-
-  const check = setInterval(() => {
+  const checkForUpdates = () => {
     axios
       .get(
         "https://raw.githubusercontent.com/ItielOlenick/fintnessapp-frontend/antd-and-remake-the-concept/src/version.js"
@@ -83,12 +81,11 @@ function App({ reloadIndex }) {
         if (latest !== current) {
           console.log("latest version: ", latest, "current version: ", current);
           openNotification();
-          clearInterval(check);
         }
         console.log("up to date");
         console.log("latest version: ", latest, "current version: ", current);
       });
-  }, 10000);
+  };
 
   const openNotification = () => {
     const msg = (
@@ -115,7 +112,7 @@ function App({ reloadIndex }) {
 
   return (
     <BrowserRouter>
-      <Navbar showDrawer={showDrawer} />
+      <Navbar showDrawer={showDrawer} checkForUpdates={checkForUpdates} />
       <Row justify="center" style={{ paddingBottom: 50 }}>
         <Col sm={12} xs={24}>
           <Content className="main-content">
