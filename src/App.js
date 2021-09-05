@@ -81,6 +81,7 @@ function App() {
         const latest = data.data.match(/\d/g).join("");
         const current = version.toString().match(/\d/g).join("");
         if (latest !== current) {
+          console.log("latest version: ", latest, "current version: ", current);
           openNotification();
           clearInterval(check);
         }
