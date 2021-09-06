@@ -27,18 +27,18 @@ function App({ reloadIndex }) {
   //active workout
 
   //initiate new workout
-  const start = ({ id, edit, empty, samples }, force) => {
+  const start = ({ id, edit, empty, samples }) => {
     setWorkoutProps({
-      ...workoutProps,
       id: id,
       edit: edit,
       empty: empty,
       samples: samples,
     });
-    if (active && !force) {
+    if (active) {
       showModal();
     } else {
       setActive(true);
+
       showDrawer();
     }
   };
@@ -75,7 +75,7 @@ function App({ reloadIndex }) {
   const handleOk = () => {
     setActive(false);
     setModalVisible(false);
-    start({ ...workoutProps }, true);
+    start({ ...workoutProps });
   };
   const checkForUpdates = () => {
     axios
@@ -171,28 +171,28 @@ function App({ reloadIndex }) {
         </Col>
       </Row>
       {active ? (
-        <div>
-          <Button
-            style={{
-              bottom: 60,
-              position: "fixed",
-              width: "100%",
-              justifyContent: "center",
-            }}
-            danger
-            onClick={() => {
-              showDrawer();
-            }}
-          >
-            Workout in progress
-          </Button>
-        </div>
+        // <div>
+        <Button
+          className="workout-in-progress"
+          style={{
+            bottom: 60,
+            position: "fixed",
+            width: "100%",
+            justifyContent: "center",
+          }}
+          danger
+          onClick={() => {
+            showDrawer();
+          }}
+        >
+          Workout in progress
+        </Button>
       ) : (
+        // </div>
         <></>
       )}
       {active ? (
         <Drawer
-          destroyOnClose
           contentWrapperStyle={visible ? { bottom: 60 } : {}}
           placement="bottom"
           visible={visible}

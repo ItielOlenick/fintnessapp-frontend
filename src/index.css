@@ -40,8 +40,11 @@ body {
   justify-content: center;
 }
 
-@media screen and (max-height: 450px) {
+@media screen and (max-height: 500px) {
   .navbar-menu {
+    display: none;
+  }
+  .workout-in-progress {
     display: none;
   }
 }
