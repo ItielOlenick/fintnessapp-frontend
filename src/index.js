@@ -6,9 +6,9 @@ import App from "./App";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 
 const reloadIndex = () => {
-  // navigator.serviceWorker.controller.postMessage({
-  //   type: "SKIP_WAITING",
-  // });
+  navigator.serviceWorker.controller.postMessage({
+    type: "SKIP_WAITING",
+  });
   window.location.reload();
 };
 
