@@ -84,7 +84,7 @@ function App({ reloadIndex }) {
       )
       .then((data) => {
         const latest = data.data.replace(/[^\d.-]/g, "");
-        const current = version.toString().replace(/[^\d.-]/g, "");
+        const current = version;
         if (latest !== current && latest !== null) {
           console.log("latest version: ", latest, "current version: ", current);
           openNotification();
