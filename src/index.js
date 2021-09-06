@@ -24,7 +24,9 @@ const configuration = {
     if (registration && registration.waiting) {
       if (window.confirm("Update the app?")) {
         registration.waiting.postMessage({ type: "SKIP_WAITING" });
-        window.location.reload();
+        setInterval(() => {
+          window.location.reload();
+        }, 500);
       }
     }
   },
