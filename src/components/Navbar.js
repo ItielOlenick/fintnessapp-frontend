@@ -29,6 +29,7 @@ const Navbar = ({ checkForUpdates }) => {
     marginBottom: 0,
     lineHeight: 1.5,
   };
+
   return (
     <div onTouchStart={() => checkForUpdates()}>
       <Menu
