@@ -11,9 +11,6 @@ body {
   overscroll-behavior-y: contain;
 }
 
-.ant-collapse-content > .ant-collapse-content-box {
-  /* padding: 0; */
-}
 .ant-collapse-ghost
   > .ant-collapse-item
   > .ant-collapse-content
@@ -46,6 +43,10 @@ body {
   }
   .workout-in-progress {
     display: none;
+  }
+  .ant-drawer-content-wrapper {
+    height: 100% !important;
+    bottom: 0 !important;
   }
 }
 .ant-menu-dark.ant-menu-horizontal > .ant-menu-item:hover {
@@ -98,8 +99,4 @@ body {
 }
 .cardNoBody.ant-card-small .ant-card-body {
   padding: 0;
-}
-
-.ant-collapse-item {
-  /* border-bottom: 0 !important; */
 }
