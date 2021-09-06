@@ -128,7 +128,7 @@ function App({ reloadIndex }) {
                 <Switch>
                   <Route
                     exact
-                    path="/"
+                    path={["/", "/index.html"]}
                     render={(props) => <WorkoutList {...props} start={start} />}
                   />
                   <Route
