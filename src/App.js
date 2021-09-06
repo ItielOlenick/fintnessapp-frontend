@@ -20,19 +20,26 @@ import ViewLog from "./components/ViewLog";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import version from "./version";
+import UserPanel from "./components/Auth/UserPanel";
 function App({ reloadIndex }) {
   const [user] = useAuthState(auth);
 
   //active workout
 
   //initiate new workout
-  const start = ({ id, edit, empty }, force) => {
-    setWorkoutProps({ ...workoutProps, id: id, edit: edit, empty: empty });
+  const start = ({ id, edit, empty, samples }, force) => {
+    setWorkoutProps({
+      ...workoutProps,
+      id: id,
+      edit: edit,
+      empty: empty,
+      samples: samples,
+    });
     if (active && !force) {
       showModal();
     } else {
-      showDrawer();
       setActive(true);
+      showDrawer();
     }
   };
 
@@ -41,6 +48,7 @@ function App({ reloadIndex }) {
     edit: false,
     id: null,
     empty: true,
+    samples: null,
   });
   //drawer
   const [visible, setVisible] = useState(false);
@@ -69,16 +77,15 @@ function App({ reloadIndex }) {
     setModalVisible(false);
     start({ ...workoutProps }, true);
   };
-
   const checkForUpdates = () => {
     axios
       .get(
         "https://raw.githubusercontent.com/ItielOlenick/fintnessapp-frontend/antd-and-remake-the-concept/src/version.js"
       )
       .then((data) => {
-        const latest = data.data.match(/\d/g).join("");
-        const current = version.toString().match(/\d/g).join("");
-        if (latest !== current) {
+        const latest = data.data.replace(/[^\d.-]/g, "");
+        const current = version.toString().replace(/[^\d.-]/g, "");
+        if (latest !== current && latest !== null) {
           console.log("latest version: ", latest, "current version: ", current);
           openNotification();
         }
@@ -146,6 +153,7 @@ function App({ reloadIndex }) {
                   <Route exact path="/logWorkout/" component={AddLog} />
                   <Route exact path="/exercises" component={ExercisesList} />
                   <Route exact path="/addExercise" component={AddExercise} />
+                  <Route exact path="/userPanel" component={UserPanel} />
                   {/* <Redirect exact from="/exercises/reload" to="/exercises" /> */}
                   <Route path="*" component={NoteFound} />
                 </Switch>
@@ -184,6 +192,7 @@ function App({ reloadIndex }) {
       )}
       {active ? (
         <Drawer
+          destroyOnClose
           contentWrapperStyle={visible ? { bottom: 60 } : {}}
           placement="bottom"
           visible={visible}
@@ -198,6 +207,7 @@ function App({ reloadIndex }) {
                 empty: workoutProps.empty,
                 edit: workoutProps.edit,
                 id: workoutProps.id,
+                samples: workoutProps.samples,
               },
             }}
           />

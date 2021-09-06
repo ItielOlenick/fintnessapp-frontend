@@ -230,12 +230,17 @@ const ExercisePicker = ({ options, form, setCount, log }) => {
                                                       fieldKey,
                                                       "reps",
                                                     ]}
-                                                    rules={[
-                                                      {
-                                                        required: true,
-                                                        message: "Missing reps",
-                                                      },
-                                                    ]}
+                                                    rules={
+                                                      log
+                                                        ? [
+                                                            {
+                                                              required: true,
+                                                              message:
+                                                                "Missing reps",
+                                                            },
+                                                          ]
+                                                        : null
+                                                    }
                                                   >
                                                     <InputNumber
                                                       placeholder="Reps"
@@ -252,13 +257,17 @@ const ExercisePicker = ({ options, form, setCount, log }) => {
                                                       fieldKey,
                                                       "weight",
                                                     ]}
-                                                    rules={[
-                                                      {
-                                                        required: true,
-                                                        message:
-                                                          "missing weight",
-                                                      },
-                                                    ]}
+                                                    rules={
+                                                      log
+                                                        ? [
+                                                            {
+                                                              required: true,
+                                                              message:
+                                                                "missing weight",
+                                                            },
+                                                          ]
+                                                        : null
+                                                    }
                                                   >
                                                     <InputNumber
                                                       placeholder="Weight"

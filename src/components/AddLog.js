@@ -100,30 +100,41 @@ const AddLog = (props) => {
     return [...new Map(arr.map((item) => [item[key], item])).values()];
   }
 
-  const getWorkout = () => {
-    (!props.location.state.edit
-      ? WorkoutService.get(props.location.state.id)
-      : LogService.get(props.location.state.id)
-    ).then((data) => {
-      const uniqueSets = getUniqueListBy(data.data.sets, "name").map((v) => {
-        const set = data.data.sets.filter((c) => c.name === v.name);
-        if (props.location.state.edit) set.forEach((s) => (s.done = true));
-        return set;
+  const organize = (data) => {
+    const uniqueSets = getUniqueListBy(data.sets, "name").map((v) => {
+      const set = data.sets.filter((c) => c.name === v.name);
+      if (props.location.state.edit) set.forEach((s) => (s.done = true));
+      set.forEach((s) => {
+        if (s.weight === 0) s.weight = null;
       });
-
-      const workout = {
-        workoutName: data.data.name,
-        exercises: uniqueSets.map((value, i) => ({
-          exercisePath: JSON.parse(value[0].exercisePath),
-          sets: uniqueSets[i],
-        })),
-        notes: data.data.notes,
-        startedAt: data.data.startedAt,
-        endedAt: data.data.endedAt,
-      };
-
-      form.setFieldsValue(workout);
+      return set;
     });
+
+    const workout = {
+      workoutName: data.name,
+      exercises: uniqueSets.map((value, i) => ({
+        exercisePath: JSON.parse(value[0].exercisePath),
+        sets: uniqueSets[i],
+      })),
+      notes: data.notes,
+      startedAt: data.startedAt,
+      endedAt: data.endedAt,
+    };
+
+    form.setFieldsValue(workout);
+  };
+
+  const getWorkout = () => {
+    if (props.location.state.samples) {
+      organize(props.location.state.samples);
+    } else {
+      (!props.location.state.edit
+        ? WorkoutService.get(props.location.state.id)
+        : LogService.get(props.location.state.id)
+      ).then((data) => {
+        organize(data.data);
+      });
+    }
   };
 
   const history = useHistory();
@@ -174,19 +185,25 @@ const AddLog = (props) => {
   //   // started: true,
   //   timeStarted: new Date().toISOString(),
   // });
+  const [showLoad, setShowLoad] = useState(false);
+  setTimeout(() => setShowLoad(true), 300);
 
   return (
     <>
       {loading ? (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Spin tip="Loading..." />
-        </div>
+        showLoad ? (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Spin tip="Loading..." />
+          </div>
+        ) : (
+          <></>
+        )
       ) : (
         <>
           <Collapse>

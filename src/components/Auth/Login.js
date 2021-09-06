@@ -6,7 +6,6 @@ const Login = () => {
   const [form] = Form.useForm();
   const history = useHistory();
   const onFinish = (values) => {
-    console.log(values);
     firebase
       .auth()
       .signInWithEmailAndPassword(values.email, values.password)

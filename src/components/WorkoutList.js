@@ -21,6 +21,7 @@ import {
 } from "antd";
 import { MoreOutlined, PlusOutlined } from "@ant-design/icons";
 import AddWorkout from "./AddWorkout";
+import sampleRoutines from "./SampleRouties";
 
 const WorkoutList = ({ start }) => {
   const [user] = useAuthState(auth);
@@ -29,15 +30,8 @@ const WorkoutList = ({ start }) => {
   const [count, setCount] = useState(0);
   const { Panel } = Collapse;
   const [formatedWorkout, setFormattedWorkout] = useState();
+  const [global, setGlobal] = useState();
 
-  const sampleRoutines = [
-    { name: "5x5", sets: [{ name: "s", count: 2 }] },
-    { name: "Push", sets: [{ name: "s", count: 2 }] },
-    { name: "Pull", sets: [{ name: "s", count: 2 }] },
-    { name: "Legs", sets: [{ name: "s", count: 2 }] },
-    { name: "A", sets: [{ name: "s", count: 2 }] },
-    { name: "B", sets: [{ name: "s", count: 2 }] },
-  ];
   // if i want to show unique repeating sets, with reps and kg,
   // get source from workouts, comment out the extra functions and comment in
   // the colum rendering that is commented out
@@ -46,7 +40,7 @@ const WorkoutList = ({ start }) => {
     return [...new Map(arr.map((item) => [item[key], item])).values()];
   }
 
-  const format = () => {
+  const format = (workouts, setFormattedWorkout) => {
     const unique = workouts.map((value) => {
       const uniqueSets = value.sets.map((v) => {
         return value.sets.filter((c) => c.name === v.name).length;
@@ -78,22 +72,9 @@ const WorkoutList = ({ start }) => {
         .catch((error) => {
           console.log("Error - something is wrong", error);
         });
-    format();
+    format(workouts, setFormattedWorkout);
+    format(sampleRoutines, setGlobal);
   }, [user, count]);
-
-  const columns = [
-    {
-      title: "Exercise",
-      dataIndex: "name",
-      key: "name",
-    },
-    {
-      title: "Sets",
-      dataIndex: "count",
-      key: "sets",
-      width: "15%",
-    },
-  ];
 
   const [show, setShow] = useState(false);
   const timer = setTimeout(() => {
@@ -104,48 +85,56 @@ const WorkoutList = ({ start }) => {
     <List
       header={"Sample Routines"}
       grid={{ gutter: 0, column: 1 }}
-      dataSource={sampleRoutines}
-      renderItem={(item) => (
+      dataSource={global}
+      renderItem={(item, i) => (
         <List.Item key={item.id}>
           <Link
-            to={{
-              pathname: "/logWorkout",
-              search: "",
-              hash: "#",
-              state: { id: item.id },
+            onClick={() => {
+              start({
+                id: null,
+                edit: false,
+                empty: false,
+                samples: sampleRoutines[i],
+              });
             }}
+            // to={{
+            //   pathname: "/logWorkout",
+            //   search: "",
+            //   hash: "#",
+            //   state: { samples: sampleRoutines[i] },
+            // }}
           >
             <Card
               size="small"
               title={item.name}
               // hoverable="true"
-              extra={
-                <Dropdown
-                  trigger="click"
-                  overlay={
-                    <Menu>
-                      <Menu.Item key={item.id + 13}>
-                        <Link
-                          to={{
-                            pathname: `/addWorkoutFromLog`,
-                            search: "",
-                            hash: "#",
-                            state: { id: item.id },
-                          }}
-                        >
-                          Create Workout From this Sample
-                        </Link>
-                      </Menu.Item>
-                    </Menu>
-                  }
-                >
-                  <MoreOutlined
-                    onClick={(event) => {
-                      event.stopPropagation();
-                    }}
-                  />
-                </Dropdown>
-              }
+              // extra={
+              //   <Dropdown
+              //     trigger="click"
+              //     overlay={
+              //       <Menu>
+              //         <Menu.Item key={item.id + 13}>
+              //           <Link
+              //             to={{
+              //               pathname: `/addWorkoutFromLog`,
+              //               search: "",
+              //               hash: "#",
+              //               state: { id: item.id },
+              //             }}
+              //           >
+              //             Create Workout From this Sample
+              //           </Link>
+              //         </Menu.Item>
+              //       </Menu>
+              //     }
+              //   >
+              //     <MoreOutlined
+              //       onClick={(event) => {
+              //         event.stopPropagation();
+              //       }}
+              //     />
+              //   </Dropdown>
+              // }
             >
               {item.sets.map((set) => (
                 <li>
@@ -247,7 +236,10 @@ const WorkoutList = ({ start }) => {
                                 overlay={
                                   <Menu>
                                     <Menu.Item key={item.id + 10}>
-                                      <Link to={`/workouts/edit/${item.id}`}>
+                                      <Link
+                                        to={`/workouts/edit/${item.id}`}
+                                        onClick={(e) => e.stopPropagation()}
+                                      >
                                         Edit
                                       </Link>
                                     </Menu.Item>

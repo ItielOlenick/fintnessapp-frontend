@@ -64,7 +64,7 @@ const Navbar = ({ checkForUpdates }) => {
               </Link>
             </Menu.Item>
             <Menu.Item key="/settings" style={miStyle}>
-              <Link to="#">
+              <Link to="/userPanel">
                 <div style={divStyle}>
                   <UserOutlined style={iconStyle} />
                   <p style={textStyle}>Profile</p>
