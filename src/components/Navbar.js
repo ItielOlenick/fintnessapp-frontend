@@ -13,7 +13,7 @@ import { useEffect } from "react";
 
 const Navbar = ({ checkForUpdates }) => {
   const location = useLocation();
-  const [user] = useAuthState(auth);
+  const [user, loading] = useAuthState(auth);
 
   // const ConditionalWrap = ({ condition, wrap, children }) =>
   //   condition ? wrap(children) : children;
@@ -38,7 +38,9 @@ const Navbar = ({ checkForUpdates }) => {
         mode="horizontal"
         selectedKeys={[location.pathname]}
       >
-        {user ? (
+        {loading ? (
+          <></>
+        ) : user ? (
           <>
             <Menu.Item key="/logList" style={miStyle}>
               <Link to="/logList">

@@ -100,3 +100,6 @@ body {
 .cardNoBody.ant-card-small .ant-card-body {
   padding: 0;
 }
+.ant-checkbox-inner {
+  transform: scale(1.25);
+}

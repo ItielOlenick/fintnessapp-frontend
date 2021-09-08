@@ -198,7 +198,7 @@ const ExercisePicker = ({ options, form, setCount, log }) => {
                                         }) => (
                                           <Row gutter={8}>
                                             {log ? (
-                                              <Col span={2}>
+                                              <Col span={3}>
                                                 <Form.Item
                                                   {...restField}
                                                   name={[name, "done"]}
@@ -211,7 +211,7 @@ const ExercisePicker = ({ options, form, setCount, log }) => {
                                             ) : (
                                               <></>
                                             )}
-                                            <Col span={log ? 22 : 24}>
+                                            <Col span={log ? 21 : 24}>
                                               <Space
                                                 key={key}
                                                 style={{
@@ -243,6 +243,7 @@ const ExercisePicker = ({ options, form, setCount, log }) => {
                                                     }
                                                   >
                                                     <InputNumber
+                                                      type="number"
                                                       placeholder="Reps"
                                                       style={{
                                                         width: "100%",
@@ -270,6 +271,7 @@ const ExercisePicker = ({ options, form, setCount, log }) => {
                                                     }
                                                   >
                                                     <InputNumber
+                                                      type="number"
                                                       placeholder="Weight"
                                                       style={{
                                                         width: "100%",

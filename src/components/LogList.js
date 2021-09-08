@@ -30,7 +30,7 @@ import {
 import UserService from "../services/UserService";
 import LogService from "../services/LogService";
 
-const LogList = ({ start }) => {
+const LogList = ({ start, logCount }) => {
   const [user] = useAuthState(auth);
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -77,7 +77,7 @@ const LogList = ({ start }) => {
           console.log("Error - something is wrong", error);
         });
     format();
-  }, [user, count]);
+  }, [user, count, logCount]);
 
   const columns = [
     {

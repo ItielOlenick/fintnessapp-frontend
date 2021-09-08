@@ -4,7 +4,17 @@ import ExercisesService from "../services/ExercisesService";
 import WorkoutService from "../services/WorkoutService";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../services/firebase";
-import { Collapse, Form, Input, Button, Spin, message, Popconfirm } from "antd";
+import {
+  Collapse,
+  Form,
+  Input,
+  Button,
+  Spin,
+  message,
+  Popconfirm,
+  notification,
+  Divider,
+} from "antd";
 
 import WgerService from "../services/WgerService";
 import LogService from "../services/LogService";
@@ -120,7 +130,7 @@ const AddLog = (props) => {
       startedAt: data.startedAt,
       endedAt: data.endedAt,
     };
-
+    console.log(workout);
     form.setFieldsValue(workout);
   };
 
@@ -139,6 +149,26 @@ const AddLog = (props) => {
 
   const history = useHistory();
 
+  const multiplePr = (data) => {
+    notification.open({
+      duration: 0,
+      message: "PR's broken this workout",
+      description: data.flatMap((e, i, a) =>
+        i % 2 === 0 ? (
+          <>
+            <h4 style={{ marginTop: 15 }}>{a[i].name}</h4>
+            <>
+              {a[i].weight}kg → {a[i + 1].weight}kg
+            </>
+            <Divider style={{ margin: "12px 0" }} />
+          </>
+        ) : (
+          <></>
+        )
+      ),
+    });
+  };
+
   const onFinish = (workout) => {
     const log = {
       id: props.location.state.edit ? props.location.state.id : null,
@@ -148,6 +178,7 @@ const AddLog = (props) => {
           exercise.sets.flatMap((set, i) =>
             set.done
               ? {
+                  id: props.location.state.edit ? set.id : null,
                   name: exercise.exercisePath[exercise.exercisePath.length - 1],
                   reps: set.reps,
                   weight: set.weight,
@@ -156,6 +187,7 @@ const AddLog = (props) => {
                   ),
                   category:
                     exercise.exercisePath[exercise.exercisePath.length - 2],
+                  user: { id: user.uid },
                 }
               : []
           )
@@ -169,16 +201,52 @@ const AddLog = (props) => {
     console.log("log: ", log);
     if (log.sets.length > 0) {
       console.log("savings workout", log);
-      LogService.create(log)
+      (props.location.state.edit
+        ? LogService.update(log)
+        : LogService.create(log)
+      )
         .then((response) => {
           console.log("Workout logged successfully", response.data);
-          props.done();
+          if (response.data.length > 4)
+            notification.open({
+              key: "multiple",
+              message: "Multiple PR's Broken! 💪",
+              description: `You are in the zone!`,
+              btn: (
+                <Button
+                  onClick={() => {
+                    notification.close("multiple");
+                    multiplePr(response.data);
+                  }}
+                >
+                  View PR's
+                </Button>
+              ),
+              duration: 0,
+            });
+          else
+            response.data.forEach((element, i, a) => {
+              if (i % 2 === 0) {
+                notification.open({
+                  message: "PR Broken! 💪",
+                  description: `Congratulations! your broke your previous record for the ${
+                    a[i].name
+                  }. Your new PR is ${a[i + 1].weight}. Keep up the good work!`,
+                  duration: 0,
+                });
+              }
+            });
+          if (!props.location.state.edit) props.done();
           history.push("/logList");
         })
         .catch((error) => {
-          console.log("Somthing went wrong");
+          console.log("Somthing went wrong", error);
         });
-    } else console.log("Empty workout");
+    } else
+      message.warn(
+        "No completed sets. Please complete at least one set before saving the workout",
+        5
+      );
   };
 
   // setStarted({

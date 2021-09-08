@@ -13,19 +13,19 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "./services/firebase";
 import Home from "./components/Home";
 import { Content } from "antd/lib/layout/layout";
-import { Col, Row, Drawer, Modal, Button, notification } from "antd";
+import { Spin, Col, Row, Drawer, Modal, Button, notification } from "antd";
 import AddLog from "./components/AddLog";
 import LogList from "./components/LogList";
 import ViewLog from "./components/ViewLog";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import version from "./version";
 import UserPanel from "./components/Auth/UserPanel";
 function App({ reloadIndex }) {
-  const [user] = useAuthState(auth);
+  const [user, loading] = useAuthState(auth);
 
   //active workout
-
+  const [logCount, setLogCount] = useState(0);
   //initiate new workout
   const start = ({ id, edit, empty, samples }) => {
     setWorkoutProps({
@@ -38,7 +38,6 @@ function App({ reloadIndex }) {
       showModal();
     } else {
       setActive(true);
-
       showDrawer();
     }
   };
@@ -56,6 +55,7 @@ function App({ reloadIndex }) {
   const done = () => {
     setActive(false);
     onClose();
+    setLogCount(logCount === 0 ? 1 : 0);
   };
 
   const showDrawer = () => {
@@ -123,7 +123,17 @@ function App({ reloadIndex }) {
       <Row justify="center" style={{ paddingBottom: 50 }}>
         <Col sm={12} xs={24}>
           <Content className="main-content">
-            {user ? (
+            {loading ? (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Spin tip="Loading..." />
+              </div>
+            ) : user ? (
               <>
                 <Switch>
                   <Route
@@ -134,7 +144,9 @@ function App({ reloadIndex }) {
                   <Route
                     exact
                     path="/logList"
-                    render={(props) => <LogList {...props} start={start} />}
+                    render={(props) => (
+                      <LogList {...props} start={start} logCount={logCount} />
+                    )}
                   />
                   <Route exact path="/viewLog" component={ViewLog} />
                   <Route exact path="/addWorkout" component={AddWorkout} />
@@ -154,7 +166,6 @@ function App({ reloadIndex }) {
                   <Route exact path="/exercises" component={ExercisesList} />
                   <Route exact path="/addExercise" component={AddExercise} />
                   <Route exact path="/userPanel" component={UserPanel} />
-                  {/* <Redirect exact from="/exercises/reload" to="/exercises" /> */}
                   <Route path="*" component={NoteFound} />
                 </Switch>
               </>

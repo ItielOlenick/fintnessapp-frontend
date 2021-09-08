@@ -197,6 +197,7 @@ const Timer = () => {
             <Space>
               <Form.Item name="hh" noStyle>
                 <InputNumber
+                  type="number"
                   ref={(i) => {
                     hours = i;
                   }}
