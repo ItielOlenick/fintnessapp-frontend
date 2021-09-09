@@ -9,7 +9,9 @@ const reloadIndex = () => {
   navigator.serviceWorker.controller.postMessage({
     type: "SKIP_WAITING",
   });
-  window.location.reload();
+  setTimeout(() => {
+    window.location.reload();
+  }, 1000);
 };
 
 ReactDOM.render(
