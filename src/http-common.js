@@ -10,6 +10,11 @@ export default axios.create({
   // baseURL: "http://10.0.0.22:8080/api",
 
   // production
+
+  //dev
+  // baseURL: "http://localhost:8080/api",
+
+  //production
   baseURL: "https://fintnessapp-backend.herokuapp.com/api",
   headers: {
     "Content-type": "application/json",
