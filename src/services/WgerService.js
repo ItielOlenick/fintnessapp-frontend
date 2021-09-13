@@ -1,11 +1,13 @@
-import axios from "axios";
-
-const wgerService = axios.create({
-  baseURL: "https://wger.de/api/v2",
-});
+import httpClient from "../http-common";
 
 const getExercise = (category) => {
-  return wgerService.get("/exercise", { params: { category: { category } } });
+  return httpClient.get("/wgerexercises", {
+    params: { category: category },
+  });
 };
 
-export default { getExercise };
+const getCategories = () => {
+  return httpClient.get("/categories");
+};
+
+export default { getExercise, getCategories };

@@ -1,7 +1,7 @@
 import httpClient from "../http-common";
 
 const getAll = (user) => {
-  return httpClient.get("/workouts", { params: { owner: user } });
+  return httpClient.get("/workouts", { params: { user: user } });
 };
 
 const create = (data) => {

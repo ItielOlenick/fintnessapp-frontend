@@ -1,9 +1,10 @@
 import firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/auth";
+require("dotenv").config();
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCCdZi7bn7wp58H9qPRrrr3YN6iiq24CW4",
+  apiKey: process.env.REACT_APP_API_KEY,
   authDomain: "fitnessapp-f33cc.firebaseapp.com",
   projectId: "fitnessapp-f33cc",
   storageBucket: "fitnessapp-f33cc.appspot.com",

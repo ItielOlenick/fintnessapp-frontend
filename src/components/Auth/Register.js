@@ -1,6 +1,7 @@
 import { Row, Col, Form, Input, Button, message } from "antd";
 import { Link, useHistory } from "react-router-dom";
 import firebase from "../../services/firebase";
+import UserService from "../../services/UserService";
 
 const Register = () => {
   const [form] = Form.useForm();
@@ -19,6 +20,14 @@ const Register = () => {
           })
           .then(() => {
             console.log("1", user.displayName);
+
+            UserService.create({ id: user.uid })
+              .then((response) => {
+                console.log(response);
+              })
+              .catch((err) => {
+                console.log("error: ", err);
+              });
             // Update successful
             // ...
           })
@@ -49,7 +58,7 @@ const Register = () => {
         span: 24,
       },
       sm: {
-        span: 10,
+        span: 6,
       },
     },
     wrapperCol: {
@@ -57,14 +66,14 @@ const Register = () => {
         span: 24,
       },
       sm: {
-        span: 14,
+        span: 12,
       },
     },
   };
   return (
-    <Row justify="center" style={{ margin: "15px 0" }}>
-      <Col xs={24} sm={8} style={{ padding: "10px" }}>
-        <h2 style={{ textAlign: "center", margin: "50px 0" }}>Register</h2>
+    <Row justify="center">
+      <Col xs={24} sm={12}>
+        <h2 style={{ textAlign: "center", margin: "0 0 50px 0" }}>Register</h2>
         <Form
           form={form}
           name="register"
@@ -130,23 +139,20 @@ const Register = () => {
           >
             <Input.Password />
           </Form.Item>
-          <Form.Item
-            wrapperCol={{
-              xs: {
-                span: 24,
-                offset: 0,
-              },
-              sm: {
-                span: 16,
-                offset: 8,
-              },
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              marginBottom: "10px",
             }}
           >
             <Button type="primary" htmlType="submit">
-              <p style={{ color: "white" }}>Register</p>
+              <p>Register</p>
             </Button>
-          </Form.Item>
+          </div>
         </Form>
+
         <div style={{ textAlign: "center" }}>
           <p>
             Already enjoying the app? <Link to="/login">Login</Link>

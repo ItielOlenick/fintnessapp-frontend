@@ -2,168 +2,194 @@ import { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import ExercisesService from "../services/ExercisesService";
 import WorkoutService from "../services/WorkoutService";
-
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../services/firebase";
-
-const EditWorkout = () => {
-  const [listexercises, Getexercises] = useState([]);
+import { Form, Input, Button, Spin, message } from "antd";
+import WgerService from "../services/WgerService";
+import ExercisePicker from "./ExercisePicker";
+const EditWorkout = (props) => {
+  const [loading, setLoading] = useState(true);
   const [user] = useAuthState(auth);
-
-  useEffect(() => {
-    user
-      ? ExercisesService.getAll(user.uid)
-          .then((response) => {
-            console.log("printing response", response.data);
-            Getexercises(response.data);
-          })
-          .catch((error) => {
-            console.log("Error - somthing is wrong", error);
-          })
-      : Getexercises([]);
-  }, [user]);
-
-  var options = [];
-  listexercises.length > 0 ? (options = listexercises) : console.log("loading");
-
-  const [sets, setSets] = useState([]);
-  const [name, setName] = useState("");
   const { id } = useParams();
-  const [selectExersice, getExercise] = useState({});
-  const history = useHistory();
+  const [form] = Form.useForm();
+  const [count, setCount] = useState(0);
+  const [options, setOptions] = useState([
+    {
+      value: "wgerExercises",
+      label: "Exercises",
+      children: [],
+    },
+    {
+      value: "userExercises",
+      label: "Custom Exercises",
+      children: [],
+    },
+  ]);
 
   useEffect(() => {
-    WorkoutService.get(id)
-      .then((workout) => {
-        setName(workout.data.name);
-        setSets(workout.data.sets);
-        console.log("found id");
-      })
-      .catch((error) => {
-        console.log("Somthing is wrong", error);
-      });
+    if (user)
+      ExercisesService.getAll(user.uid)
+        .then((response) => {
+          console.log("printing response", response.data);
+          // getExercises(response.data);
+          const temp = [...options];
+          temp[1].children = response.data.map((values) => ({
+            value: values.name,
+            label: values.name,
+          }));
+          setOptions(temp);
+        })
+        .catch((error) => {
+          console.log("Error - something is wrong", error);
+        });
+  }, [user, count]);
+
+  useEffect(() => {
+    getWger();
+    getWorkout();
   }, []);
 
-  const updateReps = (e, index) => {
-    e.preventDefault();
-    var update = sets;
-    update[index].reps = e.target.value;
-    //arrays are in the same state since the items changed but the array itself didnt. so we
-    //spread the array itself again to show react we have changed it.
-    setSets([...update]);
-  };
-  const removeExercise = (e, index) => {
-    e.preventDefault();
-    if (sets.length > 1) {
-      var update = sets;
-      update.splice(index, 1);
-      console.log(update);
-      setSets([...update]);
-    } else console.log("remove the workout");
-  };
+  async function getWger() {
+    const categories = await WgerService.getCategories().then((data) => {
+      const cats = [
+        ...data.data.map((values) => ({
+          value: values.id,
+          label: values.name,
+          id: values.id,
+        })),
+      ];
+      return cats;
+    });
 
-  const addExercise = (e) => {
-    e.preventDefault();
-    console.log(selectExersice);
-    getExercise((selectExersice.reps = 0));
-    setSets((sets) => [...sets, selectExersice]);
-    getExercise(selectExersice);
-  };
+    const wgerExercises = [];
+    const promises = [
+      ...categories.map(async (category) => {
+        await WgerService.getExercise(category.id).then((data) => {
+          const exercises = [
+            ...data.data.map((values) => ({
+              value: values.name,
+              label: values.name,
+            })),
+          ];
+          // console.log(`exercises of category ${category.value}`, exercises);
+          wgerExercises.push({
+            value: category.value,
+            label: category.label,
+            children: getUniqueListBy(exercises, "value"),
+          });
+        });
+      }),
+    ];
+    await Promise.all(promises);
+    console.log(wgerExercises);
+    const temp = [...options];
+    temp[0].children = wgerExercises;
+    setOptions(temp);
+    console.log("options:", options);
+    setLoading(false);
+  }
 
-  const saveWorkout = (e) => {
-    e.preventDefault();
-    const workout = { id, name, sets, owner: user.uid };
-    console.log("workout:", workout);
-    WorkoutService.update(workout)
-      .then((response) => {
-        console.log("Workout added successfully", response.data);
-        history.push(`/workouts/${response.data.id}`);
-      })
-      .catch((error) => {
-        console.log("Somthing went wrong");
+  const getWorkout = () => {
+    WorkoutService.get(id ? id : props.location.state.id).then((data) => {
+      const uniqueSets = getUniqueListBy(data.data.sets, "name").map((v) => {
+        return data.data.sets.filter((c) => c.name === v.name);
       });
+
+      const workout = {
+        workoutName: data.data.name,
+        exercises: uniqueSets.map((value, i) => ({
+          exercisePath: JSON.parse(value[0].exercisePath),
+          sets: uniqueSets[i],
+        })),
+      };
+
+      form.setFieldsValue(workout);
+    });
   };
+
+  function getUniqueListBy(arr, key) {
+    return [...new Map(arr.map((item) => [item[key], item])).values()];
+  }
+
+  const history = useHistory();
+
+  const onFinish = (workout) => {
+    const savedWorkout = {
+      id: id,
+      name: workout.workoutName,
+      sets: workout.exercises
+        .map((exercise, j) =>
+          exercise.sets.flatMap((set, i) => ({
+            name: exercise.exercisePath[exercise.exercisePath.length - 1],
+            reps: set.reps,
+            weight: set.weight,
+            exercisePath: JSON.stringify(workout.exercises[j].exercisePath),
+            category: exercise.exercisePath[exercise.exercisePath.length - 2],
+          }))
+        )
+        .flat(),
+      user: { id: user.uid },
+    };
+    if (savedWorkout.sets.length > 0) {
+      console.log("updating workout", savedWorkout);
+      WorkoutService.update(savedWorkout)
+        .then((response) => {
+          console.log("Workout updated successfully", response.data);
+          history.push("/");
+        })
+        .catch((error) => {
+          console.log("Somthing went wrong");
+        });
+    } else console.log("Empty workout");
+  };
+
+  const [show, setShow] = useState(false);
+  const timer = setTimeout(() => {
+    setShow(true);
+  }, 300);
 
   return (
-    <div className="main-content container">
-      {sets.length > 0 ? (
-        <form>
-          <div className="form-group mb-3">
-            <label htmlFor="title">
-              Workout Title: <sup>*</sup>
-            </label>
-            <input
-              type="text"
-              className="form-control"
-              id="title"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
+    <>
+      {loading ? (
+        show ? (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Spin tip="Loading..." />
           </div>
-
-          <div className="samerow">
-            <h5>exercises:</h5>
-            <label htmlFor="reps" className="mobile">
-              <h5> Reps:</h5>
-            </label>
-          </div>
-          <div>
-            <ol>
-              {sets.map((item, b) => (
-                <div className="samerow" style={{ marginBottom: 5 }}>
-                  <li key={b}>{item.name}</li>
-                  <div className="col-4 samerow">
-                    <input
-                      type="number"
-                      className="form-control mobile-textbox"
-                      id="reps"
-                      value={item.reps}
-                      onInput={(e) => updateReps(e, b)}
-                    />
-                    <button
-                      className="mobile-btn"
-                      onClick={(e) => removeExercise(e, b)}
-                    >
-                      Remove
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </ol>
-          </div>
-          <div className="form-group mb-3 create">
-            <h5>Add exercises:</h5>
-            <label htmlFor="exercises">Select exercises to add</label>
-            <select
-              className="form-control"
-              id="exercises"
-              defaultValue=""
-              //another option: onInput={(e) => getExercise(JSON.parse(e.target.value))}
-              onInput={(e) => getExercise(options[e.target.value])}
-            >
-              <option value="" hidden>
-                chose exercise
-              </option>
-              {options.map((options, index) => (
-                //another option: <option key={options.id} value={JSON.stringify({name: options.name, bodyPart: options.bodyPart})}>
-                <option key={options.id} value={index}>
-                  {options.name}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="text-center mb-3">
-            <button onClick={(e) => addExercise(e)}>Add exercise</button>
-          </div>
-
-          <div className="text-center mb-3">
-            <button onClick={(e) => saveWorkout(e)}>Save Workout</button>
-          </div>
-        </form>
+        ) : (
+          <></>
+        )
       ) : (
-        <div>Loading</div>
+        <Form form={form} onFinish={onFinish}>
+          <ExercisePicker options={options} setCount={setCount} form={form} />
+          <Form.Item>
+            <Button
+              type="primary"
+              onClick={() => {
+                if (form.getFieldValue(["exercises", 0, "sets"]) != undefined) {
+                  form.submit();
+                  console.log(
+                    "form before saving: ",
+                    form.getFieldsValue(true)
+                  );
+                } else {
+                  message.warn(
+                    "Empty workout, please add at least one exercise"
+                  );
+                }
+              }}
+            >
+              Save
+            </Button>
+          </Form.Item>
+        </Form>
       )}
-    </div>
+    </>
   );
 };
 
