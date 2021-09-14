@@ -11,7 +11,7 @@ const reloadIndex = () => {
   });
   setTimeout(() => {
     window.location.reload();
-  }, 1000);
+  }, 1500);
 };
 
 ReactDOM.render(
@@ -29,7 +29,7 @@ const configuration = {
         setTimeout(() => {
           alert("Update Successful");
           window.location.reload();
-        }, 1000);
+        }, 1500);
       }
     }
   },
