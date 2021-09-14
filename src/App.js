@@ -168,51 +168,6 @@ function App({ reloadIndex }) {
                   <Route exact path="/userPanel" component={UserPanel} />
                   <Route path="*" component={NoteFound} />
                 </Switch>
-                {active ? (
-                  // <div>
-                  <Button
-                    className="workout-in-progress"
-                    style={{
-                      bottom: 60,
-                      position: "fixed",
-                      width: "100%",
-                      justifyContent: "center",
-                    }}
-                    danger
-                    onClick={() => {
-                      showDrawer();
-                    }}
-                  >
-                    Workout in progress
-                  </Button>
-                ) : (
-                  // </div>
-                  <></>
-                )}
-                {active ? (
-                  <Drawer
-                    contentWrapperStyle={visible ? { bottom: 60 } : {}}
-                    placement="bottom"
-                    visible={visible}
-                    onClose={onClose}
-                    height={visible ? "calc(100% - 60px)" : "100%"}
-                    closable={false}
-                  >
-                    <AddLog
-                      done={done}
-                      location={{
-                        state: {
-                          empty: workoutProps.empty,
-                          edit: workoutProps.edit,
-                          id: workoutProps.id,
-                          samples: workoutProps.samples,
-                        },
-                      }}
-                    />
-                  </Drawer>
-                ) : (
-                  <></>
-                )}
               </>
             ) : (
               <Switch>
@@ -226,7 +181,55 @@ function App({ reloadIndex }) {
           </Content>
         </Col>
       </Row>
-
+      {user ? (
+        <>
+          {active ? (
+            <Button
+              className="workout-in-progress"
+              style={{
+                bottom: 60,
+                position: "fixed",
+                width: "100%",
+                justifyContent: "center",
+              }}
+              danger
+              onClick={() => {
+                showDrawer();
+              }}
+            >
+              Workout in progress
+            </Button>
+          ) : (
+            <></>
+          )}
+          {active ? (
+            <Drawer
+              contentWrapperStyle={visible ? { bottom: 60 } : {}}
+              placement="bottom"
+              visible={visible}
+              onClose={onClose}
+              height={visible ? "calc(100% - 60px)" : "100%"}
+              closable={false}
+            >
+              <AddLog
+                done={done}
+                location={{
+                  state: {
+                    empty: workoutProps.empty,
+                    edit: workoutProps.edit,
+                    id: workoutProps.id,
+                    samples: workoutProps.samples,
+                  },
+                }}
+              />
+            </Drawer>
+          ) : (
+            <></>
+          )}
+        </>
+      ) : (
+        <></>
+      )}
       <Modal
         zIndex={2000}
         title={"Workout in progress"}

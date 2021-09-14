@@ -24,7 +24,7 @@ import Timer from "./Timer";
 
 const AddLog = (props) => {
   const [started, setStarted] = useState({
-    started: true,
+    started: false,
     timeStarted: new Date().toISOString(),
   });
   const [loading, setLoading] = useState(true);
@@ -283,6 +283,26 @@ const AddLog = (props) => {
             </Panel>
           </Collapse>
           <br />
+          {started.started ? (
+            <></>
+          ) : (
+            <>
+              <Button
+                onClick={() =>
+                  setStarted({
+                    started: true,
+                    timeStarted: new Date().toISOString(),
+                  })
+                }
+                block
+                type="primary"
+              >
+                Start Workout
+              </Button>
+              <br />
+              <br />
+            </>
+          )}
           <Form form={form} onFinish={onFinish}>
             <ExercisePicker
               options={options}
@@ -294,22 +314,26 @@ const AddLog = (props) => {
               <TextArea rows={5} />
             </Form.Item>
             <div className="sameRow">
-              <Button
-                type="primary"
-                onClick={() => {
-                  if (
-                    form.getFieldValue(["exercises", 0, "sets"]) != undefined
-                  ) {
-                    form.submit();
-                  } else {
-                    message.warn(
-                      "Empty workout, please add at least one exercise"
-                    );
-                  }
-                }}
-              >
-                Save
-              </Button>
+              {started.started ? (
+                <Button
+                  type="primary"
+                  onClick={() => {
+                    if (
+                      form.getFieldValue(["exercises", 0, "sets"]) != undefined
+                    ) {
+                      form.submit();
+                    } else {
+                      message.warn(
+                        "Empty workout, please add at least one exercise"
+                      );
+                    }
+                  }}
+                >
+                  Save
+                </Button>
+              ) : (
+                <></>
+              )}
               <Popconfirm
                 title="Sure to cancel Workout?"
                 onConfirm={() => props.done()}
