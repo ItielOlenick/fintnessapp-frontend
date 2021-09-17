@@ -12,4 +12,4 @@ The app is designed to track workouts at the gym as you preform them.
   <li> Add your own costume exercises to fit every workout you may preform.
 </ul>
 
-📱 For best experience open in mobile phone and click "Add to homescreen" to download the PWA
+
