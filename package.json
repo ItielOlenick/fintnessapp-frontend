@@ -6,6 +6,7 @@
     "node": "14.x"
   },
   "dependencies": {
+    "@ant-design/charts": "^1.2.13",
     "@ant-design/icons": "^4.6.3",
     "@popperjs/core": "^2.9.2",
     "@testing-library/jest-dom": "^5.14.1",

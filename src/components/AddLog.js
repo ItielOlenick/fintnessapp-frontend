@@ -249,10 +249,6 @@ const AddLog = (props) => {
       );
   };
 
-  // setStarted({
-  //   // started: true,
-  //   timeStarted: new Date().toISOString(),
-  // });
   const [showLoad, setShowLoad] = useState(false);
   setTimeout(() => setShowLoad(true), 300);
 
@@ -283,7 +279,7 @@ const AddLog = (props) => {
             </Panel>
           </Collapse>
           <br />
-          {started.started ? (
+          {started.started || props.location.state.edit ? (
             <></>
           ) : (
             <>
@@ -314,7 +310,13 @@ const AddLog = (props) => {
               <TextArea rows={5} />
             </Form.Item>
             <div className="sameRow">
-              {started.started ? (
+              <Popconfirm
+                title="Sure to cancel Workout?"
+                onConfirm={() => props.done()}
+              >
+                <Button>Cancel Workout</Button>
+              </Popconfirm>
+              {started.started || props.location.state.edit ? (
                 <Button
                   type="primary"
                   onClick={() => {
@@ -334,12 +336,6 @@ const AddLog = (props) => {
               ) : (
                 <></>
               )}
-              <Popconfirm
-                title="Sure to cancel Workout?"
-                onConfirm={() => props.done()}
-              >
-                <Button>Cancel Workout</Button>
-              </Popconfirm>
             </div>
           </Form>
         </>

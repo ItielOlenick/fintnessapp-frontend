@@ -21,6 +21,7 @@ import { useState } from "react";
 import axios from "axios";
 import version from "./version";
 import UserPanel from "./components/Auth/UserPanel";
+import Progress from "./components/Progress";
 function App({ reloadIndex }) {
   const [user, loading] = useAuthState(auth);
 
@@ -116,7 +117,6 @@ function App({ reloadIndex }) {
     };
     notification.open(args);
   };
-
   return (
     <BrowserRouter>
       <Navbar showDrawer={showDrawer} checkForUpdates={checkForUpdates} />
@@ -136,6 +136,7 @@ function App({ reloadIndex }) {
             ) : user ? (
               <>
                 <Switch>
+                  <Route exact path="/progress" component={Progress} />
                   <Route
                     exact
                     path={["/", "/index.html"]}

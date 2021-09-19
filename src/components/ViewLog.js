@@ -1,9 +1,9 @@
 import LogService from "../services/LogService";
 import { auth } from "../services/firebase";
-import { Table, List, Card } from "antd";
+import { List, Card } from "antd";
 import { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-
+import { Link } from "react-router-dom";
 const ViewLog = (props) => {
   const [user] = useAuthState(auth);
   const [log, setLog] = useState();
@@ -74,20 +74,29 @@ const ViewLog = (props) => {
             dataSource={unique}
             grid={{ gutter: 0, column: 1 }}
             renderItem={(item) => (
-              <List.Item key={item.id}>
-                <Card size="small" title={item.name}>
-                  {/* <ol> */}
-                  {log.sets
-                    .filter((s) => s.name === item.name)
-                    .map((v, i) => (
-                      <li>
-                        &nbsp;&nbsp;&nbsp;&nbsp;{i + 1}. &nbsp;&nbsp;&nbsp;
-                        {v.reps} x {v.weight} kg
-                      </li>
-                    ))}
-                  {/* </ol> */}
-                </Card>
-              </List.Item>
+              <Link
+                to={{
+                  pathname: "/progress",
+                  search: "",
+                  hash: "#",
+                  state: { setName: item.name },
+                }}
+              >
+                <List.Item key={item.id}>
+                  <Card size="small" title={item.name}>
+                    {/* <ol> */}
+                    {log.sets
+                      .filter((s) => s.name === item.name)
+                      .map((v, i) => (
+                        <li>
+                          &nbsp;&nbsp;&nbsp;&nbsp;{i + 1}. &nbsp;&nbsp;&nbsp;
+                          {v.reps} x {v.weight} kg
+                        </li>
+                      ))}
+                    {/* </ol> */}
+                  </Card>
+                </List.Item>
+              </Link>
             )}
           />
         </>

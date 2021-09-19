@@ -31,7 +31,8 @@ const Navbar = ({ checkForUpdates }) => {
   };
 
   return (
-    <div onTouchStart={() => checkForUpdates()}>
+    <>
+      {/* <div onTouchStart={() => checkForUpdates()}> */}
       <Menu
         className="navbar-menu"
         theme="dark"
@@ -86,7 +87,7 @@ const Navbar = ({ checkForUpdates }) => {
           </>
         )}
       </Menu>
-    </div>
+    </>
   );
 };
 

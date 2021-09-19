@@ -3,11 +3,10 @@ import httpClient from "../http-common";
 const get = (user) => {
   return httpClient.get("/sets", { params: { userId: user } });
 };
-const getPrs = (user) => {
-  return httpClient.get("/prs", { params: { userId: user } });
-};
 
-const getByName = (user, name) => {
-  return httpClient.get("/sets", { params: { userId: user, name: name } });
+const getPrsByName = (user, exercise, all) => {
+  return httpClient.get(`/prs`, {
+    params: { userId: user, exercise: exercise, all: all },
+  });
 };
-export default { get, getPrs };
+export default { get, getPrsByName };
