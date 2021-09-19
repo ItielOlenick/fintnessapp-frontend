@@ -46,7 +46,7 @@ const Progress = (props) => {
           weight: pr.weight,
         },
         content: "PR",
-        offsetY: -5,
+        offsetY: 10,
         offsetX: 5,
       },
     ],
