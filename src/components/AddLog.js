@@ -189,7 +189,7 @@ const AddLog = (props) => {
                     exercise.exercisePath[exercise.exercisePath.length - 2],
                   user: { id: user.uid },
                   preformedAt: props.location.state.edit
-                    ? null
+                    ? {}
                     : started.timeStarted,
                 }
               : []
@@ -198,7 +198,7 @@ const AddLog = (props) => {
         .flat(),
       user: { id: user.uid },
       notes: workout.notes,
-      startedAt: props.location.state.edit ? null : started.timeStarted,
+      startedAt: props.location.state.edit ? {} : started.timeStarted,
       endedAt: new Date().toISOString(),
     };
     console.log("log: ", log);

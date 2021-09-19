@@ -89,7 +89,7 @@ const Progress = (props) => {
     <>
       <h2>{props.location.state.setName}</h2>
       <h3>Personal Record: {pr.weight} kg</h3>
-      <h4>Progress:</h4>
+      <h3>Exercise Progress:</h3>
       <br />
       <Line {...config} />
     </>
