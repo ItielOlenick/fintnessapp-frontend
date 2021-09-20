@@ -9,20 +9,6 @@ const ViewLog = (props) => {
   const [log, setLog] = useState();
   const [loading, setLoading] = useState(true);
   const [unique, setUnique] = useState();
-  const columns = [
-    {
-      title: "Reps",
-      dataIndex: "reps",
-      key: "reps",
-      width: "15%",
-    },
-    {
-      title: "Weight",
-      dataIndex: "weight",
-      key: "Weight",
-      width: "15%",
-    },
-  ];
 
   useEffect(() => {
     if (user)
@@ -57,8 +43,6 @@ const ViewLog = (props) => {
   function getUniqueListBy(arr, key) {
     return [...new Map(arr.map((item) => [item[key], item])).values()];
   }
-
-  const format = () => {};
 
   return (
     <>
@@ -99,6 +83,16 @@ const ViewLog = (props) => {
               </Link>
             )}
           />
+          {log.notes ? (
+            <>
+              <h2>Workout Notes</h2>
+              <Card size="small" style={{ background: "#ffffdf" }}>
+                {log.notes}
+              </Card>
+            </>
+          ) : (
+            <></>
+          )}
         </>
       )}
     </>

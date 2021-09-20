@@ -42,12 +42,21 @@ const Progress = (props) => {
         type: "text",
 
         position: {
-          date: formatDate(new Date(Date.parse(pr.preformedAt))),
+          // date: formatDate(new Date(Date.parse(pr.preformedAt))),
           weight: pr.weight,
         },
         content: "PR",
         offsetY: 10,
         offsetX: 5,
+      },
+      {
+        type: "line",
+        start: ["start", pr.weight],
+        end: ["end", pr.weight],
+        style: {
+          stroke: "#F4664A",
+          lineDash: [2, 2],
+        },
       },
     ],
     yAxis: {

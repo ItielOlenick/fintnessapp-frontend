@@ -246,7 +246,7 @@ const ExercisePicker = ({ options, form, setCount, log }) => {
                                                       type="number"
                                                       placeholder="Reps"
                                                       style={{
-                                                        width: "100%",
+                                                        width: "95%",
                                                       }}
                                                     />
                                                   </Form.Item>
@@ -274,7 +274,7 @@ const ExercisePicker = ({ options, form, setCount, log }) => {
                                                       type="number"
                                                       placeholder="Weight"
                                                       style={{
-                                                        width: "100%",
+                                                        width: "95%",
                                                       }}
                                                     />
                                                   </Form.Item>

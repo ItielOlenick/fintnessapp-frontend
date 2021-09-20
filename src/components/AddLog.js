@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useHistory, useParams } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import ExercisesService from "../services/ExercisesService";
 import WorkoutService from "../services/WorkoutService";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -14,8 +14,9 @@ import {
   Popconfirm,
   notification,
   Divider,
+  DatePicker,
 } from "antd";
-
+import moment from "moment";
 import WgerService from "../services/WgerService";
 import LogService from "../services/LogService";
 import Stopwatch from "./Stopwatch";
@@ -106,6 +107,18 @@ const AddLog = (props) => {
     setLoading(false);
   }
 
+  const formatDate = (date) => {
+    return (
+      (date.getDate() > 9 ? date.getDate() : "0" + date.getDate()) +
+      "/" +
+      (date.getMonth() > 8
+        ? date.getMonth() + 1
+        : "0" + (date.getMonth() + 1)) +
+      "/" +
+      date.getFullYear()
+    );
+  };
+
   function getUniqueListBy(arr, key) {
     return [...new Map(arr.map((item) => [item[key], item])).values()];
   }
@@ -127,7 +140,7 @@ const AddLog = (props) => {
         sets: uniqueSets[i],
       })),
       notes: data.notes,
-      startedAt: data.startedAt,
+      startedAt: moment(data.startedAt),
       endedAt: data.endedAt,
     };
     console.log(workout);
@@ -169,7 +182,8 @@ const AddLog = (props) => {
     });
   };
 
-  const onFinish = (workout) => {
+  const onFinish = () => {
+    const workout = form.getFieldsValue(true);
     const log = {
       id: props.location.state.edit ? props.location.state.id : null,
       name: workout.workoutName,
@@ -189,7 +203,7 @@ const AddLog = (props) => {
                     exercise.exercisePath[exercise.exercisePath.length - 2],
                   user: { id: user.uid },
                   preformedAt: props.location.state.edit
-                    ? set.preformedAt
+                    ? workout.startedAt
                     : started.timeStarted,
                 }
               : []
@@ -275,15 +289,22 @@ const AddLog = (props) => {
         )
       ) : (
         <>
-          <Collapse>
-            <Panel header="Stopwatch & Timer" key="1" showArrow={false}>
-              <div className="sameRow">
-                <Stopwatch />
-                <Timer />
-              </div>
-            </Panel>
-          </Collapse>
-          <br />
+          {props.location.state.edit ? (
+            <></>
+          ) : (
+            <>
+              <Collapse>
+                <Panel header="Stopwatch & Timer" key="1" showArrow={false}>
+                  <div className="sameRow">
+                    <Stopwatch />
+                    <Timer />
+                  </div>
+                </Panel>
+              </Collapse>
+              <br />
+            </>
+          )}
+
           {started.started || props.location.state.edit ? (
             <></>
           ) : (
@@ -305,6 +326,13 @@ const AddLog = (props) => {
             </>
           )}
           <Form form={form} onFinish={onFinish}>
+            <div className="sameRow">
+              <h2 style={{ marginBottom: "1.2em" }}>Edit Workout</h2>
+              <Form.Item name="startedAt">
+                <DatePicker format="DD/MM/YYYY" />
+              </Form.Item>
+            </div>
+
             <ExercisePicker
               options={options}
               setCount={setCount}
@@ -312,15 +340,25 @@ const AddLog = (props) => {
               log={true}
             />
             <Form.Item name="notes" label="Workout notes">
-              <TextArea rows={5} />
+              <TextArea
+                rows={5}
+                placeholder="Write something about your workout"
+              />
             </Form.Item>
             <div className="sameRow">
-              <Popconfirm
-                title="Sure to cancel Workout?"
-                onConfirm={() => props.done()}
-              >
-                <Button>Cancel Workout</Button>
-              </Popconfirm>
+              {props.location.state.edit ? (
+                <Link to="/logList">
+                  <Button>Cancel</Button>
+                </Link>
+              ) : (
+                <Popconfirm
+                  title="Sure to cancel Workout?"
+                  onConfirm={() => props.done()}
+                >
+                  <Button>Cancel Workout</Button>
+                </Popconfirm>
+              )}
+
               {started.started || props.location.state.edit ? (
                 <Button
                   type="primary"
