@@ -123,6 +123,8 @@ function App({ reloadIndex }) {
         This webapp was designed for mobile devices.
         <br /> To use this app properly please access and/or install it from
         your mobile device.
+        <br />
+        Meanwhile, you can enjoy this simulation
       </p>
 
       <div className="mobile-sim" style={{ width: 375, height: 720 }}>
