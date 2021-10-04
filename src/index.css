@@ -10,6 +10,15 @@
 body {
   overscroll-behavior-y: contain;
 }
+.onComputer {
+  display: none;
+}
+@media (min-width: 600px) {
+  .onComputer {
+    display: block;
+    text-align: center;
+  }
+}
 
 .ant-collapse-ghost
   > .ant-collapse-item

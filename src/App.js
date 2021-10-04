@@ -119,6 +119,14 @@ function App({ reloadIndex }) {
   };
   return (
     <BrowserRouter>
+      <div className="onComputer">
+        ⚠️This webapp was designed for mobile devices. To view this app in a
+        simulated environment{" "}
+        <a href="https://www.responsinator.com/?url=https%3A%2F%2Ffintnessapp-frontend.herokuapp.com">
+          Click here
+        </a>
+        ⚠️
+      </div>
       <Navbar showDrawer={showDrawer} checkForUpdates={checkForUpdates} />
       <Row justify="center" style={{ paddingBottom: 50 }}>
         <Col sm={12} xs={24}>
