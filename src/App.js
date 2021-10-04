@@ -121,7 +121,7 @@ function App({ reloadIndex }) {
     <BrowserRouter>
       <p className="onComputer">
         This webapp was designed for mobile devices.
-        <br /> To view this app properly please access and/or install it from
+        <br /> To use this app properly please access and/or install it from
         your mobile device.
       </p>
 
