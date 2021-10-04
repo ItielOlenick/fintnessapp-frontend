@@ -7,7 +7,6 @@ const Register = () => {
   const [form] = Form.useForm();
   const history = useHistory();
   const onFinish = (values) => {
-    console.log(values);
     firebase
       .auth()
       .createUserWithEmailAndPassword(values.email, values.password)
@@ -19,12 +18,8 @@ const Register = () => {
             displayName: values.name,
           })
           .then(() => {
-            console.log("1", user.displayName);
-
             UserService.create({ id: user.uid })
-              .then((response) => {
-                console.log(response);
-              })
+              .then((response) => {})
               .catch((err) => {
                 console.log("error: ", err);
               });
@@ -33,18 +28,15 @@ const Register = () => {
           })
           .catch((error) => {
             // An error occurred
-            console.log("2");
             // ...
           });
       })
       .then((userCredential) => {
-        console.log("3");
         // Signed in
 
         history.push("/");
       })
       .catch((error) => {
-        console.log("4");
         var errorCode = error.code;
         var errorMessage = error.message;
         message.warning(errorMessage);

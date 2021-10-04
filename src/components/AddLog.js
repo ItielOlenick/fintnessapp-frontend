@@ -50,8 +50,6 @@ const AddLog = (props) => {
     if (user)
       ExercisesService.getAll(user.uid)
         .then((response) => {
-          console.log("printing response", response.data);
-          // getExercises(response.data);
           const temp = [...options];
           temp[1].children = response.data.map((values) => ({
             value: values.name,
@@ -100,7 +98,6 @@ const AddLog = (props) => {
       }),
     ];
     await Promise.all(promises);
-    console.log(wgerExercises);
     const temp = [...options];
     temp[0].children = wgerExercises;
     setOptions(temp);
@@ -143,7 +140,7 @@ const AddLog = (props) => {
       startedAt: moment(data.startedAt),
       endedAt: data.endedAt,
     };
-    console.log(workout);
+
     form.setFieldsValue(workout);
   };
 
@@ -217,15 +214,13 @@ const AddLog = (props) => {
         : started.timeStarted,
       endedAt: new Date().toISOString(),
     };
-    console.log("log: ", log);
+
     if (log.sets.length > 0) {
-      console.log("savings workout", log);
       (props.location.state.edit
         ? LogService.update(log)
         : LogService.create(log)
       )
         .then((response) => {
-          console.log("Workout logged successfully", response.data);
           if (response.data.length > 4)
             notification.open({
               key: "multiple",

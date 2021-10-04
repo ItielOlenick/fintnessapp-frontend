@@ -47,7 +47,6 @@ const LogList = ({ start, logCount }) => {
       const uniqueSets = value.sets.map((v) => {
         return value.sets.filter((c) => c.name === v.name).length;
       });
-      console.log("uniqueSets: ", uniqueSets);
       return {
         ...value,
         sets: getUniqueListBy(
@@ -59,10 +58,7 @@ const LogList = ({ start, logCount }) => {
         ),
       };
     });
-
     setFormattedWorkout(unique);
-
-    console.log(formattedWorkout);
   };
 
   useEffect(() => {
@@ -215,8 +211,6 @@ const LogList = ({ start, logCount }) => {
                                       }}
                                       onCancel={(event) => {
                                         event.stopPropagation();
-
-                                        console.log("cancel");
                                       }}
                                     >
                                       Delete

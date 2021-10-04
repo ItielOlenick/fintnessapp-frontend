@@ -29,8 +29,6 @@ const AddWorkout = () => {
     if (user)
       ExercisesService.getAll(user.uid)
         .then((response) => {
-          console.log("printing response", response.data);
-          // getExercises(response.data);
           const temp = [...options];
           temp[1].children = response.data.map((values) => ({
             value: values.name,
@@ -75,11 +73,11 @@ const AddWorkout = () => {
         }),
       ];
       Promise.all(promises);
-      console.log(wgerExercises);
+
       const temp = [...options];
       temp[0].children = wgerExercises;
       setOptions(temp);
-      console.log("options:", options);
+
       setLoading(false);
     });
   };
@@ -107,10 +105,8 @@ const AddWorkout = () => {
       user: { id: user.uid },
     };
     if (savedWorkout.sets.length > 0) {
-      console.log("savings workout", savedWorkout);
       WorkoutService.create(savedWorkout)
         .then((response) => {
-          console.log("Workout added successfully", response.data);
           history.push("/");
         })
         .catch((error) => {

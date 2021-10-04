@@ -45,7 +45,6 @@ const WorkoutList = ({ start }) => {
       const uniqueSets = value.sets.map((v) => {
         return value.sets.filter((c) => c.name === v.name).length;
       });
-      console.log("uniqueSets: ", uniqueSets);
       return {
         ...value,
         sets: getUniqueListBy(
@@ -259,8 +258,6 @@ const WorkoutList = ({ start }) => {
                                         }}
                                         onCancel={(event) => {
                                           event.stopPropagation();
-
-                                          console.log("cancel");
                                         }}
                                       >
                                         Delete

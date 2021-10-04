@@ -30,8 +30,6 @@ const EditWorkout = (props) => {
     if (user)
       ExercisesService.getAll(user.uid)
         .then((response) => {
-          console.log("printing response", response.data);
-          // getExercises(response.data);
           const temp = [...options];
           temp[1].children = response.data.map((values) => ({
             value: values.name,
@@ -81,11 +79,9 @@ const EditWorkout = (props) => {
       }),
     ];
     await Promise.all(promises);
-    console.log(wgerExercises);
     const temp = [...options];
     temp[0].children = wgerExercises;
     setOptions(temp);
-    console.log("options:", options);
     setLoading(false);
   }
 
@@ -131,10 +127,8 @@ const EditWorkout = (props) => {
       user: { id: user.uid },
     };
     if (savedWorkout.sets.length > 0) {
-      console.log("updating workout", savedWorkout);
       WorkoutService.update(savedWorkout)
         .then((response) => {
-          console.log("Workout updated successfully", response.data);
           history.push("/");
         })
         .catch((error) => {
@@ -173,10 +167,6 @@ const EditWorkout = (props) => {
               onClick={() => {
                 if (form.getFieldValue(["exercises", 0, "sets"]) != undefined) {
                   form.submit();
-                  console.log(
-                    "form before saving: ",
-                    form.getFieldsValue(true)
-                  );
                 } else {
                   message.warn(
                     "Empty workout, please add at least one exercise"

@@ -54,7 +54,6 @@ const ExercisePicker = ({ options, form, setCount, log }) => {
     if (path.length === 3 && typeof path[2].value === "string") {
       return path[2].value;
     }
-    console.log(path);
     return path[1].label;
   }
 
