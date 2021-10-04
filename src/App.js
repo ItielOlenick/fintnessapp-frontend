@@ -119,77 +119,86 @@ function App({ reloadIndex }) {
   };
   return (
     <BrowserRouter>
-      <div className="onComputer">
-        ⚠️This webapp was designed for mobile devices. To view this app in a
-        simulated environment{" "}
-        <a href="https://www.responsinator.com/?url=https%3A%2F%2Ffintnessapp-frontend.herokuapp.com">
-          Click here
-        </a>
-        ⚠️
-      </div>
-      <Navbar showDrawer={showDrawer} checkForUpdates={checkForUpdates} />
-      <Row justify="center" style={{ paddingBottom: 50 }}>
-        <Col sm={12} xs={24}>
-          <Content className="main-content">
-            {loading ? (
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <Spin tip="Loading..." />
-              </div>
-            ) : user ? (
-              <>
-                <Switch>
-                  <Route exact path="/progress" component={Progress} />
-                  <Route
-                    exact
-                    path={["/", "/index.html"]}
-                    render={(props) => <WorkoutList {...props} start={start} />}
-                  />
-                  <Route
-                    exact
-                    path="/logList"
-                    render={(props) => (
-                      <LogList {...props} start={start} logCount={logCount} />
-                    )}
-                  />
-                  <Route exact path="/viewLog" component={ViewLog} />
-                  <Route exact path="/addWorkout" component={AddWorkout} />
-                  <Route
-                    exact
-                    path="/Workouts/edit/:id"
-                    component={EditWorkout}
-                  />
-                  <Route exact path="/logs/edit" component={AddLog} />
-                  <Route
-                    exact
-                    path="/addWorkoutFromLog"
-                    component={EditWorkout}
-                  />
+      <p className="onComputer">
+        This webapp was designed for mobile devices.
+        <br /> To view this app properly please access and/or install it from
+        your mobile device.
+      </p>
 
-                  <Route exact path="/logWorkout/" component={AddLog} />
-                  <Route exact path="/exercises" component={ExercisesList} />
-                  <Route exact path="/addExercise" component={AddExercise} />
-                  <Route exact path="/userPanel" component={UserPanel} />
+      <div className="mobile-sim" style={{ width: 375, height: 720 }}>
+        <iframe
+          src="https://fintnessapp-frontend.herokuapp.com"
+          style={{ width: "100%", height: "100%" }}
+        ></iframe>
+      </div>
+      <div className="show">
+        <Navbar showDrawer={showDrawer} checkForUpdates={checkForUpdates} />
+        <Row justify="center" style={{ paddingBottom: 50 }}>
+          <Col sm={12} xs={24}>
+            <Content className="main-content">
+              {loading ? (
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Spin tip="Loading..." />
+                </div>
+              ) : user ? (
+                <>
+                  <Switch>
+                    <Route exact path="/progress" component={Progress} />
+                    <Route
+                      exact
+                      path={["/", "/index.html"]}
+                      render={(props) => (
+                        <WorkoutList {...props} start={start} />
+                      )}
+                    />
+                    <Route
+                      exact
+                      path="/logList"
+                      render={(props) => (
+                        <LogList {...props} start={start} logCount={logCount} />
+                      )}
+                    />
+                    <Route exact path="/viewLog" component={ViewLog} />
+                    <Route exact path="/addWorkout" component={AddWorkout} />
+                    <Route
+                      exact
+                      path="/Workouts/edit/:id"
+                      component={EditWorkout}
+                    />
+                    <Route exact path="/logs/edit" component={AddLog} />
+                    <Route
+                      exact
+                      path="/addWorkoutFromLog"
+                      component={EditWorkout}
+                    />
+
+                    <Route exact path="/logWorkout/" component={AddLog} />
+                    <Route exact path="/exercises" component={ExercisesList} />
+                    <Route exact path="/addExercise" component={AddExercise} />
+                    <Route exact path="/userPanel" component={UserPanel} />
+                    <Route path="*" component={NoteFound} />
+                  </Switch>
+                </>
+              ) : (
+                <Switch>
+                  <Route exact path="/" component={Home} />
+                  <Redirect exact from="/home" to="/" />
+                  <Route exact path="/login" component={Login} />
+                  <Route exact path="/register" component={Register} />
                   <Route path="*" component={NoteFound} />
                 </Switch>
-              </>
-            ) : (
-              <Switch>
-                <Route exact path="/" component={Home} />
-                <Redirect exact from="/home" to="/" />
-                <Route exact path="/login" component={Login} />
-                <Route exact path="/register" component={Register} />
-                <Route path="*" component={NoteFound} />
-              </Switch>
-            )}
-          </Content>
-        </Col>
-      </Row>
+              )}
+            </Content>
+          </Col>
+        </Row>
+      </div>
+
       {user ? (
         <>
           {active ? (
