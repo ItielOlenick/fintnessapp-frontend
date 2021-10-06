@@ -1,9 +1,11 @@
 import LogService from "../services/LogService";
 import { auth } from "../services/firebase";
-import { List, Card } from "antd";
+import { List, Card, notification } from "antd";
 import { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Link } from "react-router-dom";
+import UserService from "../services/UserService";
+
 const ViewLog = (props) => {
   const [user] = useAuthState(auth);
   const [log, setLog] = useState();
@@ -27,7 +29,22 @@ const ViewLog = (props) => {
           console.log("Error - something is wrong", error);
         });
   }, []);
-
+  useEffect(() => {
+    if (user)
+      UserService.get(user.uid).then((res) => {
+        if (!res.data.firstLogView) {
+          notification.open({
+            key: "firstLogView",
+            message: "Get a detailed view",
+            description: `Click on an exercise to view your progress and personal record.`,
+            duration: 0,
+          });
+          let userSettings = res.data;
+          userSettings = { ...userSettings, firstLogView: true };
+          UserService.update(userSettings);
+        }
+      });
+  }, []);
   const formatDate = (date) => {
     return (
       (date.getDate() > 9 ? date.getDate() : "0" + date.getDate()) +

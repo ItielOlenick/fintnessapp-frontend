@@ -7,26 +7,16 @@ import {
   Collapse,
   Col,
   Row,
-  Button,
-  Tooltip,
   List,
   Card,
   Popconfirm,
   Spin,
-  Table,
-  Space,
-  Popover,
   Menu,
   Dropdown,
   Divider,
+  notification,
 } from "antd";
-import {
-  MoreOutlined,
-  PlusOutlined,
-  DeleteOutlined,
-  EditOutlined,
-  UnorderedListOutlined,
-} from "@ant-design/icons";
+import { MoreOutlined } from "@ant-design/icons";
 import UserService from "../services/UserService";
 import LogService from "../services/LogService";
 
@@ -74,6 +64,23 @@ const LogList = ({ start, logCount }) => {
         });
     format();
   }, [user, count, logCount]);
+
+  useEffect(() => {
+    if (user)
+      UserService.get(user.uid).then((res) => {
+        if (!res.data.firstLogList) {
+          notification.open({
+            key: "firstLogList",
+            message: "Congratulations!",
+            description: `You completed your first workout. Click on one of your past workouts to view it in detail and get insights on your work.`,
+            duration: 0,
+          });
+          let userSettings = res.data;
+          userSettings = { ...userSettings, firstLogList: true };
+          UserService.update(userSettings);
+        }
+      });
+  }, []);
 
   const columns = [
     {
