@@ -195,7 +195,7 @@ function App({ reloadIndex }) {
                   <Redirect exact from="/home" to="/" />
                   <Route exact path="/login" component={Login} />
                   <Route exact path="/register" component={Register} />
-                  <Route path="/about" component={About} />
+                  <Route exact path="/about" component={About} />
                   <Route path="*" component={NoteFound} />
                 </Switch>
               )}
