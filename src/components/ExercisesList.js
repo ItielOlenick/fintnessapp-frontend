@@ -35,7 +35,6 @@ const ExercisesList = () => {
     if (user)
       ExercisesService.getAll(user.uid)
         .then((response) => {
-          console.log("printing response", response.data);
           SetExercises(response.data);
           setCount(response.data.length);
           setLoading(false);
