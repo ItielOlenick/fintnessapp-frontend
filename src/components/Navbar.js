@@ -82,7 +82,7 @@ const Navbar = ({ checkForUpdates }) => {
               <Link to="/">Home</Link>
             </Menu.Item>
             <Menu.Item>
-              <Link to="#">About</Link>
+              <Link to="/about">About</Link>
             </Menu.Item>
           </>
         )}

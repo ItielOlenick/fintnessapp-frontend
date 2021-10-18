@@ -22,6 +22,8 @@ import axios from "axios";
 import version from "./version";
 import UserPanel from "./components/Auth/UserPanel";
 import Progress from "./components/Progress";
+import About from "./components/About";
+
 function App({ reloadIndex }) {
   const [user, loading] = useAuthState(auth);
 
@@ -120,7 +122,7 @@ function App({ reloadIndex }) {
   return (
     <BrowserRouter>
       <p className="onComputer">
-        This webapp was designed for mobile devices.
+        This webapp was designed for mobile devices 📱.
         <br /> To use this app properly please access and/or install it from
         your mobile device.
         <br />
@@ -193,6 +195,7 @@ function App({ reloadIndex }) {
                   <Redirect exact from="/home" to="/" />
                   <Route exact path="/login" component={Login} />
                   <Route exact path="/register" component={Register} />
+                  <Route path="/about" component={About} />
                   <Route path="*" component={NoteFound} />
                 </Switch>
               )}
