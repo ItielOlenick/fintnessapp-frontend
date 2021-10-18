@@ -136,7 +136,7 @@ function App() {
         ></iframe>
       </div>
       <div className="show">
-        <Navbar showDrawer={showDrawer} checkForUpdates={checkForUpdates} />
+        <Navbar showDrawer={showDrawer} />
         <Row justify="center" style={{ paddingBottom: 50 }}>
           <Col sm={12} xs={24}>
             <Content className="main-content">
