@@ -24,7 +24,7 @@ import UserPanel from "./components/Auth/UserPanel";
 import Progress from "./components/Progress";
 import About from "./components/About";
 
-function App({ reloadIndex }) {
+function App() {
   const [user, loading] = useAuthState(auth);
 
   //active workout
@@ -80,45 +80,45 @@ function App({ reloadIndex }) {
     setModalVisible(false);
     start({ ...workoutProps });
   };
-  const checkForUpdates = () => {
-    axios
-      .get(
-        "https://raw.githubusercontent.com/ItielOlenick/fintnessapp-frontend/antd-and-remake-the-concept/src/version.js"
-      )
-      .then((data) => {
-        const latest = data.data.replace(/[^\d.-]/g, "");
-        const current = version;
-        if (latest !== current && latest !== null) {
-          console.log("latest version: ", latest, "current version: ", current);
-          openNotification();
-        }
-        console.log("up to date");
-        console.log("latest version: ", latest, "current version: ", current);
-      });
-  };
+  // const checkForUpdates = () => {
+  //   axios
+  //     .get(
+  //       "https://raw.githubusercontent.com/ItielOlenick/fintnessapp-frontend/antd-and-remake-the-concept/src/version.js"
+  //     )
+  //     .then((data) => {
+  //       const latest = data.data.replace(/[^\d.-]/g, "");
+  //       const current = version;
+  //       if (latest !== current && latest !== null) {
+  //         console.log("latest version: ", latest, "current version: ", current);
+  //         openNotification();
+  //       }
+  //       console.log("up to date");
+  //       console.log("latest version: ", latest, "current version: ", current);
+  //     });
+  // };
 
-  const openNotification = () => {
-    const msg = (
-      <>
-        Click{" "}
-        <a
-          onClick={() => {
-            reloadIndex();
-          }}
-        >
-          here
-        </a>{" "}
-        to update now
-      </>
-    );
-    const args = {
-      key: "update",
-      message: "Update Available",
-      description: msg,
-      duration: 0,
-    };
-    notification.open(args);
-  };
+  // const openNotification = () => {
+  //   const msg = (
+  //     <>
+  //       Click{" "}
+  //       <a
+  //         onClick={() => {
+  //           reloadIndex();
+  //         }}
+  //       >
+  //         here
+  //       </a>{" "}
+  //       to update now
+  //     </>
+  //   );
+  //   const args = {
+  //     key: "update",
+  //     message: "Update Available",
+  //     description: msg,
+  //     duration: 0,
+  //   };
+  //   notification.open(args);
+  // };
   return (
     <BrowserRouter>
       <p className="onComputer">

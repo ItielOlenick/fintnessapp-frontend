@@ -5,18 +5,18 @@ import "./index.css";
 import App from "./App";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 
-const reloadIndex = () => {
-  navigator.serviceWorker.controller.postMessage({
-    type: "SKIP_WAITING",
-  });
-  setTimeout(() => {
-    window.location.reload();
-  }, 1500);
-};
+// const reloadIndex = () => {
+//   navigator.serviceWorker.controller.postMessage({
+//     type: "SKIP_WAITING",
+//   });
+//   setTimeout(() => {
+//     window.location.reload();
+//   }, 1500);
+// };
 
 ReactDOM.render(
   <React.StrictMode>
-    <App reloadIndex={reloadIndex} />
+    <App />
   </React.StrictMode>,
   document.getElementById("root")
 );
