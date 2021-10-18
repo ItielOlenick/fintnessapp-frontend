@@ -68,7 +68,7 @@ const LogList = ({ start, logCount }) => {
   useEffect(() => {
     if (user)
       UserService.get(user.uid).then((res) => {
-        if (!res.data.firstLogList) {
+        if (!res.data.firstLogList && count > 0) {
           notification.open({
             key: "firstLogList",
             message: "Congratulations!",
@@ -80,7 +80,7 @@ const LogList = ({ start, logCount }) => {
           UserService.update(userSettings);
         }
       });
-  }, []);
+  }, [count]);
 
   const columns = [
     {

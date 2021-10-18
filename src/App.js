@@ -156,7 +156,7 @@ function App({ reloadIndex }) {
                     <Route exact path="/progress" component={Progress} />
                     <Route
                       exact
-                      path={["/", "/index.html"]}
+                      path={["/", "/index.html", "/register"]}
                       render={(props) => (
                         <WorkoutList {...props} start={start} />
                       )}
