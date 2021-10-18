@@ -1,5 +1,9 @@
 import { Link } from "react-router-dom";
 const About = () => {
+  const open = () => {
+    window.open("mailto:etl676@gmail.com");
+  };
+
   return (
     <>
       <h2>Workout tracking app</h2>
@@ -20,9 +24,7 @@ const About = () => {
       <p>
         The app was created by Itiel Olenick. If you have any questions or
         suggestions feel free to email me at{" "}
-        <Link onClick={window.open("mailto:etl676@gmail.com")}>
-          etl676@gmail.com
-        </Link>
+        <Link onClick={open}>etl676@gmail.com</Link>
         .<br /> <br />
         Enjoy the app! 💪
       </p>
