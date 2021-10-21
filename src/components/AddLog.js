@@ -322,10 +322,18 @@ const AddLog = (props) => {
           )}
           <Form form={form} onFinish={onFinish}>
             <div className="sameRow">
-              <h2 style={{ marginBottom: "1.2em" }}>Edit Workout</h2>
-              <Form.Item name="startedAt">
-                <DatePicker format="DD/MM/YYYY" />
-              </Form.Item>
+              {props.location.state.edit ? (
+                <>
+                  <h2 style={{ marginBottom: "1.2em" }}>Edit Workout</h2>
+                  <Form.Item name="startedAt">
+                    <DatePicker format="DD/MM/YYYY" />
+                  </Form.Item>
+                </>
+              ) : (
+                <>
+                  <h2 style={{ marginBottom: "1.2em" }}>Workout</h2>
+                </>
+              )}
             </div>
 
             <ExercisePicker

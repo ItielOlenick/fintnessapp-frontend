@@ -96,45 +96,8 @@ const WorkoutList = ({ start }) => {
                 samples: sampleRoutines[i],
               });
             }}
-            // to={{
-            //   pathname: "/logWorkout",
-            //   search: "",
-            //   hash: "#",
-            //   state: { samples: sampleRoutines[i] },
-            // }}
           >
-            <Card
-              size="small"
-              title={item.name}
-              // hoverable="true"
-              // extra={
-              //   <Dropdown
-              //     trigger="click"
-              //     overlay={
-              //       <Menu>
-              //         <Menu.Item key={item.id + 13}>
-              //           <Link
-              //             to={{
-              //               pathname: `/addWorkoutFromLog`,
-              //               search: "",
-              //               hash: "#",
-              //               state: { id: item.id },
-              //             }}
-              //           >
-              //             Create Workout From this Sample
-              //           </Link>
-              //         </Menu.Item>
-              //       </Menu>
-              //     }
-              //   >
-              //     <MoreOutlined
-              //       onClick={(event) => {
-              //         event.stopPropagation();
-              //       }}
-              //     />
-              //   </Dropdown>
-              // }
-            >
+            <Card size="small" title={item.name}>
               {item.sets.map((set) => (
                 <li>
                   {set.count} x {set.name}
