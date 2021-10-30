@@ -60,17 +60,32 @@ const WorkoutList = ({ start }) => {
     setFormattedWorkout(unique);
   };
 
+  const retry = require("retry");
+
+  const operation = retry.operation({
+    retries: 7,
+    factor: 3,
+    minTimeout: 1 * 1000,
+    maxTimeout: 10 * 1000,
+    randomize: true,
+  });
+
   useEffect(() => {
     if (user)
-      WorkoutService.getAll(user.uid)
-        .then((response) => {
-          SetWorkouts(response.data);
-          setCount(response.data.length);
-          setLoading(false);
-        })
-        .catch((error) => {
-          console.log("Error - something is wrong", error);
-        });
+      operation.attempt((cur) => {
+        WorkoutService.getAll(user.uid)
+          .then((response) => {
+            SetWorkouts(response.data);
+            setCount(response.data.length);
+            setLoading(false);
+          })
+          .catch((error) => {
+            console.log("Error - something is wrong", error);
+            if (operation.retry(error)) {
+              return;
+            }
+          });
+      });
     format(workouts, setFormattedWorkout);
     format(sampleRoutines, setGlobal);
   }, [user, count]);
